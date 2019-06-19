@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        LOCC
+    </title>
+
+    <!-- JS -->
+    <!-- Ajax import -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+    </script>
+
+    <!-- sweet alert imports -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+
+    <!-- import own js-->
+    <script type="text/javascript" src="js/script.js"></script>
+
+    <!-- import masonry -->
+
+    <!-- CSS -->
+    <!--bootstrap CDN import-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- sweetalert css import-->
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+
+    <!-- bepaal viewport zodat de website kan bepalen hoe grooot het scherm is -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+</html>
+<body class="bg-info">
+<div class="col-12 mt-2">
+    <!-- Only displayed when no team is in either in localstorage or in url -->
+    <!-- removed from dom after team is chosen -->
+    <div id="noTeamSet">
+        <div class="row mb-2">
+            <div class="col-12">
+                <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
+                <div class="col-12">
+                    <div class="row grid" id="teams">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="teamSet">
+        <div class="row">
+        <span class="col-12 text-center">
+            <h1 class="h2"><span class="mr-2">Hole</span><span id="holeNumber"
+                                                                        class="text-muted "></span></h1>
+        </span>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-12">
+                <h2 class="h3 text-center">Tee</h2>
+                <div class="col-12">
+                    <div class="row grid" id="buttons">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <h2 class="h3 col-12 text-center">Score</h2>
+                <div class="col-12">
+                    <div class="row grid " id="score">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div id="checkContainer" class="text-center border mb-3 rounded m-1">
+                    <div class="row">
+                        <div class="h1 text-secondary col-4" id="holeCheck">-</div>
+                        <div class="h1 text-secondary col-4" id="colorCheck">-</div>
+                        <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
+                    </div>
+                    <div class="row">
+                        <div class="text-muted col-4">HOLE</div>
+                        <div class="text-muted col-4">TEE</div>
+                        <div class="text-muted col-4">SCORE</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-12">
+                <div class="m-1">
+                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
+                            type="submit" name="submit"
+                            onclick="opslaan()">Opslaan
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-12">
+                <div id="scoreResult" class="m-1 overflow-auto">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+</body>
