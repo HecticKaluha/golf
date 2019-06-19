@@ -34,8 +34,8 @@
 </html>
 <body class="bg-info">
 <div class="col-12 mt-2">
-    <!-- Only displayed when no team is in either in localstorage or in url -->
-    <!-- removed from dom after team is chosen -->
+    <!-- alleen zichtbaar wanneer een team gezet is -->
+    <!-- wordt verwijderd uit dom zodra een team gekozen is -->
     <div id="noTeamSet">
         <div class="row mb-2">
             <div class="col-12">
@@ -50,84 +50,99 @@
         </div>
     </div>
 
+    <!-- zichtbaar wanneer een team geselecteerd is -->
     <div id="teamSet">
-        <div class="row">
+        <!-- zichtbaar wanneer hole kleiner of gelijk is aan 18 (het spel is nog bezig) -->
+        <div id="playing">
+            <div class="row">
         <span class="col-12 text-center">
             <h1 class="h2"><span class="mr-2">Hole</span><span id="holeNumber"
-                                                                        class="text-muted "></span></h1>
+                                                               class="text-muted "></span></h1>
         </span>
-        </div>
+            </div>
 
-        <hr>
+            <hr>
 
-        <div class="row">
-            <div class="col-12">
-                <h2 class="h3 text-center">Tee</h2>
+            <div class="row">
                 <div class="col-12">
-                    <div class="row grid" id="teeButtons">
+                    <h2 class="h3 text-center">Tee</h2>
+                    <div class="col-12">
+                        <div class="row grid" id="teeButtons">
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <hr>
+            <hr>
 
-        <div class="row mb-3">
-            <div class="col-12">
-                <h2 class="h3 col-12 text-center">Score</h2>
+            <div class="row mb-3">
                 <div class="col-12">
-                    <div class="row grid " id="scoreButtons">
+                    <h2 class="h3 col-12 text-center">Score</h2>
+                    <div class="col-12">
+                        <div class="row grid " id="scoreButtons">
 
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div id="checkContainer" class="text-center border mb-3 rounded m-1">
-                    <div class="row">
-                        <div class="h1 text-secondary col-4" id="holeCheck">-</div>
-                        <div class="h1 text-secondary col-4" id="colorCheck">-</div>
-                        <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
-                    </div>
-                    <div class="row">
-                        <div class="text-muted col-4">HOLE</div>
-                        <div class="text-muted col-4">TEE</div>
-                        <div class="text-muted col-4">SCORE</div>
+            <div class="row">
+                <div class="col-12">
+                    <div id="checkContainer" class="text-center border mb-3 rounded m-1">
+                        <div class="row">
+                            <div class="h1 text-secondary col-4" id="holeCheck">-</div>
+                            <div class="h1 text-secondary col-4" id="colorCheck">-</div>
+                            <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="text-muted col-4">HOLE</div>
+                            <div class="text-muted col-4">TEE</div>
+                            <div class="text-muted col-4">SCORE</div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row mb-3">
-            <div class="col-12">
-                <div class="m-1">
-                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                            type="submit" name="submit"
-                            onclick="saveHole()">Opslaan
-                    </button>
+            <div class="row mb-3">
+                <div class="col-12">
+                    <div class="m-1">
+                        <button id="opslaanButton"
+                                class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
+                                type="submit" name="submit"
+                                onclick="saveHole()">Opslaan
+                        </button>
+                    </div>
                 </div>
             </div>
+
+            <hr>
+
         </div>
+    </div>
 
-        <hr>
-
-        <div class="row">
-            <div class="col-12">
-                <div class="m-1">
-                    <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                            type="submit" name="submit"
-                            onclick="testQuery()">Voer query uit
-                    </button>
-                </div>
-                <div id="scoreResult" class="m-1 overflow-auto">
-
-                </div>
+    <!-- button en result - altijd zichtbaar wanneer het een team gekozen is, ook na het spelen van 18 holes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="m-1 mb-3">
+                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
+                        type="submit" name="submit"
+                        onclick="testQuery()">Voer query uit
+                </button>
             </div>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
+            <h1 class="mb-3" id="message"></h1>
+            <div id="queryResult" class="m-1 overflow-auto">
+
+            </div>
+        </div>
+    </div>
+
+</div>
 </div>
 
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>

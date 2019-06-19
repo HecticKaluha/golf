@@ -5,9 +5,9 @@ var masonries = [];
 var masonriesElements = [];
 
 $(document).ready(function () {
-    if (!parseFloat(localStorage.getItem('hole')) || parseFloat(localStorage.getItem('hole')) > 18) {
-        localStorage.setItem('hole', 1);
-    }
+    // if (!parseFloat(localStorage.getItem('hole')) || parseFloat(localStorage.getItem('hole')) > 18) {
+    //     localStorage.setItem('hole', 1);
+    // }
 
     setCookie('sessie', 'een uur', 1);
 
@@ -16,22 +16,17 @@ $(document).ready(function () {
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
-    teamSet.style.display = 'none';
-    noTeamSet.style.display = 'none';
+    teamSet.style.display = noTeamSet.style.display = 'none';
 
     var hole = localStorage.getItem('hole');
-
-    //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
-    //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
-    holeCheck.innerText = holeNumber.innerText = hole;
+    showHole(hole);
 
     //init alle grids tegelijkertijd
     initializeGrids();
 
     if (getTeamFromURL()) {
         showTeamSet();
-    }
-    else{
+    } else {
         showNoTeamSet();
     }
     restructure();
@@ -39,12 +34,11 @@ function generatePage() {
 
 function getTeamFromURL() {
     //check if exists in localstorage
-    if(localStorage.getItem('team'))
-    {
+    if (localStorage.getItem('team')) {
         return true;
     }
     //check in url
-    else{
+    else {
         //bouw url
         var url = new URL(window.location.href);
         //vraag url parameter team op
@@ -61,13 +55,13 @@ function getTeamFromURL() {
     }
 }
 
-function showNoTeamSet(){
+function showNoTeamSet() {
     noTeamSet.style.display = 'block';
 
     var result = executeQuery(`select * from teams`);
     //bepaal size van knop gebaseerd op totaal aantal teams
     var size = 12 / result.length;
-    if(size < 6 || size === Infinity){
+    if (size < 6 || size === Infinity) {
         size = 6
     }
 
@@ -91,7 +85,7 @@ function showNoTeamSet(){
     });
 }
 
-function showTeamSet(){
+function showTeamSet() {
     noTeamSet.remove();
 
     teamSet.style.display = 'block';
@@ -166,7 +160,6 @@ function saveHole() {
                         timer: 1500,
                     });
                     nextHole();
-                    getAllScores();
                 } else {
                     //show error
                     Swal.fire({
@@ -191,25 +184,38 @@ function saveHole() {
     }
 }
 
-function nextHole() {
-    localStorage.setItem('hole', parseFloat(localStorage.getItem('hole')) + 1);
-    var hole = parseFloat(localStorage.getItem('hole'));
-
-    if (!hole || hole > 18) {
+function showHole(hole) {
+    //if not set set to 0
+    if(!hole){
         hole = 1;
     }
-    localStorage.setItem('hole', hole);
+    if (hole > 18) {
+        finishGame();
+    } else {
+        renderHole(hole);
+    }
+}
 
+function nextHole(){
+    var hole = parseFloat(localStorage.getItem('hole'));
+    hole++;
+    localStorage.setItem('hole', hole);
+    showHole(hole);
+}
+
+function renderHole(hole) {
     localStorage.setItem('score', 0);
     localStorage.setItem('tee', 'geen');
+    localStorage.setItem('hole', hole);
 
     colorCheck.style.color = "black";
     colorCheck.innerText = "-";
 
     scoreCheck.innerText = "-";
 
-    holeNumber.innerText = hole;
-    holeCheck.innerText = hole;
+    //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
+    //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
+    holeNumber.innerText = holeCheck.innerText = hole;
 
     checkContainer.style.backgroundColor = '#f8f9fa';
 }
@@ -224,13 +230,13 @@ var iets = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON h
 function getAllScores() {
     var query = `select team, hole,kleur, score from scores`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
-    renderTable(executeQuery(query));
+    return executeQuery(query);
 }
 
 function getAllScoresOrdered() {
     var query = `select * from scores order by score desc`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
-    renderTable(executeQuery(query));
+    return executeQuery(query);
 }
 
 function executeQuery(query) {
@@ -287,7 +293,7 @@ function getCookie(cname) {
 }
 
 function renderTable(jsonResult) {
-    scoreResult.innerHTML =
+    queryResult.innerHTML =
         `<table class="table table-bordered table-striped">
                                 <thead>
                                     <tr role="row" id="thead">
@@ -328,24 +334,34 @@ function renderTable(jsonResult) {
     });
 }
 
-function initializeGrids(){
+function initializeGrids() {
     masonries = document.getElementsByClassName('grid');
-    Array.from(masonries).forEach(function(grid, index){
-        masonriesElements[index] = new Masonry( grid, {
+    Array.from(masonries).forEach(function (grid, index) {
+        masonriesElements[index] = new Masonry(grid, {
             itemSelector: '.grid-item',
         });
     });
 }
 
-function restructure(){
-    masonriesElements.forEach(function (masonry){
+function restructure() {
+    masonriesElements.forEach(function (masonry) {
         masonry.reloadItems();
         masonry.layout();
     });
 }
 
-function testQuery(){
+function testQuery() {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = `Select team, kleur from scores where kleur = 'blue'`;
     var dbResult = executeQuery(query);
+    //deze regel mag weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
     renderTable(dbResult);
+}
+
+function finishGame() {
+    renderTable(getAllScores());
+    playing.style.display = 'none';
+    message.style.display = `block`;
+    message.innerHTML = `Het spel is afgelopen, hieronder staan de resultaten.`;
 }
