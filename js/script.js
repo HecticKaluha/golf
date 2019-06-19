@@ -8,63 +8,34 @@ $(document).ready(function () {
     if (!parseFloat(localStorage.getItem('hole')) || parseFloat(localStorage.getItem('hole')) > 18) {
         localStorage.setItem('hole', 1);
     }
+
+    setCookie('sessie', 'een uur', 1);
+
+    generatePage();
+});
+
+function generatePage() {
+    //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
+    teamSet.style.display = 'none';
+    noTeamSet.style.display = 'none';
+
     var hole = localStorage.getItem('hole');
 
     //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
     //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
     holeCheck.innerText = holeNumber.innerText = hole;
 
-    setCookie('sessie', 'een uur', 1);
-
-    //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
-    teamSet.style.display = 'none';
-    noTeamSet.style.display = 'none';
-
+    //init alle grids tegelijkertijd
+    initializeGrids();
 
     if (getTeamFromURL()) {
-        teamSet.style.display = 'block';
-        generateButtons();
-        //activeer masonry voor elk element met de class grid. elk direct childelement daarvan met de class grid-item
-        //zal zich gedragen volgens masonry behavior
+        showTeamSet();
     }
     else{
-        var result = executeQuery(`select * from teams`);
-        //bepaal size van knop gebaseerd op totaal aantal teams
-        var size = 12 / result.length;
-        if(size < 6 || size === Infinity){
-            size = 6
-        }
-
-        //generate buttons voor elk bestaand team in database
-        result.forEach(function (team) {
-            var div = document.createElement('div');
-            //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
-            div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
-            var button = document.createElement('BUTTON');
-            button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
-            button.innerHTML = team.team;
-
-            button.onclick = function () {
-                localStorage.setItem('team', team.id);
-                generateButtons();
-                //niet initializen maar bestaande restructuren
-                // restructure();
-            };
-
-            div.appendChild(button);
-            teams.appendChild(div);
-        });
-
-
-        noTeamSet.style.display = 'block';
-        //activeer masonry voor elk element met de class grid. elk direct childelement daarvan met de class grid-item
-        //zal zich gedragen volgens masonry behavior
-        console.log('initing');
-        initializeGrids();
+        showNoTeamSet();
     }
-    //on page load wordt de tabel met database resultaten weergegeven
-    // getAllScores();
-});
+    restructure();
+}
 
 function getTeamFromURL() {
     //check if exists in localstorage
@@ -74,7 +45,7 @@ function getTeamFromURL() {
     }
     //check in url
     else{
-    //bouw url
+        //bouw url
         var url = new URL(window.location.href);
         //vraag url parameter team op
         var team = url.searchParams.get("team");
@@ -90,14 +61,40 @@ function getTeamFromURL() {
     }
 }
 
-function generateButtons() {
-    //maak teamset zichtbaar
-    teamSet.style.display = 'block';
-    //verwijder noTeamSet van de dom omdat een team gezet is
+function showNoTeamSet(){
+    noTeamSet.style.display = 'block';
+
+    var result = executeQuery(`select * from teams`);
+    //bepaal size van knop gebaseerd op totaal aantal teams
+    var size = 12 / result.length;
+    if(size < 6 || size === Infinity){
+        size = 6
+    }
+
+    //generate buttons voor elk bestaand team in database
+    result.forEach(function (team) {
+        var div = document.createElement('div');
+        //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
+        div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
+        var button = document.createElement('BUTTON');
+        button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
+        button.innerHTML = team.team;
+
+        button.onclick = function () {
+            localStorage.setItem('team', team.id);
+            showTeamSet();
+            restructure();
+        };
+
+        div.appendChild(button);
+        teams.appendChild(div);
+    });
+}
+
+function showTeamSet(){
     noTeamSet.remove();
 
-    container = document.getElementById('buttons');
-    scoreButtons = document.getElementById('score');
+    teamSet.style.display = 'block';
 
     colors.forEach(function (color) {
         var div = document.createElement('div');
@@ -109,11 +106,11 @@ function generateButtons() {
         button.style.backgroundColor = color;
 
         button.onclick = function () {
-            kleuren(color);
+            setTee(color);
         };
 
         div.appendChild(button);
-        container.appendChild(div);
+        teeButtons.appendChild(div);
     });
 
     amountOfScoreButtons.forEach(function (score) {
@@ -133,12 +130,10 @@ function generateButtons() {
     });
 
     checkContainer.style.backgroundColor = '#f8f9fa';
-    console.log('initializing');
-    initializeGrids();
 }
 
-function kleuren(color) {
-    localStorage.setItem('kleur', color);
+function setTee(color) {
+    localStorage.setItem('tee', color);
     checkContainer.style.backgroundColor = color;
     colorCheck.innerText = color;
 }
@@ -148,14 +143,14 @@ function setScore(score) {
     scoreCheck.innerText = score;
 }
 
-function opslaan() {
-    if (localStorage.getItem('kleur') !== 'geen' && localStorage.getItem('score') > 0) {
+function saveHole() {
+    if (localStorage.getItem('tee') !== 'geen' && localStorage.getItem('score') > 0) {
         $.ajax({
             url: "db_write.php?method=saveScore",
             data: {
                 team: localStorage.getItem('team'),
                 hole: localStorage.getItem('hole'),
-                kleur: localStorage.getItem('kleur'),
+                tee: localStorage.getItem('tee'),
                 score: localStorage.getItem('score')
             },
             type: "post",
@@ -206,7 +201,7 @@ function nextHole() {
     localStorage.setItem('hole', hole);
 
     localStorage.setItem('score', 0);
-    localStorage.setItem('kleur', 'geen');
+    localStorage.setItem('tee', 'geen');
 
     colorCheck.style.color = "black";
     colorCheck.innerText = "-";
@@ -225,7 +220,6 @@ function nextHole() {
 //zie https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Template_literals voor verdere uitleg
 var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
 var iets = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
-
 
 function getAllScores() {
     var query = `select team, hole,kleur, score from scores`;
@@ -305,9 +299,6 @@ function generateTable(jsonResult) {
                                 <tbody/>
                             </table>`;
 
-    var thead = document.getElementById('thead');
-    var tbody = document.getElementById('tbody');
-
     //loop over alle rows
     jsonResult.forEach(function (row, index) {
         var tableRow = document.createElement('tr');
@@ -340,19 +331,15 @@ function generateTable(jsonResult) {
 function initializeGrids(){
     masonries = document.getElementsByClassName('grid');
     Array.from(masonries).forEach(function(grid, index){
-        var masonry = new Masonry( grid, {
+        masonriesElements[index] = new Masonry( grid, {
             itemSelector: '.grid-item',
         });
-        masonriesElements[index] = masonry;
     });
-    console.log(`masonries after init = ${masonriesElements}`);
 }
 
 function restructure(){
-    console.log(`masonries before resturcuturing = ${masonriesElements}`);
-
     masonriesElements.forEach(function (masonry){
-        // console.log(masonry);
+        masonry.reloadItems();
         masonry.layout();
     });
 }

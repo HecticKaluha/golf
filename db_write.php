@@ -10,13 +10,13 @@ switch($_GET['method']){
 }
 
 function saveScore(){
-    $kleur = $_POST['kleur'];
+    $tee = $_POST['tee'];
     $score = $_POST['score'];
     $hole = $_POST['hole'];
     $team = $_POST['team'];
 
     $sql = "INSERT INTO scores (id, team, hole, kleur, score)
-            VALUES (NULL, '$team', '$hole', '$kleur', '$score')";
+            VALUES (NULL, '$team', '$hole', '$tee', '$score')";
 
     $conn = null;
 
@@ -27,7 +27,7 @@ function saveScore(){
             if (mysqli_query($conn, $sql)) {
                 echo json_encode([
                     "success" => true,
-                    "message" => "$team <br> $hole, $kleur, $score<br> Verzonden!"
+                    "message" => "$team <br> $hole, $tee, $score<br> Verzonden!"
                 ]);
             } else {
                 echo json_encode([
