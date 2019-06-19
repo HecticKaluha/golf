@@ -224,13 +224,13 @@ var iets = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON h
 function getAllScores() {
     var query = `select team, hole,kleur, score from scores`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
-    generateTable(executeQuery(query));
+    renderTable(executeQuery(query));
 }
 
 function getAllScoresOrdered() {
     var query = `select * from scores order by score desc`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
-    generateTable(executeQuery(query));
+    renderTable(executeQuery(query));
 }
 
 function executeQuery(query) {
@@ -286,7 +286,7 @@ function getCookie(cname) {
     return "";
 }
 
-function generateTable(jsonResult) {
+function renderTable(jsonResult) {
     scoreResult.innerHTML =
         `<table class="table table-bordered table-striped">
                                 <thead>
@@ -342,4 +342,10 @@ function restructure(){
         masonry.reloadItems();
         masonry.layout();
     });
+}
+
+function testQuery(){
+    var query = `Select team, kleur from scores where kleur = 'blue'`;
+    var dbResult = executeQuery(query);
+    renderTable(dbResult);
 }
