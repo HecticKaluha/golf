@@ -5,10 +5,6 @@ var masonries = [];
 var masonriesElements = [];
 
 $(document).ready(function () {
-    // if (!parseFloat(localStorage.getItem('hole')) || parseFloat(localStorage.getItem('hole')) > 18) {
-    //     localStorage.setItem('hole', 1);
-    // }
-
     setCookie('sessie', 'een uur', 1);
 
     generatePage();
@@ -18,10 +14,7 @@ function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
     teamSet.style.display = noTeamSet.style.display = 'none';
 
-    var hole = localStorage.getItem('hole');
-    showHole(hole);
-
-    //init alle grids tegelijkertijd
+    //init alle masonries tegelijkertijd
     initializeGrids();
 
     if (getTeamFromURL()) {
@@ -29,6 +22,9 @@ function generatePage() {
     } else {
         showNoTeamSet();
     }
+    var hole = localStorage.getItem('hole');
+    showHole(hole);
+
     restructure();
 }
 
@@ -66,6 +62,7 @@ function showNoTeamSet() {
     }
 
     //generate buttons voor elk bestaand team in database
+    teams.innerHTML = '';
     result.forEach(function (team) {
         var div = document.createElement('div');
         //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
@@ -86,10 +83,11 @@ function showNoTeamSet() {
 }
 
 function showTeamSet() {
-    noTeamSet.remove();
-
+    noTeamSet.style.display = 'none';
     teamSet.style.display = 'block';
+    playing.style.display = 'block';
 
+    teeButtons.innerHTML = '';
     colors.forEach(function (color) {
         var div = document.createElement('div');
         div.className = 'p-1 col-6 col-sm-3 grid-item';
@@ -107,6 +105,7 @@ function showTeamSet() {
         teeButtons.appendChild(div);
     });
 
+    scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function (score) {
         var div = document.createElement('div');
         div.className = 'p-1 col-4 col-sm-4 col-lg-3 grid-item';
@@ -138,7 +137,7 @@ function setScore(score) {
 }
 
 function saveHole() {
-    if (localStorage.getItem('tee') !== 'geen' && localStorage.getItem('score') > 0) {
+    if (localStorage.getItem('tee') && localStorage.getItem('score')) {
         $.ajax({
             url: "db_write.php?method=saveScore",
             data: {
@@ -184,9 +183,16 @@ function saveHole() {
     }
 }
 
+function nextHole() {
+    var hole = parseFloat(localStorage.getItem('hole'));
+    hole++;
+    localStorage.setItem('hole', hole);
+    showHole(hole);
+}
+
 function showHole(hole) {
     //if not set set to 0
-    if(!hole){
+    if (!hole) {
         hole = 1;
     }
     if (hole > 18) {
@@ -196,16 +202,9 @@ function showHole(hole) {
     }
 }
 
-function nextHole(){
-    var hole = parseFloat(localStorage.getItem('hole'));
-    hole++;
-    localStorage.setItem('hole', hole);
-    showHole(hole);
-}
-
 function renderHole(hole) {
-    localStorage.setItem('score', 0);
-    localStorage.setItem('tee', 'geen');
+    localStorage.removeItem('score');
+    localStorage.removeItem('tee');
     localStorage.setItem('hole', hole);
 
     colorCheck.style.color = "black";
@@ -354,14 +353,35 @@ function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = `Select team, kleur from scores where kleur = 'blue'`;
     var dbResult = executeQuery(query);
-    //deze regel mag weg zodra de testquery knop uit de app gehaald wordt.
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
+    replay.style.display = `none`;
+
     renderTable(dbResult);
 }
 
 function finishGame() {
     renderTable(getAllScores());
     playing.style.display = 'none';
-    message.style.display = `block`;
+    var replayButton = document.createElement('button');
+    replayButton.className = 'btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text';
+    replayButton.onclick = function(){
+        restart();
+    };
+    replayButton.innerText = 'Start nog een spel';
+    replay.appendChild(replayButton);
     message.innerHTML = `Het spel is afgelopen, hieronder staan de resultaten.`;
+    finished.style.display = `block`;
+}
+
+function restart(){
+    localStorage.removeItem('team');
+    localStorage.removeItem('score');
+    localStorage.removeItem('tee');
+    localStorage.removeItem('hole');
+    finished.style.display = 'none';
+    queryResult.innerHTML = '';
+
+    //remove redundant info
+    generatePage();
 }

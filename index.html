@@ -126,16 +126,22 @@
         <div class="col-12">
             <div class="m-1 mb-3">
                 <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                        type="submit" name="submit"
                         onclick="testQuery()">Voer query uit
                 </button>
             </div>
         </div>
     </div>
 
-    <div class="row">
+    <div class="row" id="finished">
         <div class="col-12 text-center">
             <h1 class="mb-3" id="message"></h1>
+            <div id="replay" class="m-1 mb-3"></div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 text-center">
             <div id="queryResult" class="m-1 overflow-auto">
 
             </div>
