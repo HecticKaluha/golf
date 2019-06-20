@@ -1,5 +1,9 @@
+var s1 = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM `scores` as s left join holes as h on h.hole=s.hole  group by s.id having team = 1";
+
+
+
 const colors = ['red', 'blue', 'yellow', 'white'];
-const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
+const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8','9'];
 
 var masonries = [];
 var masonriesElements = [];
@@ -29,26 +33,27 @@ function generatePage() {
 }
 
 function getTeamFromURL() {
-    //check if exists in localstorage
-    if (localStorage.getItem('team')) {
+    //bouw url
+    var url = new URL(window.location.href);
+    //vraag url parameter team op
+    var team = url.searchParams.get("team");
+    //team in url gevonden
+    if (team) {
+        localStorage.setItem('team', team);
         return true;
     }
-    //check in url
+    //team niet gevonden in url
     else {
-        //bouw url
-        var url = new URL(window.location.href);
-        //vraag url parameter team op
-        var team = url.searchParams.get("team");
-        //team in url gevonden
-        if (team) {
-            localStorage.setItem('team', team);
+        //check if exists in localstorage
+        if (localStorage.getItem('team')) {
             return true;
         }
-        //team niet gevonden in url
+        //check in url
         else {
             return false;
         }
     }
+
 }
 
 function showNoTeamSet() {
@@ -159,6 +164,7 @@ function saveHole() {
                         timer: 1500,
                     });
                     nextHole();
+                    renderTable(getTeamScore());
                 } else {
                     //show error
                     Swal.fire({
@@ -226,18 +232,6 @@ function renderHole(hole) {
 var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
 var iets = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
 
-function getAllScores() {
-    var query = `select team, hole,kleur, score from scores`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getAllScoresOrdered() {
-    var query = `select * from scores order by score desc`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
 function executeQuery(query) {
     var result = [];
     $.ajax({
@@ -266,6 +260,24 @@ function executeQuery(query) {
         }
     });
     return result;
+}
+
+function getAllScores() {
+    var query = `select team, hole,kleur, score from scores where team =`+localStorage.getItem('team');
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getTeamScore(){
+    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getAllScoresOrdered() {
+    var query = `select * from scores order by score desc`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
 }
 
 function setCookie(cname, cvalue, exhours) {
@@ -351,7 +363,7 @@ function restructure() {
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = `Select team, kleur from scores where kleur = 'blue'`;
+    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
@@ -368,9 +380,9 @@ function finishGame() {
     replayButton.onclick = function(){
         restart();
     };
-    replayButton.innerText = 'Start nog een spel';
+    replayButton.innerText = 'Start nieuwe ronde';
     replay.appendChild(replayButton);
-    message.innerHTML = `Het spel is afgelopen, hieronder staan de resultaten.`;
+    message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
 }
 

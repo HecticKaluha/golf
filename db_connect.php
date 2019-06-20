@@ -8,6 +8,11 @@ function dbConnect()
     $password = "hf4a9NZ2-";
     $dbname = "jroea_2";
 
+//    $servername = "localhost";
+//    $username = "root";
+//    $password = "root";
+//    $dbname = "locc";
+
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 
     try {
