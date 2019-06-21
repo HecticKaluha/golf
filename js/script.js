@@ -1,7 +1,3 @@
-var s1 = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM `scores` as s left join holes as h on h.hole=s.hole  group by s.id having team = 1";
-
-
-
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8','9'];
 
@@ -39,7 +35,11 @@ function getTeamFromURL() {
     var team = url.searchParams.get("team");
     //team in url gevonden
     if (team) {
-        localStorage.setItem('team', team);
+        
+      if(team != localStorage.getItem('team')){
+         localStorage.setItem('hole',1);
+        }
+      localStorage.setItem('team', team);
         return true;
     }
     //team niet gevonden in url
@@ -180,8 +180,8 @@ function saveHole() {
         });
     } else {
         Swal.fire({
-            title: 'Onvolledige data',
-            text: "Zorg ervoor dat je een tee en een score hebt ingevuld voor deze hole",
+            title: 'OOPS',
+            text: "TeeKleur en score ingevuld??",
             type: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Ik begrijp het, sorry...'
@@ -201,7 +201,7 @@ function showHole(hole) {
     if (!hole) {
         hole = 1;
     }
-    if (hole > 18) {
+    if (hole > 9) {
         finishGame();
     } else {
         renderHole(hole);
@@ -225,12 +225,6 @@ function renderHole(hole) {
     checkContainer.style.backgroundColor = '#f8f9fa';
 }
 
-//omdat je nu een string gebruikt om je query op te bouwen hoef je kolomnamen niet tussen quotes te zetten (zie hieronder)
-//door gebruik te maken van apostrophes (geen quotes ' of dubbele quotes " ) kun je direct javascript variables gebruiken
-//als je ze zet tussen ${variable} (zie queries hieronder met localstorage)
-//zie https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Template_literals voor verdere uitleg
-var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
-var iets = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
 
 function executeQuery(query) {
     var result = [];
@@ -361,9 +355,55 @@ function restructure() {
     });
 }
 
+
+//omdat je nu een string gebruikt om je query op te bouwen hoef je kolomnamen niet tussen quotes te zetten (zie hieronder)
+//door gebruik te maken van apostrophes (geen quotes ' of dubbele quotes " ) kun je direct javascript variables gebruiken
+//als je ze zet tussen ${variable} (zie queries hieronder met localstorage)
+//zie https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Template_literals voor verdere uitleg
+var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
+var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
+var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
+/*
+var klassement = 'select sum(score) as totaal, score,
+  count(case when hole = '1' THEN 1 END) H1,
+  count(case when hole = '2' THEN 1 END) H2,
+  count(case when hole = '3' THEN 1 END) H3,
+  count(case when hole = '4' THEN 1 END) H4,
+  count(case when hole = '5' THEN 1 END) H5,
+  count(case when hole = '6' THEN 1 END) H6,
+  count(case when hole = '7' THEN 1 END) H7,
+  count(case when hole = '8' THEN 1 END) H8,
+  count(case when hole = '9' THEN 1 END) H9,
+  count(case when hole = '10' THEN 1 END) H10,
+  count(case when hole = '11' THEN 1 END) H11,
+  count(case when hole = '12' THEN 1 END) H12,
+  count(case when hole = '13' THEN 1 END) H13,
+  count(case when hole = '14' THEN 1 END) H14,
+  count(case when hole = '15' THEN 1 END) H15,
+  count(case when hole = '16' THEN 1 END) H16,
+  count(case when hole = '17' THEN 1 END) H17,
+  count(case when hole = '18' THEN 1 END) H18,
+
+ kleur, team
+from scores sc
+group by score
+order by totaal desc';
+*/
+
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var dbResult = executeQuery(query);
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
+    replay.style.display = `none`;
+
+    renderTable(dbResult);
+}
+
+function testQuery2() {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+    var query = q3;
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
