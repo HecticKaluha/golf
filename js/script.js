@@ -1,5 +1,5 @@
 const colors = ['red', 'blue', 'yellow', 'white'];
-const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8','9'];
+const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
 var masonries = [];
 var masonriesElements = [];
@@ -35,11 +35,10 @@ function getTeamFromURL() {
     var team = url.searchParams.get("team");
     //team in url gevonden
     if (team) {
-        
-      if(team != localStorage.getItem('team')){
-         localStorage.setItem('hole',1);
+        if (team !== localStorage.getItem('team')) {
+            localStorage.setItem('hole', 1);
         }
-      localStorage.setItem('team', team);
+        localStorage.setItem('team', team);
         return true;
     }
     //team niet gevonden in url
@@ -53,7 +52,6 @@ function getTeamFromURL() {
             return false;
         }
     }
-
 }
 
 function showNoTeamSet() {
@@ -164,7 +162,7 @@ function saveHole() {
                         timer: 1500,
                     });
                     nextHole();
-                    renderTable(getTeamScore());
+                    renderTable(getTeamScore(), 'teamScore');
                 } else {
                     //show error
                     Swal.fire({
@@ -257,12 +255,12 @@ function executeQuery(query) {
 }
 
 function getAllScores() {
-    var query = `select team, hole,kleur, score from scores where team =`+localStorage.getItem('team');
+    var query = `select team, hole,kleur, score from scores where team =` + localStorage.getItem('team');
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
 
-function getTeamScore(){
+function getTeamScore() {
     var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
@@ -297,15 +295,31 @@ function getCookie(cname) {
     return "";
 }
 
-function renderTable(jsonResult) {
-    queryResult.innerHTML =
+function renderTable(jsonResult, renderName) {
+    var divToRenderIn = null;
+
+    if(!renderName){
+        divToRenderIn = results;
+    }
+    else{
+        if(document.getElementById(renderName)){
+            divToRenderIn = document.getElementById(renderName);
+        }
+        else{
+            divToRenderIn = document.createElement('div');
+            divToRenderIn.id = renderName;
+            results.append(divToRenderIn);
+        }
+    }
+
+    divToRenderIn.innerHTML =
         `<table class="table table-bordered table-striped">
                                 <thead>
-                                    <tr role="row" id="thead">
+                                    <tr role="row" id="${renderName}-thead">
                                     
                                     </tr>
                                 </thead>
-                                <tbody id="tbody">
+                                <tbody id="${renderName}-tbody">
                                 
                                 <tbody/>
                             </table>`;
@@ -323,7 +337,7 @@ function renderTable(jsonResult) {
                 var theader = document.createElement('td');
                 theader.innerText = key;
                 theader.className = 'text-wrap';
-                thead.appendChild(theader);
+                document.getElementById(`${renderName}-thead`).appendChild(theader);
             }
 
             //genereren van alle data die per rij beschikbaar is
@@ -335,7 +349,7 @@ function renderTable(jsonResult) {
             }
             tableRow.appendChild(scoreRowData);
         }
-        tbody.appendChild(tableRow);
+        document.getElementById(`${renderName}-tbody`).appendChild(tableRow);
     });
 }
 
@@ -398,7 +412,7 @@ function testQuery() {
     message.style.display = `none`;
     replay.style.display = `none`;
 
-    renderTable(dbResult);
+    renderTable(dbResult, 'query1');
 }
 
 function testQuery2() {
@@ -409,15 +423,18 @@ function testQuery2() {
     message.style.display = `none`;
     replay.style.display = `none`;
 
-    renderTable(dbResult);
+    renderTable(dbResult, 'query2');
 }
 
 function finishGame() {
-    renderTable(getAllScores());
+    results.innerHTML = '';
+    renderTable(getAllScores(),'finalResults');
     playing.style.display = 'none';
+    message.style.display = `block`;
+    replay.style.display = `block`;
     var replayButton = document.createElement('button');
     replayButton.className = 'btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text';
-    replayButton.onclick = function(){
+    replayButton.onclick = function () {
         restart();
     };
     replayButton.innerText = 'Start nieuwe ronde';
@@ -426,13 +443,13 @@ function finishGame() {
     finished.style.display = `block`;
 }
 
-function restart(){
+function restart() {
     localStorage.removeItem('team');
     localStorage.removeItem('score');
     localStorage.removeItem('tee');
     localStorage.removeItem('hole');
     finished.style.display = 'none';
-    queryResult.innerHTML = '';
+    results.innerHTML = '';
 
     //remove redundant info
     generatePage();
