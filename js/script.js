@@ -1,3 +1,7 @@
+// deze datum wil ik meegeven in de insert
+// dan kunnen we de score zoeken where team is teamcookie and datum is vandaag
+console.log(new Date().toISOString().split('T')[0]);
+
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
