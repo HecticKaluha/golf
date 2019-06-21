@@ -409,6 +409,17 @@ group by score
 order by totaal desc';
 */
 
+/*
+
+
+select team, sum(score) as totaal
+from scores
+where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE()
+group by team
+order by totaal asc
+
+*/
+
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
