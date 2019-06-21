@@ -1,5 +1,6 @@
 // deze datum wil ik meegeven in de insert
 // dan kunnen we de score zoeken where team is teamcookie and datum is vandaag
+// waar moet ik de function query aanroepen, en hoe?
 console.log(new Date().toISOString().split('T')[0]);
 
 const colors = ['red', 'blue', 'yellow', 'white'];
