@@ -420,12 +420,12 @@ function klassement() {
     replay.style.display = `none`;
   
   dbResult.forEach(function(teamId){
-    console.log(teamId);
+    console.log("teamId['team'] " +teamId['team']);
 
-    var teamResult = executeQuery('select team,sum(score) as totaal from scores where team = '+teamId['team']);
+    var teamResult = executeQuery("select team,sum(score) as totaal from scores where team = " + teamId['team'] + " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)");
     console.log(teamResult);
 
-    renderTable(teamResult, teamId.id); // klassenement is id van div toch?
+    renderTable(teamResult, teamId['team']); // klassenement is id van div toch?
     
   });
   
