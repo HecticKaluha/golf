@@ -411,9 +411,9 @@ function testQuery() {
     renderTable(dbResult, 'query1');
 }
 
-function testQuery2(q) {
+function klassement() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = q;
+    var query = "select distinct team from scores";
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
@@ -422,7 +422,7 @@ function testQuery2(q) {
   dbResult.forEach(function(teamId){
     console.log(teamId);
 
-    var teamResult = executeQuery('select * from scores where team = '+teamId);
+    var teamResult = executeQuery('select team,sum(score) as totaal from scores where team = '+teamId['team']);
     console.log(teamResult);
 
     renderTable(teamResult, teamId.id); // klassenement is id van div toch?
