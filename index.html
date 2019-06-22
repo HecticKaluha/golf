@@ -62,7 +62,22 @@
             </div>
 
             <hr>
-
+            <div class="row">
+                <div class="col-12">
+                    <div id="checkContainer" class="text-center border mb-3 rounded m-1">
+                        <div class="row">
+                            <div class="h1 text-secondary col-4" id="holeCheck">-</div>
+                            <div class="h1 text-secondary col-4" id="colorCheck">-</div>
+                            <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
+                        </div>
+                        <div class="row">
+                            <div class="text-muted col-4">HOLE</div>
+                            <div class="text-muted col-4">TEE</div>
+                            <div class="text-muted col-4">SCORE</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <h2 class="h3 text-center">Tee</h2>
@@ -87,22 +102,7 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12">
-                    <div id="checkContainer" class="text-center border mb-3 rounded m-1">
-                        <div class="row">
-                            <div class="h1 text-secondary col-4" id="holeCheck">-</div>
-                            <div class="h1 text-secondary col-4" id="colorCheck">-</div>
-                            <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
-                        </div>
-                        <div class="row">
-                            <div class="text-muted col-4">HOLE</div>
-                            <div class="text-muted col-4">TEE</div>
-                            <div class="text-muted col-4">SCORE</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <div class="row mb-3">
                 <div class="col-12">
@@ -131,7 +131,21 @@
             </div>
         </div>
     </div>
-
+    <div class="row">
+        <div class="col-12">
+            <div class="m-1 mb-3">
+                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
+                        onclick="testQuery2(q3)">TeamTotaal
+                </button>
+                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
+                        onclick="testQuery2(q4)">test
+                </button>
+          </div>
+        </div>
+    </div>
+  
+  
+  
     <div class="row" id="finished">
         <div class="col-12 text-center">
             <h1 class="mb-3" id="message"></h1>

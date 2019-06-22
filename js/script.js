@@ -1,6 +1,5 @@
 // deze datum wil ik meegeven in de insert
 // dan kunnen we de score zoeken where team is teamcookie and datum is vandaag
-// waar moet ik de function query aanroepen, en hoe?
 console.log(new Date().toISOString().split('T')[0]);
 
 const colors = ['red', 'blue', 'yellow', 'white'];
@@ -14,6 +13,8 @@ $(document).ready(function () {
 
     generatePage();
 });
+
+
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -277,6 +278,14 @@ function getAllScoresOrdered() {
     return executeQuery(query);
 }
 
+function getAllTeams() {
+    var query = `select * from teams`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+
+
 function setCookie(cname, cvalue, exhours) {
     var d = new Date();
     d.setTime(d.getTime() + (exhours * 60 * 60 * 1000));
@@ -382,43 +391,11 @@ function restructure() {
 var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
 var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
 var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
-/*
-var klassement = 'select sum(score) as totaal, score,
-  count(case when hole = '1' THEN 1 END) H1,
-  count(case when hole = '2' THEN 1 END) H2,
-  count(case when hole = '3' THEN 1 END) H3,
-  count(case when hole = '4' THEN 1 END) H4,
-  count(case when hole = '5' THEN 1 END) H5,
-  count(case when hole = '6' THEN 1 END) H6,
-  count(case when hole = '7' THEN 1 END) H7,
-  count(case when hole = '8' THEN 1 END) H8,
-  count(case when hole = '9' THEN 1 END) H9,
-  count(case when hole = '10' THEN 1 END) H10,
-  count(case when hole = '11' THEN 1 END) H11,
-  count(case when hole = '12' THEN 1 END) H12,
-  count(case when hole = '13' THEN 1 END) H13,
-  count(case when hole = '14' THEN 1 END) H14,
-  count(case when hole = '15' THEN 1 END) H15,
-  count(case when hole = '16' THEN 1 END) H16,
-  count(case when hole = '17' THEN 1 END) H17,
-  count(case when hole = '18' THEN 1 END) H18,
-
- kleur, team
-from scores sc
-group by score
-order by totaal desc';
-*/
-
-/*
+var q4 = 'select id from teams';
+var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
 
 
-select team, sum(score) as totaal
-from scores
-where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE()
-group by team
-order by totaal asc
 
-*/
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
@@ -431,16 +408,28 @@ function testQuery() {
     renderTable(dbResult, 'query1');
 }
 
-function testQuery2() {
+function testQuery2(q) {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = q3;
+    var query = q;
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
     replay.style.display = `none`;
+  
+  dbResult.forEach(function(teamId){
+    console.log(teamId.id);
 
-    renderTable(dbResult, 'query2');
+    var teamResult = executeQuery('select * from scores where team = '+teamId.id);
+    console.log(teamResult);
+
+    renderTable(teamResult, teamId.id); // klassenement is id van div toch?
+    
+  });
+  
+   // renderTable(dbResult, 'query2');
 }
+
+
 
 function finishGame() {
     results.innerHTML = '';
