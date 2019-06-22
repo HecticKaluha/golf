@@ -262,12 +262,13 @@ function executeQuery(query) {
 
 function getAllScores() {
     var query = `select team, hole,kleur, score from scores where team =` + localStorage.getItem('team');
+
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
 
 function getTeamScore() {
-    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
+    var query = 'SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = `${localStorage.getItem('team')`';
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
@@ -399,7 +400,9 @@ var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum,
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = 444 and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()";
+
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
