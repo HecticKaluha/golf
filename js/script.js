@@ -3,7 +3,7 @@
 console.log(new Date().toISOString().split('T')[0]);
 
 const colors = ['red', 'blue', 'yellow', 'white'];
-const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
+const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
 var masonries = [];
 var masonriesElements = [];
