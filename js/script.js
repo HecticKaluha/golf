@@ -103,7 +103,7 @@ function showTeamSet() {
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary p-3 p-sm-4 p-lg-5 bigger-text rounded';
-        button.innerHTML = color;
+        //button.innerHTML = color;
         button.style.backgroundColor = color;
 
         button.onclick = function () {
@@ -117,7 +117,7 @@ function showTeamSet() {
     scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function (score) {
         var div = document.createElement('div');
-        div.className = 'p-1 col-4 col-sm-4 col-lg-3 grid-item';
+        div.className = 'p-1 col-3 col-sm-4 col-lg-3 grid-item';
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
@@ -391,7 +391,7 @@ function restructure() {
 var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
 var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
 var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
-var q4 = 'select id from teams';
+var q4 = 'select distinct team from scores';
 var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
 
 
@@ -417,9 +417,9 @@ function testQuery2(q) {
     replay.style.display = `none`;
   
   dbResult.forEach(function(teamId){
-    console.log(teamId.id);
+    console.log(teamId);
 
-    var teamResult = executeQuery('select * from scores where team = '+teamId.id);
+    var teamResult = executeQuery('select * from scores where team = '+teamId);
     console.log(teamResult);
 
     renderTable(teamResult, teamId.id); // klassenement is id van div toch?
