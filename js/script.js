@@ -1,6 +1,3 @@
-// deze datum wil ik meegeven in de insert
-// dan kunnen we de score zoeken where team is teamcookie and datum is vandaag
-console.log(new Date().toISOString().split('T')[0]);
 $('#holeNumber').hide();
 
 const colors = ['red', 'blue', 'yellow', 'white'];
@@ -247,6 +244,7 @@ function executeQuery(query) {
             if (response.success) {
                 //je response message (result van de query) is beschikbaar via response.message
                 result = response.message;
+
             } else {
                 //show error
                 Swal.fire({
@@ -314,6 +312,10 @@ function getCookie(cname) {
 }
 
 function renderTable(jsonResult, renderName) {
+
+    console.log(localStorage.getItem('kleurObj'));
+
+
     var divToRenderIn = null;
 
     if(!renderName){
@@ -400,6 +402,9 @@ var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum,
 var q7 = "SELECT *  FROM klassement where game =1 ";
 var q6 = "SELECT *  FROM overall as o right join game g on g.teamId = o.team right join teams t on t.id = g.teamId where t.id in (select teamId from game) order by totaal";
 
+
+
+
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
   //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
@@ -428,6 +433,41 @@ function testQuery2(q) {
 
 
 function klassement() {
+    var klasQuery = "select s.team AS team,";
+    for (i=1 ; i<19;i++){
+
+    klasQuery += ("case when s.hole = " + i + " then s.kleur end as K"+i+", sum(case when s.hole = "+i+" then s.score end) AS H"+i+",");
+
+}
+
+
+    klasQuery += "sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
+
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+    var query = klasQuery;
+
+    var dbResult = executeQuery(query);
+
+
+    renderTable(dbResult, 'klassement'); 
+  };
+  
+   // renderTable(dbResult, 'query2');
+
+
+function kleur(){
+
+    var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
+    var dbResult = executeQuery(query);   
+    dbResult.forEach(function(teamId){
+    var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
+    renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
+    
+    });
+};
+
+
+function klassement__() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = "select distinct team from scores";
     var dbResult = executeQuery(query);
