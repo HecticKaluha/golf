@@ -207,7 +207,7 @@ function showHole(hole) {
     if (!hole) {
         hole = 1;
     }
-    if (hole > 4) {
+    if (hole > 18) {
         finishGame();
     } else {
         renderHole(hole);
@@ -397,14 +397,13 @@ var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON hol
 var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
 var q4 = 'select distinct team from scores';
 var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
-var q6 = "SELECT s.team, sum(case when s.hole = 1 THEN score END) H1, SUM(case when s.hole = 2 THEN score END) H2,SUM(case when s.hole = 3 THEN score END) H3,  SUM(case when s.hole = 4 THEN score END) H4,SUM(case when s.hole = 5 THEN score END) H5,  sum(case when s.hole = 6 THEN score END) H6,SUM(case when s.hole = 7 THEN score END) H7,  SUM(case when s.hole = 8 THEN score END) H8,SUM(case when s.hole = 9 THEN score END) H9,  SUM(case when s.hole = 10 THEN score END) H10,SUM(case when s.hole = 11 THEN score END) H11,  SUM(case when s.hole = 12 THEN score END) H12,  SUM(case when s.hole = 13 THEN score END) H13,  SUM(case when s.hole = 14 THEN score END) H14,SUM(case when s.hole = 15 THEN score END) H15,  SUM(case when s.hole = 16 THEN score END) H16,SUM(case when s.hole = 17 THEN score END) H17,  SUM(case when s.hole = 18 THEN score END) H18,sum(score) as totaal FROM scores s LEFT join holes h ON h.hole = s.hole where DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
-
-
+var q7 = "SELECT *  FROM klassement where game =1 ";
+var q6 = "SELECT *  FROM overall as o right join game g on g.teamId = o.team right join teams t on t.id = g.teamId where t.id in (select teamId from game) order by totaal";
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
   //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
-    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = "+localStorage.getItem('team')+" and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()";
+    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = "+localStorage.getItem('team')+" ";//and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()
 
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
