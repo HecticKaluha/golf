@@ -1,6 +1,7 @@
 // deze datum wil ik meegeven in de insert
 // dan kunnen we de score zoeken where team is teamcookie and datum is vandaag
 console.log(new Date().toISOString().split('T')[0]);
+$('#holeNumber').hide();
 
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
@@ -103,7 +104,7 @@ function showTeamSet() {
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary p-3 p-sm-4 p-lg-5 bigger-text rounded';
-        button.innerHTML = color;
+        //button.innerHTML = color;
         button.style.backgroundColor = color;
 
         button.onclick = function () {
@@ -117,7 +118,8 @@ function showTeamSet() {
     scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function (score) {
         var div = document.createElement('div');
-        div.className = 'p-1 col-4 col-sm-4 col-lg-3 grid-item';
+
+        div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
@@ -205,7 +207,7 @@ function showHole(hole) {
     if (!hole) {
         hole = 1;
     }
-    if (hole > 9) {
+    if (hole > 4) {
         finishGame();
     } else {
         renderHole(hole);
@@ -224,7 +226,8 @@ function renderHole(hole) {
 
     //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
     //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
-    holeNumber.innerText = holeCheck.innerText = hole;
+    //holeNumber.innerText = hole;
+    holeCheck.innerText = hole;
 
     checkContainer.style.backgroundColor = '#f8f9fa';
 }
@@ -261,13 +264,14 @@ function executeQuery(query) {
 }
 
 function getAllScores() {
-    var query = `select team, hole,kleur, score from scores where team ='${localStorage.getItem('team')}'`;
+    var query = 'select team, hole,kleur, score from scores where team =' + localStorage.getItem('team');
+
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
 
 function getTeamScore() {
-    var query = `select team, hole,kleur, score from scores where team = '${localStorage.getItem('team')}'`;
+    var query = 'SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ' + localStorage.getItem('team');
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
@@ -391,15 +395,17 @@ function restructure() {
 var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
 var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
 var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
-var q4 = 'select id from teams';
+var q4 = 'select distinct team from scores';
 var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
-
+var q6 = "SELECT s.team, sum(case when s.hole = 1 THEN score END) H1, SUM(case when s.hole = 2 THEN score END) H2,SUM(case when s.hole = 3 THEN score END) H3,  SUM(case when s.hole = 4 THEN score END) H4,SUM(case when s.hole = 5 THEN score END) H5,  sum(case when s.hole = 6 THEN score END) H6,SUM(case when s.hole = 7 THEN score END) H7,  SUM(case when s.hole = 8 THEN score END) H8,SUM(case when s.hole = 9 THEN score END) H9,  SUM(case when s.hole = 10 THEN score END) H10,SUM(case when s.hole = 11 THEN score END) H11,  SUM(case when s.hole = 12 THEN score END) H12,  SUM(case when s.hole = 13 THEN score END) H13,  SUM(case when s.hole = 14 THEN score END) H14,SUM(case when s.hole = 15 THEN score END) H15,  SUM(case when s.hole = 16 THEN score END) H16,SUM(case when s.hole = 17 THEN score END) H17,  SUM(case when s.hole = 18 THEN score END) H18,sum(score) as totaal FROM scores s LEFT join holes h ON h.hole = s.hole where DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
 
 
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = '${localStorage.getItem('team')}'`;
+  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = "+localStorage.getItem('team')+" and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()";
+
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
@@ -410,19 +416,33 @@ function testQuery() {
 
 function testQuery2(q) {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
     var query = q;
+
+    var dbResult = executeQuery(query);
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
+    replay.style.display = `none`;
+
+    renderTable(dbResult, 'query1');
+}
+
+
+function klassement() {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+    var query = "select distinct team from scores";
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
     replay.style.display = `none`;
   
   dbResult.forEach(function(teamId){
-    console.log(teamId.id);
+    console.log("teamId['team'] " +teamId['team']);
 
-    var teamResult = executeQuery('select * from scores where team = '+teamId.id);
+    var teamResult = executeQuery("select team,sum(score) as totaal from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
     console.log(teamResult);
 
-    renderTable(teamResult, teamId.id); // klassenement is id van div toch?
+    renderTable(teamResult, teamId['team']); // klassenement is id van div toch?
     
   });
   
