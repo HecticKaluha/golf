@@ -103,7 +103,7 @@ function showTeamSet() {
         div.className = 'p-1 col-6 col-sm-3 grid-item';
 
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large col-12 border text-secondary p-3 p-sm-4 p-lg-5 bigger-text rounded';
+        button.className = 'btn-large col-12 border text-secondary p-4 p-sm-4 p-lg-5 bigger-text rounded';
         //button.innerHTML = color;
         button.style.backgroundColor = color;
 
@@ -263,33 +263,6 @@ function executeQuery(query) {
     return result;
 }
 
-function getAllScores() {
-    var query = 'select team, hole,kleur, score from scores where team =' + localStorage.getItem('team');
-
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getTeamScore() {
-    var query = 'SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ' + localStorage.getItem('team');
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getAllScoresOrdered() {
-    var query = `select * from scores order by score desc`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getAllTeams() {
-    var query = `select * from teams`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-
-
 function setCookie(cname, cvalue, exhours) {
     var d = new Date();
     d.setTime(d.getTime() + (exhours * 60 * 60 * 1000));
@@ -371,86 +344,6 @@ function renderTable(jsonResult, renderName) {
     });
 }
 
-function initializeGrids() {
-    masonries = document.getElementsByClassName('grid');
-    Array.from(masonries).forEach(function (grid, index) {
-        masonriesElements[index] = new Masonry(grid, {
-            itemSelector: '.grid-item',
-        });
-    });
-}
-
-function restructure() {
-    masonriesElements.forEach(function (masonry) {
-        masonry.reloadItems();
-        masonry.layout();
-    });
-}
-
-
-//omdat je nu een string gebruikt om je query op te bouwen hoef je kolomnamen niet tussen quotes te zetten (zie hieronder)
-//door gebruik te maken van apostrophes (geen quotes ' of dubbele quotes " ) kun je direct javascript variables gebruiken
-//als je ze zet tussen ${variable} (zie queries hieronder met localstorage)
-//zie https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Template_literals voor verdere uitleg
-var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
-var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
-var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
-var q4 = 'select distinct team from scores';
-var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
-var q6 = "SELECT s.team, sum(case when s.hole = 1 THEN score END) H1, SUM(case when s.hole = 2 THEN score END) H2,SUM(case when s.hole = 3 THEN score END) H3,  SUM(case when s.hole = 4 THEN score END) H4,SUM(case when s.hole = 5 THEN score END) H5,  sum(case when s.hole = 6 THEN score END) H6,SUM(case when s.hole = 7 THEN score END) H7,  SUM(case when s.hole = 8 THEN score END) H8,SUM(case when s.hole = 9 THEN score END) H9,  SUM(case when s.hole = 10 THEN score END) H10,SUM(case when s.hole = 11 THEN score END) H11,  SUM(case when s.hole = 12 THEN score END) H12,  SUM(case when s.hole = 13 THEN score END) H13,  SUM(case when s.hole = 14 THEN score END) H14,SUM(case when s.hole = 15 THEN score END) H15,  SUM(case when s.hole = 16 THEN score END) H16,SUM(case when s.hole = 17 THEN score END) H17,  SUM(case when s.hole = 18 THEN score END) H18,sum(score) as totaal FROM scores s LEFT join holes h ON h.hole = s.hole where DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
-
-
-
-function testQuery() {
-    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
-    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = "+localStorage.getItem('team')+" and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()";
-
-    var dbResult = executeQuery(query);
-    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
-    message.style.display = `none`;
-    replay.style.display = `none`;
-
-    renderTable(dbResult, 'query1');
-}
-
-function testQuery2(q) {
-    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
-    var query = q;
-
-    var dbResult = executeQuery(query);
-    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
-    message.style.display = `none`;
-    replay.style.display = `none`;
-
-    renderTable(dbResult, 'query1');
-}
-
-
-function klassement() {
-    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = "select distinct team from scores";
-    var dbResult = executeQuery(query);
-    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
-    message.style.display = `none`;
-    replay.style.display = `none`;
-  
-  dbResult.forEach(function(teamId){
-    console.log("teamId['team'] " +teamId['team']);
-
-    var teamResult = executeQuery("select team,sum(score) as totaal from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-    console.log(teamResult);
-
-    renderTable(teamResult, teamId['team']); // klassenement is id van div toch?
-    
-  });
-  
-   // renderTable(dbResult, 'query2');
-}
-
-
-
 function finishGame() {
     results.innerHTML = '';
     renderTable(getAllScores(),'finalResults');
@@ -479,3 +372,101 @@ function restart() {
     //remove redundant info
     generatePage();
 }
+
+function initializeGrids() {
+    masonries = document.getElementsByClassName('grid');
+    Array.from(masonries).forEach(function (grid, index) {
+        masonriesElements[index] = new Masonry(grid, {
+            itemSelector: '.grid-item',
+        });
+    });
+}
+
+function restructure() {
+    masonriesElements.forEach(function (masonry) {
+        masonry.reloadItems();
+        masonry.layout();
+    });
+}
+
+//omdat je nu een string gebruikt om je query op te bouwen hoef je kolomnamen niet tussen quotes te zetten (zie hieronder)
+//door gebruik te maken van apostrophes (geen quotes ' of dubbele quotes " ) kun je direct javascript variables gebruiken
+//als je ze zet tussen ${variable} (zie queries hieronder met localstorage)
+//zie https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Template_literals voor verdere uitleg
+var iets = `select SUM(score) as TOTAAL FROM scores WHERE team = ${localStorage.getItem('team')}`;
+var q2 = `SELECT team,scores.hole,score,kleur FROM scores LEFT join holes ON holes.hole = scores.hole`;
+var q3 = `SELECT sum(score) as totaal FROM scores where team = ${localStorage.getItem('team')}`; // rondetotaal
+var q4 = 'select distinct team from scores';
+var q5 = `select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc`;
+var q6 = `SELECT s.team, sum(case when s.hole = 1 THEN score END) H1, SUM(case when s.hole = 2 THEN score END) H2,SUM(case when s.hole = 3 THEN score END) H3,  SUM(case when s.hole = 4 THEN score END) H4,SUM(case when s.hole = 5 THEN score END) H5,  sum(case when s.hole = 6 THEN score END) H6,SUM(case when s.hole = 7 THEN score END) H7,  SUM(case when s.hole = 8 THEN score END) H8,SUM(case when s.hole = 9 THEN score END) H9,  SUM(case when s.hole = 10 THEN score END) H10,SUM(case when s.hole = 11 THEN score END) H11,  SUM(case when s.hole = 12 THEN score END) H12,  SUM(case when s.hole = 13 THEN score END) H13,  SUM(case when s.hole = 14 THEN score END) H14,SUM(case when s.hole = 15 THEN score END) H15,  SUM(case when s.hole = 16 THEN score END) H16,SUM(case when s.hole = 17 THEN score END) H17,  SUM(case when s.hole = 18 THEN score END) H18,sum(score) as totaal FROM scores s LEFT join holes h ON h.hole = s.hole where DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc`;
+
+function testQuery() {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${+localStorage.getItem('team')} and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()`;
+
+    var dbResult = executeQuery(query);
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
+    replay.style.display = `none`;
+
+    renderTable(dbResult, 'query1');
+}
+
+function testQuery2(q) {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = q;
+
+    var dbResult = executeQuery(query);
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
+    replay.style.display = `none`;
+
+    renderTable(dbResult, 'query1');
+}
+
+function klassement() {
+    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
+    var query = `select distinct team from scores`;
+    var dbResult = executeQuery(query);
+    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
+    message.style.display = `none`;
+    replay.style.display = `none`;
+  
+    dbResult.forEach(function(teamId){
+        console.log(`teamId['team'] ${teamId['team']}`);
+
+        var teamResult = executeQuery(`select team,sum(score) as totaal from scores where team = ${ teamId['team']}`); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
+        console.log(teamResult);
+
+        renderTable(teamResult, teamId['team']); // klassenement is id van div toch? ja
+    });
+}
+
+function getAllScores() {
+    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
+
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getTeamScore() {
+    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getAllScoresOrdered() {
+    var query = `select * from scores order by score desc`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getAllTeams() {
+    var query = `select * from teams`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+
