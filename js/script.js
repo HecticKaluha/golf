@@ -1,17 +1,14 @@
-$('#holeNumber').hide();
-
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
-var masonries = [];
-var masonriesElements = [];
+let masonries = [];
+let masonriesElements = [];
 
 $(document).ready(function () {
     setCookie('sessie', 'een uur', 1);
 
     generatePage();
 });
-
 
 
 function generatePage() {
@@ -285,20 +282,14 @@ function getCookie(cname) {
 }
 
 function renderTable(jsonResult, renderName) {
-
-    console.log(localStorage.getItem('kleurObj'));
-
-
     var divToRenderIn = null;
 
-    if(!renderName){
+    if (!renderName) {
         divToRenderIn = results;
-    }
-    else{
-        if(document.getElementById(renderName)){
+    } else {
+        if (document.getElementById(renderName)) {
             divToRenderIn = document.getElementById(renderName);
-        }
-        else{
+        } else {
             divToRenderIn = document.createElement('div');
             divToRenderIn.id = renderName;
             results.append(divToRenderIn);
@@ -348,7 +339,7 @@ function renderTable(jsonResult, renderName) {
 
 function finishGame() {
     results.innerHTML = '';
-    renderTable(getAllScores(),'finalResults');
+    renderTable(getAllScores(), 'finalResults');
     playing.style.display = 'none';
     message.style.display = `block`;
     replay.style.display = `block`;
@@ -405,8 +396,8 @@ var q6 = "SELECT *  FROM overall as o right join game g on g.teamId = o.team rig
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
-    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = "+localStorage.getItem('team')+" ";//and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()
+    //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = "SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team, s.datum FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = " + localStorage.getItem('team') + " ";//and DATE_FORMAT(s.datum, '%Y-%m-%d') = CURDATE()
 
     var dbResult = executeQuery(query);
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
@@ -418,7 +409,7 @@ function testQuery() {
 
 function testQuery2(q) {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-  //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    //  var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
     var query = q;
 
     var dbResult = executeQuery(query);
@@ -431,36 +422,30 @@ function testQuery2(q) {
 
 function klassement() {
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
-    for (i=1 ; i<19;i++){
+    for (i = 1; i < 19; i++) {
+        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
+    }
 
-    klasQuery += (" sum(case when s.hole = "+i+" then s.score end) AS H"+i+",");
-
-}
-
-
-    klasQuery += "sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
+    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
 
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
     var query = klasQuery;
-    console.log(klasQuery);
 
     var dbResult = executeQuery(query);
+    renderTable(dbResult, 'klassement');
+};
+
+// renderTable(dbResult, 'query2');
 
 
-    renderTable(dbResult, 'klassement'); 
-  };
-  
-   // renderTable(dbResult, 'query2');
-
-
-function kleur(){
+function kleur() {
 
     var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
-    var dbResult = executeQuery(query);   
-    dbResult.forEach(function(teamId){
-    var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-    renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
-    
+    var dbResult = executeQuery(query);
+    dbResult.forEach(function (teamId) {
+        var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
+        renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
+
     });
 };
 
@@ -472,8 +457,8 @@ function klassement__() {
     //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
     message.style.display = `none`;
     replay.style.display = `none`;
-  
-    dbResult.forEach(function(teamId){
+
+    dbResult.forEach(function (teamId) {
         console.log(`teamId['team'] ${teamId['team']}`);
 
         var teamResult = executeQuery(`select team,sum(score) as totaal from scores where team = ${ teamId['team']}`); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
