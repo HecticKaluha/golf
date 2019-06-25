@@ -100,7 +100,7 @@ function showTeamSet() {
         div.className = 'p-1 col-6 col-sm-3 grid-item';
 
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large col-12 border text-secondary p-4 p-sm-4 p-lg-5 bigger-text rounded';
+        button.className = 'btn-large col-12 border text-secondary p-3 p-sm-4 p-lg-5 bigger-text rounded';
         //button.innerHTML = color;
         button.style.backgroundColor = color;
 
@@ -261,6 +261,33 @@ function executeQuery(query) {
     return result;
 }
 
+function getAllScores() {
+    var query = 'select team, hole,kleur, score from scores where team =' + localStorage.getItem('team');
+
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getTeamScore() {
+    var query = 'SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ' + localStorage.getItem('team');
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getAllScoresOrdered() {
+    var query = `select * from scores order by score desc`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+function getAllTeams() {
+    var query = `select * from teams`;
+    //Roep de generieke generate functie aan en geef daar de result van de query mee
+    return executeQuery(query);
+}
+
+
+
 function setCookie(cname, cvalue, exhours) {
     var d = new Date();
     d.setTime(d.getTime() + (exhours * 60 * 60 * 1000));
@@ -346,35 +373,6 @@ function renderTable(jsonResult, renderName) {
     });
 }
 
-function finishGame() {
-    results.innerHTML = '';
-    renderTable(getAllScores(),'finalResults');
-    playing.style.display = 'none';
-    message.style.display = `block`;
-    replay.style.display = `block`;
-    var replayButton = document.createElement('button');
-    replayButton.className = 'btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text';
-    replayButton.onclick = function () {
-        restart();
-    };
-    replayButton.innerText = 'Start nieuwe ronde';
-    replay.appendChild(replayButton);
-    message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
-    finished.style.display = `block`;
-}
-
-function restart() {
-    localStorage.removeItem('team');
-    localStorage.removeItem('score');
-    localStorage.removeItem('tee');
-    localStorage.removeItem('hole');
-    finished.style.display = 'none';
-    results.innerHTML = '';
-
-    //remove redundant info
-    generatePage();
-}
-
 function initializeGrids() {
     masonries = document.getElementsByClassName('grid');
     Array.from(masonries).forEach(function (grid, index) {
@@ -391,6 +389,7 @@ function restructure() {
     });
 }
 
+
 //omdat je nu een string gebruikt om je query op te bouwen hoef je kolomnamen niet tussen quotes te zetten (zie hieronder)
 //door gebruik te maken van apostrophes (geen quotes ' of dubbele quotes " ) kun je direct javascript variables gebruiken
 //als je ze zet tussen ${variable} (zie queries hieronder met localstorage)
@@ -402,6 +401,9 @@ var q4 = 'select distinct team from scores';
 var q5 = "select team, sum(score) as totaal from scores where DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() group by team order by totaal asc";
 var q7 = "SELECT *  FROM klassement where game =1 ";
 var q6 = "SELECT *  FROM overall as o right join game g on g.teamId = o.team right join teams t on t.id = g.teamId where t.id in (select teamId from game) order by totaal";
+
+
+
 
 function testQuery() {
     //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
@@ -428,6 +430,7 @@ function testQuery2(q) {
 
     renderTable(dbResult, 'query1');
 }
+
 
 function klassement() {
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
@@ -473,39 +476,46 @@ function klassement__() {
     message.style.display = `none`;
     replay.style.display = `none`;
   
-    dbResult.forEach(function(teamId){
-        console.log(`teamId['team'] ${teamId['team']}`);
+  dbResult.forEach(function(teamId){
+    console.log("teamId['team'] " +teamId['team']);
 
-        var teamResult = executeQuery(`select team,sum(score) as totaal from scores where team = ${ teamId['team']}`); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-        console.log(teamResult);
+    var teamResult = executeQuery("select team,sum(score) as totaal from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
+    console.log(teamResult);
 
-        renderTable(teamResult, teamId['team']); // klassenement is id van div toch? ja
-    });
-}
-
-function getAllScores() {
-    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
-
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getTeamScore() {
-    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getAllScoresOrdered() {
-    var query = `select * from scores order by score desc`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
-}
-
-function getAllTeams() {
-    var query = `select * from teams`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
+    renderTable(teamResult, teamId['team']); // klassenement is id van div toch?
+    
+  });
+  
+   // renderTable(dbResult, 'query2');
 }
 
 
+
+function finishGame() {
+    results.innerHTML = '';
+    renderTable(getAllScores(),'finalResults');
+    playing.style.display = 'none';
+    message.style.display = `block`;
+    replay.style.display = `block`;
+    var replayButton = document.createElement('button');
+    replayButton.className = 'btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text';
+    replayButton.onclick = function () {
+        restart();
+    };
+    replayButton.innerText = 'Start nieuwe ronde';
+    replay.appendChild(replayButton);
+    message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
+    finished.style.display = `block`;
+}
+
+function restart() {
+    localStorage.removeItem('team');
+    localStorage.removeItem('score');
+    localStorage.removeItem('tee');
+    localStorage.removeItem('hole');
+    finished.style.display = 'none';
+    results.innerHTML = '';
+
+    //remove redundant info
+    generatePage();
+}
