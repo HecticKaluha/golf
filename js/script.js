@@ -241,6 +241,7 @@ function executeQuery(query) {
             if (response.success) {
                 //je response message (result van de query) is beschikbaar via response.message
                 result = response.message;
+                //console.log(result);
 
             } else {
                 //show error
@@ -422,6 +423,8 @@ function testQuery2(q) {
 
 function klassement() {
 
+
+    kleur();
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
@@ -429,32 +432,35 @@ function klassement() {
         klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
     var dbResult = executeQuery(klasQuery);
-        //console.log(dbResult);
+    renderTable(dbResult,"klas");
+    console.log(dbResult);
 
     var table = "<table>";
-    var kleurObj = kleur();
+
     dbResult.forEach(function(team){
         console.log("team: "+team['team']);
         table += "<tr>"
 
-        var kleurObj = localStorage.getItem('team');
+        var kleurObj = JSON.parse(localStorage.getItem(team['team']));
+        // console.log(typeof kleurObj);
+        // console.log(kleurObj.length);
         console.log(kleurObj);
 
-            Object.entries(kleurObj).forEach(entry => {
+        kleurObj.forEach(function (value) {
 
-                let key = entry[0];
-                let value = entry[1];
+                table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'] + "</td>";
 
-                table += "<td>" + value + "</td>";
-                console.log("key=: "+key+"dit is "+ value );
+                //console.log("key=: "+key+"dit is "+ value );
+
             });
  
             table += "</tr>";
         });
-    table += "</table>"
-    $('#klassement').html('table');
+    table += "</table>";
+    $("#klassement").html(table);
 
-    //renderTable(dbResult, 'klassement');
+
+
 }
 
 // renderTable(dbResult, 'query2');
@@ -466,12 +472,7 @@ function kleur() {
     var dbResult = executeQuery(query);
     dbResult.forEach(function (teamId) {
         var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-        //localStorage.setItem(teamId['team'], kleurResult);
-
-        console.log(kleurResult);
-
-        return (kleurResult);
-        //renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
+        localStorage.setItem(teamId['team'], JSON.stringify(kleurResult));
 
     });
 };
