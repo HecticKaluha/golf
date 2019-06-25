@@ -432,25 +432,31 @@ function klassement() {
         klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
     var dbResult = executeQuery(klasQuery);
-    renderTable(dbResult,"klas");
-    console.log(dbResult);
+    renderTable(dbResult,"klassementGoed");
+
+
+    localStorage.setItem('teamScore', JSON.stringify(dbResult));
+
 
     var table = "<table>";
 
     dbResult.forEach(function(team){
+        x = 0;
         console.log("team: "+team['team']);
         table += "<tr>"
+        
+
+        teamScore = JSON.parse(localStorage.getItem('teamScore'));
+        console.log(teamScore);
 
         var kleurObj = JSON.parse(localStorage.getItem(team['team']));
-        // console.log(typeof kleurObj);
-        // console.log(kleurObj.length);
         console.log(kleurObj);
 
         kleurObj.forEach(function (value) {
 
-                table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'] + "</td>";
-
-                //console.log("key=: "+key+"dit is "+ value );
+                x++;
+                console.log("x= " + x);
+                table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'] + " " + teamScore['x'] + "</td>";
 
             });
  
