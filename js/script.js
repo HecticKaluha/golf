@@ -421,30 +421,57 @@ function testQuery2(q) {
 }
 
 function klassement() {
+
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
     }
+        klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
-    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
+    var dbResult = executeQuery(klasQuery);
+        //console.log(dbResult);
 
-    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = klasQuery;
+    var table = "<table>";
+    var kleurObj = kleur();
+    dbResult.forEach(function(team){
+        console.log("team: "+team['team']);
+        table += "<tr>"
 
-    var dbResult = executeQuery(query);
-    renderTable(dbResult, 'klassement');
-};
+        var kleurObj = localStorage.getItem('team');
+        console.log(kleurObj);
+
+            Object.entries(kleurObj).forEach(entry => {
+
+                let key = entry[0];
+                let value = entry[1];
+
+                table += "<td>" + value + "</td>";
+                console.log("key=: "+key+"dit is "+ value );
+            });
+ 
+            table += "</tr>";
+        });
+    table += "</table>"
+    $('#klassement').html('table');
+
+    //renderTable(dbResult, 'klassement');
+}
 
 // renderTable(dbResult, 'query2');
 
 
 function kleur() {
 
-    var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`)) where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() group by `s`.`team` order by sum(`s`.`score`)";
+    var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";// where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
     var dbResult = executeQuery(query);
     dbResult.forEach(function (teamId) {
         var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-        renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
+        //localStorage.setItem(teamId['team'], kleurResult);
+
+        console.log(kleurResult);
+
+        return (kleurResult);
+        //renderTable(kleurResult, teamId['team']); // klassenement is id van div toch?
 
     });
 };
