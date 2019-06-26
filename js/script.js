@@ -11,6 +11,33 @@ $(document).ready(function () {
     generatePage();
 });
 
+/*
+var max = 5;
+var maxCount = 0;
+var rood = 0;
+var geel = 0;
+var blauw = 0;
+var wit = 0;
+
+function checkMax(kleur) {
+	if (kleur <= max) {
+		kleur++;
+		if (kleur == max) {
+			maxCount++;
+			if (maxCount == 2) {
+				max = 4;
+			}
+		}
+		return True;
+	} else {
+		alert(“dat mag niet meer!”);
+		return False;
+		//mischien zelfs knop weghalen
+	}
+}
+
+*/
+
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -506,5 +533,4 @@ function getAllTeams() {
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
-
 
