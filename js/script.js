@@ -423,7 +423,6 @@ function testQuery2(q) {
 }
 
 function klassement() {
-
     kleur();
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
     for (i = 1; i < 19; i++) {
@@ -433,14 +432,20 @@ function klassement() {
 
     var dbResult = executeQuery(klasQuery);
     renderTable(dbResult,"klasse");
-
+    
     // localStorage.setItem('teamScore', JSON.stringify(dbResult));
     // var teamScore = JSON.parse(localStorage.getItem('teamScore'));
     var teamScore = dbResult;
     var table = "<table>";
 
     teamScore.forEach(function(teams){
-        var team = teams['team']
+        var team = teams['team'];
+        
+        for (hole = 1 ; hole < 19 ; hole++){
+            console.log('hole'+hole+'= ' +teams['H'+hole]);
+
+        }
+
         console.log("team: " + team );
         table += "<tr>"
         
@@ -451,6 +456,7 @@ function klassement() {
         console.log(kleurObj[team]['kleur']);
 
         teamScore.forEach(function(score){
+            x++;
             //console.log(score);
             if (score['team'] === team){
 
@@ -467,13 +473,15 @@ function klassement() {
              
         })
 
+        var x=0;
+
         kleurObj.forEach(function (value) {
 
-                
+                x++;
                 //score = teamScore[team][H1];
                 //console.log(score);
                 table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'];
-                //table += score;
+                table += teams[x];
                 table += "de uitslag";
                 table += "</td>";
 
