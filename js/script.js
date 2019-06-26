@@ -450,7 +450,7 @@ function klassement() {
         for (hole = 1 ; hole < 19 ; hole++){
             
             //console.log(kleurObj[x][hole]['kleur']);
-                table += "<td bgcolor= "+ kleurObj[hole-1]['kleur'] + ">";
+                table += "<td width=100px bgcolor= "+ kleurObj[hole-1]['kleur'] + ">";
                 table += teams['H'+hole];
                 table += "</td>";
 
