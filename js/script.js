@@ -12,12 +12,7 @@ $(document).ready(function () {
 });
 
 /*
-var max = 5;
-var maxCount = 0;
-var rood = 0;
-var geel = 0;
-var blauw = 0;
-var wit = 0;
+var max = 5, maxCount = 0, red = 0, yellow = 0, blue = 0, white = 0;
 
 function checkMax(kleur) {
 	if (kleur <= max) {
