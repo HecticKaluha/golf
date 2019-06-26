@@ -1,6 +1,7 @@
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 
+
 let masonries = [];
 let masonriesElements = [];
 
@@ -433,28 +434,51 @@ function klassement() {
     var dbResult = executeQuery(klasQuery);
     renderTable(dbResult,"klasse");
 
-    localStorage.setItem('teamScore', JSON.stringify(dbResult));
-
+    // localStorage.setItem('teamScore', JSON.stringify(dbResult));
+    // var teamScore = JSON.parse(localStorage.getItem('teamScore'));
+    var teamScore = dbResult;
     var table = "<table>";
 
-    dbResult.forEach(function(team){
-        x = 0;
-        console.log("team: "+team['team']);
+    teamScore.forEach(function(teams){
+        var team = teams['team']
+        console.log("team: " + team );
         table += "<tr>"
         
-        teamScore = JSON.parse(localStorage.getItem('teamScore'));
-        console.log("teamScore: "+teamScore);
+        var kleurObj = JSON.parse(localStorage.getItem(team));
+        // console.log('teamscore [team][h1]');
+        // console.log(teamScore[team]['H1']);
+        console.log('kleurobj[team][kleur]');
+        console.log(kleurObj[team]['kleur']);
 
-        var kleurObj = JSON.parse(localStorage.getItem(team['team']));
-        console.log("kleurObj: "+kleurObj);
+        teamScore.forEach(function(score){
+            //console.log(score);
+            if (score['team'] === team){
+
+                for (hole = 1 ; hole < 19 ; hole++){
+                    console.log('hole');
+                    var hole = 'H'+hole;
+                    console.log(hole);
+                    console.log(score[hole]);
+                    }   
+                 console.log("JJJAAAAHHHH");
+                }
+                   
+  
+             
+        })
 
         kleurObj.forEach(function (value) {
 
-                x++;
-                //console.log("x= " + x);
-                table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'] + " " + teamScore['x'] + "</td>";
+                
+                //score = teamScore[team][H1];
+                //console.log(score);
+                table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'];
+                //table += score;
+                table += "de uitslag";
+                table += "</td>";
 
             });
+
  
             table += "</tr>";
         });
@@ -467,33 +491,16 @@ function kleur() {
 
     var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";// where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
     var dbResult = executeQuery(query);
-    console.log(typeof dbResult);
+
     dbResult.forEach(function (teamId) {
         var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-    console.log(typeof kleurResult);
+
         localStorage.setItem(teamId['team'], JSON.stringify(kleurResult));
 
     });
 };
 
 
-function klassement__() {
-    //vul hier je query in, wanneer je op de knop klikt zal het resultaat zichtbaar worden op het scherm
-    var query = "select distinct team from scores";
-    var dbResult = executeQuery(query);
-    //deze regels mogen weg zodra de testquery knop uit de app gehaald wordt.
-    message.style.display = `none`;
-    replay.style.display = `none`;
-
-    dbResult.forEach(function (teamId) {
-        console.log(`teamId['team'] ${teamId['team']}`);
-
-        var teamResult = executeQuery(`select team,sum(score) as totaal from scores where team = ${ teamId['team']}`); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-        console.log(teamResult);
-
-        renderTable(teamResult, teamId['team']); // klassenement is id van div toch? ja
-    });
-}
 
 function getAllScores() {
     var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
