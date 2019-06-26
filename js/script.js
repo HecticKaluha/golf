@@ -423,7 +423,6 @@ function testQuery2(q) {
 
 function klassement() {
 
-
     kleur();
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
     for (i = 1; i < 19; i++) {
@@ -432,11 +431,9 @@ function klassement() {
         klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
     var dbResult = executeQuery(klasQuery);
-    renderTable(dbResult,"klassementGoed");
-
+    renderTable(dbResult,"klasse");
 
     localStorage.setItem('teamScore', JSON.stringify(dbResult));
-
 
     var table = "<table>";
 
@@ -445,17 +442,16 @@ function klassement() {
         console.log("team: "+team['team']);
         table += "<tr>"
         
-
         teamScore = JSON.parse(localStorage.getItem('teamScore'));
-        console.log(teamScore);
+        console.log("teamScore: "+teamScore);
 
         var kleurObj = JSON.parse(localStorage.getItem(team['team']));
-        console.log(kleurObj);
+        console.log("kleurObj: "+kleurObj);
 
         kleurObj.forEach(function (value) {
 
                 x++;
-                console.log("x= " + x);
+                //console.log("x= " + x);
                 table += "<td bgcolor= "+value['kleur']+ ">" + value['kleur'] + " " + teamScore['x'] + "</td>";
 
             });
@@ -463,21 +459,18 @@ function klassement() {
             table += "</tr>";
         });
     table += "</table>";
-    $("#klassement").html(table);
-
-
+    $("#klasse").html(table);
 
 }
-
-// renderTable(dbResult, 'query2');
-
 
 function kleur() {
 
     var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";// where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
     var dbResult = executeQuery(query);
+    console.log(typeof dbResult);
     dbResult.forEach(function (teamId) {
         var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
+    console.log(typeof kleurResult);
         localStorage.setItem(teamId['team'], JSON.stringify(kleurResult));
 
     });
