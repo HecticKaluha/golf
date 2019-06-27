@@ -14,10 +14,12 @@ $(document).ready(function () {
 
 var max = 5, maxCount = 0, red = 0, yellow = 0, blue = 0, white = 0;
 
-function checkMax(kleur) {
-	if (kleur <= max) {
-		kleur++;
-		if (kleur == max) {
+function checkMax(color) {
+
+    //color moet hier eigenlijk verwijzen naar de var met die naam
+	if (color <= max) {
+		color++;
+		if (color == max) {
 			maxCount++;
 			if (maxCount == 2) {
 				max = 4;
@@ -153,12 +155,15 @@ function showTeamSet() {
     checkContainer.style.backgroundColor = '#f8f9fa';
 }
 
+
+
+
 function setTee(color){
 
 
     localStorage.setItem('tee', color);
 
-    if(checkMax(color)){
+    if(!checkMax(color)){
     console.log(color);
     return;
 }
