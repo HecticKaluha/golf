@@ -11,7 +11,7 @@ $(document).ready(function () {
     generatePage();
 });
 
-/*
+
 var max = 5, maxCount = 0, red = 0, yellow = 0, blue = 0, white = 0;
 
 function checkMax(kleur) {
@@ -23,15 +23,15 @@ function checkMax(kleur) {
 				max = 4;
 			}
 		}
-		return True;
+		return true;
 	} else {
-		alert(“dat mag niet meer!”);
-		return False;
+		alert("dat mag niet meer!");
+		return false;
 		//mischien zelfs knop weghalen
 	}
 }
 
-*/
+
 
 
 function generatePage() {
@@ -153,11 +153,21 @@ function showTeamSet() {
     checkContainer.style.backgroundColor = '#f8f9fa';
 }
 
-function setTee(color) {
+function setTee(color){
+
+
     localStorage.setItem('tee', color);
+
+    if(checkMax(color)){
+    console.log(color);
+    return;
+}
+
     checkContainer.style.backgroundColor = color;
     colorCheck.innerText = color;
 }
+
+
 
 function setScore(score) {
     localStorage.setItem('score', score);
