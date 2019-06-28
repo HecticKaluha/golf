@@ -116,6 +116,18 @@ function getGameFromURL(){
 
 }
 
+
+function getNextTeamGame(team){
+        var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores WHERE team = ` + team);
+        console.log(teamGame[0]['maxGame']);
+        var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
+        localStorage.setItem('teamGame', nextTeamGame);
+        console.log(nextTeamGame);
+
+}
+
+
+
 function getTeamFromURL() {
     //bouw url
     var url = new URL(window.location.href);
@@ -127,8 +139,10 @@ function getTeamFromURL() {
         if (team !== localStorage.getItem('team')) {
             localStorage.setItem('hole', 1);
             setColorCount();
+
         }
         localStorage.setItem('team', team);
+        getNextTeamGame(team);
         return true;
     }
     //team niet gevonden in url
@@ -530,14 +544,15 @@ function testQuery2(q) {
 }
 
 
-function klassement(jaar) {
-    if (jaar == '2018'){
+function klassement(game) {
+    if (game == '2018'){
         var scoreTabel = 'scoresCup2018';
-        var game = 0;
+        var gameJoin = '';
 
     } else {
         var scoreTabel = 'scores';  
-        var game = 1;      
+        var gameJoin = ` left join game on (s.game = game.game)`;  
+        gameJoin = '';    
     }
     //var x = 0;
     kleur();
@@ -547,7 +562,7 @@ function klassement(jaar) {
     }
     //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team     left join `game`  on game.game=s.game      left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team`       order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() ||||||     having(`s`.`team` IN (select `id` FROM `game` WHERE `game` = "+game+")) 
     
-    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
+    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
 
     console.log(klasQuery);
     var dbResult = executeQuery(klasQuery);
@@ -602,7 +617,13 @@ function klassement(jaar) {
 
             //console.log(kleurObj[x][hole]['kleur']);
             table += "<td width=50px bgcolor= " + kleurObj[hole - 1]['kleur'] + ">";
-            table += teams['H' + hole];
+            console.log(teams['H' + hole]);
+            if (teams['H' + hole] == null){
+                score = 0;
+            } else {
+                score = teams['H' + hole];
+            }
+            table += score;
             table += "</td>";
 
         }
