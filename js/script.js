@@ -552,9 +552,12 @@ function testQuery2(q) {
 
 function klassement(jaar) {
     if (jaar == '2018'){
-        scoreTabel = 'scoresCup2018';
+        var scoreTabel = 'scoresCup2018';
+        var game = 0;
+
     } else {
-        scoreTabel = 'scores';        
+        var scoreTabel = 'scores';  
+        var game = 1;      
     }
     //var x = 0;
     kleur();
@@ -562,8 +565,11 @@ function klassement(jaar) {
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
     }
+    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team     left join `game`  on game.game=s.game      left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team`       order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() ||||||     having(`s`.`team` IN (select `id` FROM `game` WHERE `game` = "+game+")) 
+    
     klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
+    console.log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     //renderTable(dbResult,"klasse");
 
