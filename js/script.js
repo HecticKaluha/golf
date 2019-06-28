@@ -12,12 +12,16 @@ $(document).ready(function () {
 
     //setDefaultValuesIfNecessary();
     generatePage();
+    //  if(!localStorage.getItem('colorCount')){
+    //     setColorCount();
+    // }
 });
 
 
 
+
 function setColorCount(){
-  if(localStorage.getItem('colorCount')){
+  //if(localStorage.getItem('colorCount')){
         var colorCount = {
             max:        5,
             maxCount:   0,
@@ -28,7 +32,7 @@ function setColorCount(){
             }            
         
     localStorage.setItem('colorCount', JSON.stringify(colorCount));
-    }
+    //}
 }
 
 function checkMax(color) {
@@ -111,6 +115,7 @@ function getTeamFromURL() {
     if (team) {
         if (team !== localStorage.getItem('team')) {
             localStorage.setItem('hole', 1);
+            setColorCount();
         }
         localStorage.setItem('team', team);
         return true;

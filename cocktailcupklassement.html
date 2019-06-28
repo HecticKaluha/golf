@@ -11,11 +11,9 @@
     </script>
 
     <!-- sweet alert imports -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
 
     <!-- import own js-->
-    <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/klassement.js"></script>
 
     <!-- import masonry -->
 
@@ -25,8 +23,6 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- sweetalert css import-->
-    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
 
     <!-- bepaal viewport zodat de website kan bepalen hoe grooot het scherm is -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -67,7 +63,7 @@
             <div class="m-1 mb-3">
 
                 <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                        onclick="klassement()">Klassement
+                        onclick="klassement('2018')">Klassement 2018
                 </button> 
           </div>
         </div>
@@ -75,7 +71,7 @@
   
   
   
-    <div class="row" id="finished">
+    <div class="row" id="klassement">
         <div class="col-12 text-center">
             <h1 class="mb-3" id="message"></h1>
             <div id="replay" class="m-1 mb-3"></div>
@@ -94,6 +90,5 @@
 </div>
 </div>
 
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
 </body>
