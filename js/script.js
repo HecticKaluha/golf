@@ -9,16 +9,15 @@ var min = 0;
 
 $(document).ready(function () {
 
-    if(!getCookie('uren')){
-        restart();
+    if(!getCookie('sessie')){
+       // restart();
     } else {
     setCookie('sessie', 'uren', 6);
     }
-    //setDefaultValuesIfNecessary();
+
     generatePage();
-    //  if(!localStorage.getItem('colorCount')){
-    //     setColorCount();
-    // }
+    getGameFromURL();
+
 });
 
 
@@ -66,30 +65,6 @@ function checkMax(color) {
 
 
 
-// function setDefaultValuesIfNecessary() {
-//     //controleer of colorCounter bestaat in localstorage anders aanmaken
-//     if (!localStorage.getItem('colorCounters')) {
-//         //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
-//         //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
-//         var colorCounters = {};
-//         colors.forEach(function (value) {
-//             colorCounters[value] = 0;
-//         });
-
-//         localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-//     }
-
-//     if (!localStorage.getItem('wild')) {
-//         //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
-//         //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
-//         var wild = holes % colors.length;
-//         min = (holes - wild) / colors.length;
-//         min--;
-//         localStorage.setItem('wild', wild);
-//     }
-//     //geef betekenis aan het maximaal aantal
-//     min = (holes - localStorage.getItem('wild')) / colors.length;
-// }
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -103,10 +78,42 @@ function generatePage() {
     } else {
         showNoTeamSet();
     }
+    
+
     var hole = localStorage.getItem('hole');
     showHole(hole);
 
     restructure();
+}
+
+function getGameFromURL(){
+    var url = new URL(window.location.href);
+    //vraag url parameter team op
+    var game = url.searchParams.get("game");
+    //team in url gevonden
+
+    if (game) {
+        //console.log(game);
+        //console.log(localStorage.getItem('game'));
+        if (game !== localStorage.getItem('game') || !localStorage.getItem('game')) {
+            
+            localStorage.setItem('game', game);
+            //setColorCount();
+        }
+        return true;
+    }
+    //team niet gevonden in url
+    else {
+        //check if exists in localstorage
+        if (localStorage.setItem('game', 9999)) {
+            return true;
+        }
+        //check in url
+        else {
+            return false;
+        }
+    }
+
 }
 
 function getTeamFromURL() {
@@ -219,35 +226,6 @@ function setTee(color) {
         colorCheck.innerText = color;
 }
 
-// function checkMax___(color) {
-//     //haal op uit localstorage
-//     var colorCounters = JSON.parse(localStorage.getItem('colorCounters'));
-//     var wild = localStorage.getItem('wild');
-
-//     //check of aangeklikte kleur onder de min zit
-//     if (colorCounters[color] < min) {
-//         //hoog aangeklikte kleur op
-//         colorCounters[color]++;
-//         //schrijf mutatie direct weg
-//         localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-//         return true;
-//     } else {
-//         //zijn er nog wildcards over?
-//         if (wild > 0) {
-//             //haal eentje van wild af
-//             wild--;
-//             localStorage.setItem('wild', wild);
-//             //hoog aangeklikte kleur op
-//             colorCounters[color]++;
-//             //schrijf mutatie direct weg
-//             localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-//             return true;
-//         } else {
-//             //mag niet meer aanklikken
-//             return false;
-//         }
-//     }
-// }
 
 function setScore(score) {
     localStorage.setItem('score', score);
@@ -263,7 +241,8 @@ function saveHole() {
                     team: localStorage.getItem('team'),
                     hole: localStorage.getItem('hole'),
                     tee: localStorage.getItem('tee'),
-                    score: localStorage.getItem('score')
+                    score: localStorage.getItem('score'),
+                    game: localStorage.getItem('game')
                 },
                 type: "post",
                 success: function (res) {
@@ -486,16 +465,13 @@ function restart() {
     localStorage.removeItem('score');
     localStorage.removeItem('tee');
     localStorage.removeItem('hole');
-
-    //localStorage.removeItem('wild');
-    //localStorage.removeItem('colorCounters');
+    localStorage.removeItem('game');
 
     finished.style.display = 'none';
 
     results.innerHTML = '';
     replay.innerHTML = '';
     setColorCount();
-    //setDefaultValuesIfNecessary();
     generatePage();
 }
 
