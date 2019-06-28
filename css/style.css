@@ -7,3 +7,12 @@
 .align-items-center{
 	align-items:center;
 }
+
+.klassement td {
+  	color: black;
+	padding: 50;
+	text-align: center;
+border-collapse: collapse;
+ 	
+border: 2px solid green;
+}

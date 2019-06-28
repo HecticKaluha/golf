@@ -4,40 +4,84 @@ const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 let masonries = [];
 let masonriesElements = [];
 
-var holes = 9;
+var holes = 18;
 var min = 0;
 
 $(document).ready(function () {
     setCookie('sessie', 'een uur', 1);
 
-    setDefaultValuesIfNecessary();
-
+    //setDefaultValuesIfNecessary();
     generatePage();
 });
 
-function setDefaultValuesIfNecessary() {
-    //controleer of colorCounter bestaat in localstorage anders aanmaken
-    if (!localStorage.getItem('colorCounters')) {
-        //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
-        //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
-        var colorCounters = {};
-        colors.forEach(function (value) {
-            colorCounters[value] = 0;
-        });
 
-        localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-    }
 
-    if (!localStorage.getItem('wild')) {
-        //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
-        //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
-        var wild = holes % colors.length;
-        min = (holes - wild) / colors.length;
-        localStorage.setItem('wild', wild);
+function setColorCount(){
+  if(localStorage.getItem('colorCount')){
+        var colorCount = {
+            max:        5,
+            maxCount:   0,
+            red:        0,
+            yellow:     0,
+            blue :      0,
+            white:      0
+            }            
+        
+    localStorage.setItem('colorCount', JSON.stringify(colorCount));
     }
-    //geef betekenis aan het maximaal aantal
-    min = (holes - localStorage.getItem('wild')) / colors.length;
 }
+
+function checkMax(color) {
+    var colorCount = JSON.parse(localStorage.getItem('colorCount'));
+    console.log('kleur');
+    console.log(colorCount[color]);
+    //color moet hier eigenlijk verwijzen naar de var met die naam
+    if (colorCount[color] < colorCount['max']) {
+        colorCount[color]++;
+        if (colorCount[color] == colorCount['max']) {
+            colorCount['maxCount']++;
+            if (colorCount['maxCount'] == 2) {
+                colorCount['max'] = 4;
+            }
+        }
+
+            localStorage.setItem('colorCount', JSON.stringify(colorCount));        
+        
+        return true;
+    } else {
+
+        return false;
+        //mischien zelfs knop weghalen
+    }
+}
+
+
+
+
+// function setDefaultValuesIfNecessary() {
+//     //controleer of colorCounter bestaat in localstorage anders aanmaken
+//     if (!localStorage.getItem('colorCounters')) {
+//         //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
+//         //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
+//         var colorCounters = {};
+//         colors.forEach(function (value) {
+//             colorCounters[value] = 0;
+//         });
+
+//         localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
+//     }
+
+//     if (!localStorage.getItem('wild')) {
+//         //maak een key value array van colorCounters waarbij elke kleur die bestaat in de color array een key vormt.
+//         //de value bij elke key wordt op 0 gezet aangezien elke kleur 0 keer is gekozen bij opstarten.
+//         var wild = holes % colors.length;
+//         min = (holes - wild) / colors.length;
+//         min--;
+//         localStorage.setItem('wild', wild);
+//     }
+//     //geef betekenis aan het maximaal aantal
+//     min = (holes - localStorage.getItem('wild')) / colors.length;
+// }
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -63,6 +107,7 @@ function getTeamFromURL() {
     //vraag url parameter team op
     var team = url.searchParams.get("team");
     //team in url gevonden
+
     if (team) {
         if (team !== localStorage.getItem('team')) {
             localStorage.setItem('hole', 1);
@@ -159,40 +204,41 @@ function showTeamSet() {
 }
 
 function setTee(color) {
-    localStorage.setItem('tee', color);
-    checkContainer.style.backgroundColor = color;
-    colorCheck.innerText = color;
+
+        localStorage.setItem('tee', color);
+        checkContainer.style.backgroundColor = color;
+        colorCheck.innerText = color;
 }
 
-function checkMax(color) {
-    //haal op uit localstorage
-    var colorCounters = JSON.parse(localStorage.getItem('colorCounters'));
-    var wild = localStorage.getItem('wild');
+// function checkMax___(color) {
+//     //haal op uit localstorage
+//     var colorCounters = JSON.parse(localStorage.getItem('colorCounters'));
+//     var wild = localStorage.getItem('wild');
 
-    //check of aangeklikte kleur onder de min zit
-    if (colorCounters[color] < min) {
-        //hoog aangeklikte kleur op
-        colorCounters[color]++;
-        //schrijf mutatie direct weg
-        localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-        return true;
-    } else {
-        //zijn er nog wildcards over?
-        if (wild > 0) {
-            //haal eentje van wild af
-            wild--;
-            localStorage.setItem('wild', wild);
-            //hoog aangeklikte kleur op
-            colorCounters[color]++;
-            //schrijf mutatie direct weg
-            localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
-            return true;
-        } else {
-            //mag niet meer aanklikken
-            return false;
-        }
-    }
-}
+//     //check of aangeklikte kleur onder de min zit
+//     if (colorCounters[color] < min) {
+//         //hoog aangeklikte kleur op
+//         colorCounters[color]++;
+//         //schrijf mutatie direct weg
+//         localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
+//         return true;
+//     } else {
+//         //zijn er nog wildcards over?
+//         if (wild > 0) {
+//             //haal eentje van wild af
+//             wild--;
+//             localStorage.setItem('wild', wild);
+//             //hoog aangeklikte kleur op
+//             colorCounters[color]++;
+//             //schrijf mutatie direct weg
+//             localStorage.setItem('colorCounters', JSON.stringify(colorCounters));
+//             return true;
+//         } else {
+//             //mag niet meer aanklikken
+//             return false;
+//         }
+//     }
+// }
 
 function setScore(score) {
     localStorage.setItem('score', score);
@@ -238,12 +284,12 @@ function saveHole() {
                 }
             });
         } else {
-            Swal.fire({
-                title: 'Kies zorgvuldig',
+        Swal.fire({
+                title: 'Helaas!',
                 text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Ik zal beter opletten...'
+                confirmButtonText: 'Ik snap het...'
             })
         }
     } else {
@@ -423,6 +469,7 @@ function finishGame() {
     replay.appendChild(replayButton);
     message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
+    setColorCount();
 }
 
 function restart() {
@@ -430,15 +477,16 @@ function restart() {
     localStorage.removeItem('score');
     localStorage.removeItem('tee');
     localStorage.removeItem('hole');
-    localStorage.removeItem('wild');
-    localStorage.removeItem('colorCounters');
+
+    //localStorage.removeItem('wild');
+    //localStorage.removeItem('colorCounters');
 
     finished.style.display = 'none';
 
     results.innerHTML = '';
     replay.innerHTML = '';
-
-    setDefaultValuesIfNecessary();
+    setColorCount();
+    //setDefaultValuesIfNecessary();
     generatePage();
 }
 
@@ -497,36 +545,77 @@ function testQuery2(q) {
 }
 
 
-function klassement() {
-    var x = 0;
+function klassement(jaar) {
+    if (jaar == '2018'){
+        scoreTabel = 'scoresCup2018';
+    } else {
+        scoreTabel = 'scores';        
+    }
+    //var x = 0;
     kleur();
     var klasQuery = "select s.team AS team, teams.team as teamnaam,";
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
     }
-    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from (`scores` `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
+    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
 
     var dbResult = executeQuery(klasQuery);
     //renderTable(dbResult,"klasse");
 
     var teamScore = dbResult;
-    var table = "<table>";
+    var table = "<table class='klassement'>";
+    table += `<tr>
+    <td>Pos.</td>
+    <td>teamnaam</td>
+    <td></td>
+    <td>H1</td>
+    <td>H2</td>
+    <td>H3</td>
+    <td>H4</td>
+    <td>H5</td>
+    <td>H6</td>
+    <td>H7</td>
+    <td>H8</td>
+    <td>H9</td>
+    <td>H10</td>
+    <td>H11</td>
+    <td>H12</td>
+    <td>H13</td>
+    <td>H14</td>
+    <td>H15</td>
+    <td>H16</td>
+    <td>H17</td>
+    <td>H18</td>
+    <td>TOTAAL</td>
+    <td>#</td>
+    </tr>`;
+     var pos = 0;
 
     teamScore.forEach(function (teams) {
+        pos++;
         var team = teams['team'];
+        var teamNaam = teams['teamnaam'];
+        //var totaal = ;
         var kleurObj = JSON.parse(localStorage.getItem(team));
-        //console.log(kleurObj[team]);
-        table += "<tr>";
-        x++;
+        var parKleur = 'yellow';
+        if (teams['#'] < 0 ){
+            var parKleur =  'red';
+        } else if (teams['#'] == 0 ){
+            var parKleur =  'silver';
+        } 
+
+        table += `<tr><td>${pos}</td><td>${teamNaam}<td>`;
+        //x++;
 
         for (hole = 1; hole < 19; hole++) {
 
             //console.log(kleurObj[x][hole]['kleur']);
-            table += "<td width=100px bgcolor= " + kleurObj[hole - 1]['kleur'] + ">";
+            table += "<td width=50px bgcolor= " + kleurObj[hole - 1]['kleur'] + ">";
             table += teams['H' + hole];
             table += "</td>";
 
         }
+        table += `<td>` + teams['totaal']+ `</td><td bgcolor=${parKleur}>` + teams['#'] + `</td>`;
 
         table += "</tr>";
     });
@@ -534,6 +623,9 @@ function klassement() {
     // console.log(table);
     $("#klassement").html(table);
 }
+
+
+
 
 function kleur() {
 
