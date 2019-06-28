@@ -8,8 +8,12 @@ var holes = 18;
 var min = 0;
 
 $(document).ready(function () {
-    setCookie('sessie', 'een uur', 1);
 
+    if(!getCookie('uren')){
+        restart();
+    } else {
+    setCookie('sessie', 'uren', 6);
+    }
     //setDefaultValuesIfNecessary();
     generatePage();
     //  if(!localStorage.getItem('colorCount')){
