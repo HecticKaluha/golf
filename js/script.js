@@ -1,5 +1,6 @@
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
+const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 
 let masonries = [];
 let masonriesElements = [];
@@ -201,12 +202,12 @@ function showTeamSet() {
         div.className = 'p-1 col-6 col-sm-3 grid-item';
 
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large col-12 border text-secondary p-4 p-sm-4 p-lg-5 bigger-text rounded';
+        button.className = 'btn-large col-12 border text-secondary p-2 p-sm-4 p-lg-5 big-text rounded';
     
         //var colorTimes = localStorage.getItem('colorCount')[color];
         var colorCount = JSON.parse(localStorage.getItem('colorCount'));
 
-        button.innerHTML = `${colorCount[color]}X gebruikt.`;
+        button.innerHTML = `${colorCount[color]} x`;
         button.style.backgroundColor = color;
 
         button.onclick = function () {
@@ -245,7 +246,7 @@ function setTee(color) {
 
         localStorage.setItem('tee', color);
         checkContainer.style.backgroundColor = color;
-        colorCheck.innerText = color;
+        //colorCheck.innerText = color;
 }
 
 
@@ -624,10 +625,9 @@ function klassement(game) {
 
         for (hole = 1; hole < 19; hole++) {
             console.log();
-            if (teams['H' + hole] === "null"){
-                score = 0;
+            if (!teams['H' + hole]){
+                score = par[hole];
                 var bgColor = 'grey';
-                continue;
             } else {
                 score = teams['H' + hole];
                 if (!kleurObj[hole - 1]){
