@@ -11,12 +11,21 @@
 .klassement td {
   	color: black;
 	padding: 50;
+	margin-bottom: 3;
 	text-align: center;
-border-collapse: collapse;
+//border-collapse: collapse;
  	
 border: 2px solid green;
 }
 
 table{
 	width: 100%;
+}
+
+.circle{
+	
+    background: #f00;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
 }

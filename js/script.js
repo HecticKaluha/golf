@@ -2,6 +2,7 @@ const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 
+
 let masonries = [];
 let masonriesElements = [];
 
@@ -12,29 +13,276 @@ $(document).ready(function () {
 
     if(!getCookie('sessie')){
        // restart();
-    } else {
+   } else {
     setCookie('sessie', 'uren', 6);
-    }
+}
 
-    generatePage();
-    getGameFromURL();
+generatePage();
+getGameFromURL();
 
 });
+
+
+function klassement(game) {
+    var klasse = {};
+    if (game == '2018'){
+        var scoreTabel = 'scoresCup2018';
+        var gameJoin = '';
+
+    } else {
+        var scoreTabel = 'scores';  
+        var gameJoin = ` left join game on (s.game = game.game)`;  
+        gameJoin = '';    
+    }
+    //var x = 0;
+    kleur();
+    var klasQuery = "select s.team AS team, teams.team as teamnaam,";
+
+    for (i = 1; i < 19; i++) {
+        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
+        if (i < 18){
+            klasQuery += ",";
+        }
+    }
+
+    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+    klasQuery += " from " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team` ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+
+    console.log(klasQuery);
+    var dbResult = executeQuery(klasQuery);
+    //renderTable(dbResult,"klasse");
+
+    var teamScore = dbResult;
+    var table = "<table class='klassement'>";
+    table += `<tr>
+    <td>Pos.</td>
+    <td>teamnaam</td>`;
+    for (h = 1 ; h < 19 ; h++){
+        table += `<td>H` + h + `<br>${par[h]}</td>`
+    }
+    
+
+    table += `<td>Projected</td>
+    <td>#</td>
+    </tr>`;
+    var pos = 0;
+
+    teamScore.forEach(function (teams) {
+        var teamRow = "";
+        var tr = {};
+
+
+        var totaal = 0;
+        pos++;
+        var team = teams['team'];
+        var teamNaam = teams['teamnaam'];
+
+        var kleurObj = JSON.parse(localStorage.getItem(team));
+ 
+        teamRow += `<tr><td>${pos}</td><td>${teamNaam}</td>`;
+
+        for (hole = 1; hole < 19; hole++) {
+             var styleId = `<div id="circle">`;
+
+
+            if (!teams['H' + hole]){
+                score = par[hole];
+                totaal += parseFloat(score);
+                var bgColor = 'grey';
+
+            } else {
+                score = teams['H' + hole];
+                totaal += parseFloat(score);
+                styleId = `<div id="circle">`
+
+                if (!kleurObj[hole - 1]){
+                    bgColor = 'grey';
+                } else {
+                    var bgColor = kleurObj[hole - 1]['kleur'];
+                }
+            }
+
+            //console.log(kleurObj[x][hole]['kleur']);
+            teamRow += `<td width=50px bgcolor= ${bgColor}> ${styleId}`;
+            if (styleId = `<div id="circle>"`){
+                teamRow += `</div>`;
+            }
+            if (score < par[hole]){
+                teamRow += '*';
+            }
+            teamRow += score;
+            teamRow += "</td>";
+
+
+
+        }
+
+        var parKleur = 'yellow';
+        if ((totaal-70) < 0 ){
+            var parKleur =  'red';
+        } else if ((totaal-70) == 0 ){
+            var parKleur =  'silver';
+        }
+
+        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
+
+        teamRow += "</tr>";
+        table += teamRow;
+
+
+
+        tr[team] = {
+            team:       team,
+            teamNaam:   teamNaam,
+            totaal:     totaal,
+            teamRow:    teamRow  
+        }
+
+        console.log(tr);
+        localStorage.setItem('tr',JSON.stringify(tr));
+
+
+    });
+    table += "</table>";
+    // console.log(table);
+    $("#klassement").html(table);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function klassementGoed(game) {
+    if (game == '2018'){
+        var scoreTabel = 'scoresCup2018';
+        var gameJoin = '';
+
+    } else {
+        var scoreTabel = 'scores';  
+        var gameJoin = ` left join game on (s.game = game.game)`;  
+        gameJoin = '';    
+    }
+    //var x = 0;
+    kleur();
+    var klasQuery = "select s.team AS team, teams.team as teamnaam,";
+    for (i = 1; i < 19; i++) {
+        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
+    }
+    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team     left join `game`  on game.game=s.game      left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team`       order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() ||||||     having(`s`.`team` IN (select `id` FROM `game` WHERE `game` = "+game+")) 
+    
+    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+
+    console.log(klasQuery);
+    var dbResult = executeQuery(klasQuery);
+    //renderTable(dbResult,"klasse");
+
+    var teamScore = dbResult;
+    var table = "<table class='klassement'>";
+    table += `<tr>
+    <td>Pos.</td>
+    <td>teamnaam</td>
+    <td></td>
+    <td>H1</td>
+    <td>H2</td>
+    <td>H3</td>
+    <td>H4</td>
+    <td>H5</td>
+    <td>H6</td>
+    <td>H7</td>
+    <td>H8</td>
+    <td>H9</td>
+    <td>H10</td>
+    <td>H11</td>
+    <td>H12</td>
+    <td>H13</td>
+    <td>H14</td>
+    <td>H15</td>
+    <td>H16</td>
+    <td>H17</td>
+    <td>H18</td>
+    <td>TOTAAL</td>
+    <td>#</td>
+    <td>objTotaal</td>
+    </tr>`;
+    var pos = 0;
+
+    teamScore.forEach(function (teams) {
+        var tr = {};
+
+        var totaal = 0;
+        pos++;
+        var team = teams['team'];
+        var teamNaam = teams['teamnaam'];
+        //var totaal = ;
+        var kleurObj = JSON.parse(localStorage.getItem(team));
+        var parKleur = 'yellow';
+        if (teams['#'] < 0 ){
+            var parKleur =  'red';
+        } else if (teams['#'] == 0 ){
+            var parKleur =  'silver';
+        } 
+
+        table += `<tr><td>${pos}</td><td>${teamNaam}<td>`;
+        //x++;
+
+        for (hole = 1; hole < 19; hole++) {
+            console.log();
+            if (!teams['H' + hole]){
+                score = par[hole];
+                totaal += parseFloat(score);
+                var bgColor = 'grey';
+            } else {
+                score = teams['H' + hole];
+                totaal += parseFloat(score);
+
+                if (!kleurObj[hole - 1]){
+                    bgColor = 'grey';
+                } else {
+                    var bgColor = kleurObj[hole - 1]['kleur'];
+                }
+            }
+
+            //console.log(kleurObj[x][hole]['kleur']);
+            table += `<td width=50px bgcolor= ${bgColor}>`;
+
+            table += score;
+            table += "</td>";
+
+
+        }
+        table += `<td>` + teams['totaal']+ `</td><td bgcolor=${parKleur}>` + teams['#'] + `</td><td>` + totaal + `</td>`;
+
+        table += "</tr>";
+    });
+    table += "</table>";
+    // console.log(table);
+    $("#klassement").html(table);
+}
+
 
 
 
 
 function setColorCount(){
   //if(localStorage.getItem('colorCount')){
-        var colorCount = {
-            max:        5,
-            maxCount:   0,
-            red:        0,
-            yellow:     0,
-            blue :      0,
-            white:      0
-            }            
-        
+    var colorCount = {
+        max:        5,
+        maxCount:   0,
+        red:        0,
+        yellow:     0,
+        blue :      0,
+        white:      0
+    }            
+
     localStorage.setItem('colorCount', JSON.stringify(colorCount));
     //}
 }
@@ -53,7 +301,7 @@ function checkMax(color) {
             }
         }
 
-            localStorage.setItem('colorCount', JSON.stringify(colorCount));        
+        localStorage.setItem('colorCount', JSON.stringify(colorCount));        
         
         return true;
     } else {
@@ -97,7 +345,7 @@ function getGameFromURL(){
         //console.log(game);
         //console.log(localStorage.getItem('game'));
         if (game !== localStorage.getItem('game') || !localStorage.getItem('game')) {
-            
+
             localStorage.setItem('game', game);
             //setColorCount();
         }
@@ -119,11 +367,11 @@ function getGameFromURL(){
 
 
 function getNextTeamGame(team){
-        var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores WHERE team = ` + team);
-        console.log(teamGame[0]['maxGame']);
-        var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
-        localStorage.setItem('teamGame', nextTeamGame);
-        console.log(nextTeamGame);
+    var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores WHERE team = ` + team);
+    console.log(teamGame[0]['maxGame']);
+    var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
+    localStorage.setItem('teamGame', nextTeamGame);
+    console.log(nextTeamGame);
 
 }
 
@@ -203,7 +451,7 @@ function showTeamSet() {
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary p-2 p-sm-4 p-lg-5 big-text rounded';
-    
+
         //var colorTimes = localStorage.getItem('colorCount')[color];
         var colorCount = JSON.parse(localStorage.getItem('colorCount'));
 
@@ -244,34 +492,34 @@ function showTeamSet() {
 
 function setTee(color) {
 
-        localStorage.setItem('tee', color);
-        checkContainer.style.backgroundColor = color;
+    localStorage.setItem('tee', color);
+    checkContainer.style.backgroundColor = color;
         //colorCheck.innerText = color;
-}
+    }
 
 
-function setScore(score) {
-    localStorage.setItem('score', score);
-    scoreCheck.innerText = score;
-}
+    function setScore(score) {
+        localStorage.setItem('score', score);
+        scoreCheck.innerText = score;
+    }
 
-function saveHole() {
-    if (localStorage.getItem('tee') && localStorage.getItem('score')) {
-        if (checkMax(localStorage.getItem('tee'))) {
-            $.ajax({
-                url: "db_write.php?method=saveScore",
-                data: {
-                    team: localStorage.getItem('team'),
-                    hole: localStorage.getItem('hole'),
-                    tee: localStorage.getItem('tee'),
-                    score: localStorage.getItem('score'),
-                    game: localStorage.getItem('game')
-                },
-                type: "post",
-                success: function (res) {
-                    var response = JSON.parse(res);
+    function saveHole() {
+        if (localStorage.getItem('tee') && localStorage.getItem('score')) {
+            if (checkMax(localStorage.getItem('tee'))) {
+                $.ajax({
+                    url: "db_write.php?method=saveScore",
+                    data: {
+                        team: localStorage.getItem('team'),
+                        hole: localStorage.getItem('hole'),
+                        tee: localStorage.getItem('tee'),
+                        score: localStorage.getItem('score'),
+                        game: localStorage.getItem('game')
+                    },
+                    type: "post",
+                    success: function (res) {
+                        var response = JSON.parse(res);
 
-                    if (response.success) {
+                        if (response.success) {
                         //je response message is beschikbaar vie response.message
                         Swal.fire({
                             title: 'Opgeslagen!',
@@ -294,35 +542,35 @@ function saveHole() {
                     console.log('dat is niet gelukt!')
                 }
             });
+            } else {
+                Swal.fire({
+                    title: 'Helaas!',
+                    text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ik snap het...'
+                })
+            }
         } else {
-        Swal.fire({
-                title: 'Helaas!',
-                text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+            Swal.fire({
+                title: 'OOPS',
+                text: "TeeKleur en score ingevuld??",
                 type: 'warning',
                 confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Ik snap het...'
+                confirmButtonText: 'Ik begrijp het, sorry...'
             })
         }
-    } else {
-        Swal.fire({
-            title: 'OOPS',
-            text: "TeeKleur en score ingevuld??",
-            type: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Ik begrijp het, sorry...'
-        })
     }
-}
 
-function nextHole() {
-    var hole = parseFloat(localStorage.getItem('hole'));
-    hole++;
-    localStorage.setItem('hole', hole);
-    showHole(hole);
-    showTeamSet();
-}
+    function nextHole() {
+        var hole = parseFloat(localStorage.getItem('hole'));
+        hole++;
+        localStorage.setItem('hole', hole);
+        showHole(hole);
+        showTeamSet();
+    }
 
-function showHole(hole) {
+    function showHole(hole) {
     //if not set set to 0
     if (!hole) {
         hole = 1;
@@ -424,16 +672,16 @@ function renderTable(jsonResult, renderName) {
     }
 
     divToRenderIn.innerHTML =
-        `<table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr role="row" id="${renderName}-thead">
-                                    
-                                    </tr>
-                                </thead>
-                                <tbody id="${renderName}-tbody">
-                                
-                                <tbody/>
-                            </table>`;
+    `<table class="table table-bordered table-striped">
+    <thead>
+    <tr role="row" id="${renderName}-thead">
+
+    </tr>
+    </thead>
+    <tbody id="${renderName}-tbody">
+
+    <tbody/>
+    </table>`;
 
     //loop over alle rows
     jsonResult.forEach(function (row, index) {
@@ -551,106 +799,6 @@ function testQuery2(q) {
     replay.style.display = `none`;
 
     renderTable(dbResult, 'query1');
-}
-
-
-function klassement(game) {
-    if (game == '2018'){
-        var scoreTabel = 'scoresCup2018';
-        var gameJoin = '';
-
-    } else {
-        var scoreTabel = 'scores';  
-        var gameJoin = ` left join game on (s.game = game.game)`;  
-        gameJoin = '';    
-    }
-    //var x = 0;
-    kleur();
-    var klasQuery = "select s.team AS team, teams.team as teamnaam,";
-    for (i = 1; i < 19; i++) {
-        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i},`);
-    }
-    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team     left join `game`  on game.game=s.game      left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team`       order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate() ||||||     having(`s`.`team` IN (select `id` FROM `game` WHERE `game` = "+game+")) 
-    
-    klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
-
-    console.log(klasQuery);
-    var dbResult = executeQuery(klasQuery);
-    //renderTable(dbResult,"klasse");
-
-    var teamScore = dbResult;
-    var table = "<table class='klassement'>";
-    table += `<tr>
-    <td>Pos.</td>
-    <td>teamnaam</td>
-    <td></td>
-    <td>H1</td>
-    <td>H2</td>
-    <td>H3</td>
-    <td>H4</td>
-    <td>H5</td>
-    <td>H6</td>
-    <td>H7</td>
-    <td>H8</td>
-    <td>H9</td>
-    <td>H10</td>
-    <td>H11</td>
-    <td>H12</td>
-    <td>H13</td>
-    <td>H14</td>
-    <td>H15</td>
-    <td>H16</td>
-    <td>H17</td>
-    <td>H18</td>
-    <td>TOTAAL</td>
-    <td>#</td>
-    </tr>`;
-     var pos = 0;
-
-    teamScore.forEach(function (teams) {
-        pos++;
-        var team = teams['team'];
-        var teamNaam = teams['teamnaam'];
-        //var totaal = ;
-        var kleurObj = JSON.parse(localStorage.getItem(team));
-        var parKleur = 'yellow';
-        if (teams['#'] < 0 ){
-            var parKleur =  'red';
-        } else if (teams['#'] == 0 ){
-            var parKleur =  'silver';
-        } 
-
-        table += `<tr><td>${pos}</td><td>${teamNaam}<td>`;
-        //x++;
-
-        for (hole = 1; hole < 19; hole++) {
-            console.log();
-            if (!teams['H' + hole]){
-                score = par[hole];
-                var bgColor = 'grey';
-            } else {
-                score = teams['H' + hole];
-                if (!kleurObj[hole - 1]){
-                    bgColor = 'grey';
-                } else {
-                var bgColor = kleurObj[hole - 1]['kleur'];
-                }
-            }
-
-            //console.log(kleurObj[x][hole]['kleur']);
-            table += `<td width=50px bgcolor= ${bgColor}>`;
-
-            table += score;
-            table += "</td>";
-
-        }
-        table += `<td>` + teams['totaal']+ `</td><td bgcolor=${parKleur}>` + teams['#'] + `</td>`;
-
-        table += "</tr>";
-    });
-    table += "</table>";
-    // console.log(table);
-    $("#klassement").html(table);
 }
 
 
