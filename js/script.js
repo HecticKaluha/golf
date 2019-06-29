@@ -195,13 +195,18 @@ function showTeamSet() {
     playing.style.display = 'block';
 
     teeButtons.innerHTML = '';
+
     colors.forEach(function (color) {
         var div = document.createElement('div');
         div.className = 'p-1 col-6 col-sm-3 grid-item';
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary p-4 p-sm-4 p-lg-5 bigger-text rounded';
-        //button.innerHTML = color;
+    
+        //var colorTimes = localStorage.getItem('colorCount')[color];
+        var colorCount = JSON.parse(localStorage.getItem('colorCount'));
+
+        button.innerHTML = `${colorCount[color]}X gebruikt.`;
         button.style.backgroundColor = color;
 
         button.onclick = function () {
@@ -211,6 +216,9 @@ function showTeamSet() {
         div.appendChild(button);
         teeButtons.appendChild(div);
     });
+
+    
+
 
     scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function (score) {
@@ -310,6 +318,7 @@ function nextHole() {
     hole++;
     localStorage.setItem('hole', hole);
     showHole(hole);
+    showTeamSet();
 }
 
 function showHole(hole) {
@@ -614,15 +623,23 @@ function klassement(game) {
         //x++;
 
         for (hole = 1; hole < 19; hole++) {
-
-            //console.log(kleurObj[x][hole]['kleur']);
-            table += "<td width=50px bgcolor= " + kleurObj[hole - 1]['kleur'] + ">";
-            console.log(teams['H' + hole]);
-            if (teams['H' + hole] == null){
+            console.log();
+            if (teams['H' + hole] === "null"){
                 score = 0;
+                var bgColor = 'grey';
+                continue;
             } else {
                 score = teams['H' + hole];
+                if (!kleurObj[hole - 1]){
+                    bgColor = 'grey';
+                } else {
+                var bgColor = kleurObj[hole - 1]['kleur'];
+                }
             }
+
+            //console.log(kleurObj[x][hole]['kleur']);
+            table += `<td width=50px bgcolor= ${bgColor}>`;
+
             table += score;
             table += "</td>";
 
