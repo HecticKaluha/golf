@@ -83,7 +83,6 @@ function klassement(game) {
     table += `<td>Projected</td>
     <td>#</td>
     </tr>`;
-    var pos = 0;
     //var tr = {};
 
 
@@ -93,9 +92,8 @@ function klassement(game) {
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
         var kleurObj = JSON.parse(localStorage.getItem(team));
-        pos++;
 
-        teamRow += `<tr><td>${pos}</td><td class=teamNaam>${teamNaam}</td>`;
+        teamRow += `<tr><td class=teamNaam>${teamNaam}</td>`;
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;

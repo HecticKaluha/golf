@@ -56,7 +56,6 @@ function klassement(game) {
     var teamScore = dbResult;
     var table = "<table class='klassement'>";
     table += `<tr>
-    <td>Pos.</td>
     <td >teamnaam</td>`;
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
@@ -66,7 +65,7 @@ function klassement(game) {
     table += `<td>Projected</td>
     <td>#</td>
     </tr>`;
-    var pos = 0;
+//    var pos = 0;
     //var tr = {};
 
 
@@ -76,9 +75,9 @@ function klassement(game) {
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
         var kleurObj = JSON.parse(localStorage.getItem(team));
-        pos++;
+     //   pos++;
 
-        teamRow += `<tr><td>${pos}</td><td class=teamNaam>${teamNaam}</td>`;
+        teamRow += `<tr><td class=teamNaam>${teamNaam}</td>`;
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
