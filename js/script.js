@@ -6,22 +6,36 @@ const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 let masonries = [];
 let masonriesElements = [];
 
-var holes = 18;
+var holes = 2;
 var min = 0;
 
 $(document).ready(function () {
+    var nu =  Date.now();
 
-    if(!getCookie('sessie')){
-       // restart();
+    if(localStorage.getItem('cookie') > nu){
+
+
+
    } else {
-    setCookie('sessie', 'uren', 6);
-}
+
+        restart();
+        getNextTeamGame();
+        localStorage.setItem('cookie',Date.now()+(6*60*60*1000));//5*60*60*1000
+        console.log('cookie gezet, geldt voor 6 uren');
+
+
+    }
 
 generatePage();
-getGameFromURL();
+
+//getGameFromURL();
+
+
 
 });
 
+var Game = localStorage.getItem('game');
+$('#results').html(Game);
 
 function klassement(game) {
     var klasse = {};
@@ -387,10 +401,10 @@ function getGameFromURL(){
 
 
 function getNextTeamGame(team){
-    var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores WHERE team = ` + team);
+    var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
     console.log(teamGame[0]['maxGame']);
     var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
-    localStorage.setItem('teamGame', nextTeamGame);
+    localStorage.setItem('game', nextTeamGame);
     console.log(nextTeamGame);
 
 }
