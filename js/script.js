@@ -25,6 +25,7 @@ getGameFromURL();
 
 function klassement(game) {
     var klasse = {};
+    var trArray = [];
     if (game == '2018'){
         var scoreTabel = 'scoresCup2018';
         var gameJoin = '';
@@ -66,7 +67,7 @@ function klassement(game) {
     <td>#</td>
     </tr>`;
     var pos = 0;
-    var tr = {};
+    //var tr = {};
 
 
     teamScore.forEach(function (teams) {
@@ -131,25 +132,32 @@ function klassement(game) {
     teamRow += "</tr>";
     table += teamRow;
 
-    tr[team] = {
-        team:       team,
-        teamNaam:   teamNaam,
-        totaal:     totaal,
-        teamRow:    teamRow  
-    }
+    // tr[team] = {
+    //     team:       team,
+    //     teamNaam:   teamNaam,
+    //     totaal:     totaal,
+    //     teamRow:    teamRow  
+    // }
+    trArray.push([totaal, team, teamNaam, teamRow]);
+
 });
     
-    localStorage.setItem('tr',JSON.stringify(tr));
-    console.log(tr);
+    // localStorage.setItem('tr',JSON.stringify(tr));
+    // console.log(tr);
 
 
     table += "</table>";
-    renderKlassement();
+    renderKlassement(trArray);
 }
 
 
 
-function renderKlassement(){
+function renderKlassement(trArray){
+    trArray.sort(function(a,b){
+        return a[0]-b[0];
+    });
+    console.log(trArray);
+
     var table = `<table class='klassement'><tr><td>Pos.</td><td>teamnaam</td>`;
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
@@ -157,10 +165,8 @@ function renderKlassement(){
 
     table += `<td>Projected</td><td>#</td></tr>`;
 
-    var tableRow = JSON.parse(localStorage.getItem('tr'));
-    Object.values(tableRow).forEach(value => {
-        console.log(value.teamRow);
-        table += value.teamRow;
+    trArray.forEach(function(row){
+        table += row[3];
     });
 
     table += "</table>";
