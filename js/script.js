@@ -48,7 +48,7 @@ function klassement(game) {
     //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
     klasQuery += " from " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team` ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
 
-    console.log(klasQuery);
+    //console.log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     //renderTable(dbResult,"klasse");
 
@@ -56,7 +56,7 @@ function klassement(game) {
     var table = "<table class='klassement'>";
     table += `<tr>
     <td>Pos.</td>
-    <td>teamnaam</td>`;
+    <td >teamnaam</td>`;
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
     }
@@ -66,91 +66,106 @@ function klassement(game) {
     <td>#</td>
     </tr>`;
     var pos = 0;
+    var tr = {};
+
 
     teamScore.forEach(function (teams) {
         var teamRow = "";
-        var tr = {};
-
-
         var totaal = 0;
-        pos++;
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
-
         var kleurObj = JSON.parse(localStorage.getItem(team));
- 
-        teamRow += `<tr><td>${pos}</td><td>${teamNaam}</td>`;
+        pos++;
+
+        teamRow += `<tr><td>${pos}</td><td nowrap>${teamNaam}</td>`;
 
         for (hole = 1; hole < 19; hole++) {
-             var styleId = `<div id="circle">`;
+            var scoreBorder = ``;
 
 
-            if (!teams['H' + hole]){
-                score = par[hole];
-                totaal += parseFloat(score);
-                var bgColor = 'grey';
+           if (!teams['H' + hole]){
+            score = par[hole];
+            totaal += parseFloat(score);
+            var bgColor = 'grey';
 
+        } else {
+            score = teams['H' + hole];
+            totaal += parseFloat(score);
+            styleId = `<div class=\"circle\">`
+
+            if (!kleurObj[hole - 1]){
+                bgColor = 'grey';
             } else {
-                score = teams['H' + hole];
-                totaal += parseFloat(score);
-                styleId = `<div id="circle">`
-
-                if (!kleurObj[hole - 1]){
-                    bgColor = 'grey';
-                } else {
-                    var bgColor = kleurObj[hole - 1]['kleur'];
-                }
+                var bgColor = kleurObj[hole - 1]['kleur'];
             }
-
-            //console.log(kleurObj[x][hole]['kleur']);
-            teamRow += `<td width=50px bgcolor= ${bgColor}> ${styleId}`;
-            if (styleId = `<div id="circle>"`){
-                teamRow += `</div>`;
-            }
-            if (score < par[hole]){
-                teamRow += '*';
-            }
-            teamRow += score;
-            teamRow += "</td>";
-
-
-
         }
 
-        var parKleur = 'yellow';
-        if ((totaal-70) < 0 ){
-            var parKleur =  'red';
-        } else if ((totaal-70) == 0 ){
-            var parKleur =  'silver';
+        if (score < par[hole]){
+            scoreBorder += `<div class=\"birdie\">`;
+        }
+        if (score > par[hole]){
+            scoreBorder += `<div  class=\"bogey\">`;
         }
 
-        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
 
-        teamRow += "</tr>";
-        table += teamRow;
+        teamRow += `<td bgcolor= ${bgColor}> ${scoreBorder}`;
 
 
+        teamRow += score;
+        if (styleId != ``){
+            teamRow += `</div>`;
+        }        
+        teamRow += "</td>";
 
-        tr[team] = {
-            team:       team,
-            teamNaam:   teamNaam,
-            totaal:     totaal,
-            teamRow:    teamRow  
-        }
+    }
 
-        console.log(tr);
-        localStorage.setItem('tr',JSON.stringify(tr));
+    var parKleur = 'marineblue';
+    if ((totaal-70) < 0 ){
+        var parKleur =  'red';
+    } else if ((totaal-70) == 0 ){
+        var parKleur =  'silver';
+    }
+
+    teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
+
+    teamRow += "</tr>";
+    table += teamRow;
+
+    tr[team] = {
+        team:       team,
+        teamNaam:   teamNaam,
+        totaal:     totaal,
+        teamRow:    teamRow  
+    }
+});
+    
+    localStorage.setItem('tr',JSON.stringify(tr));
+    console.log(tr);
 
 
-    });
     table += "</table>";
-    // console.log(table);
-    $("#klassement").html(table);
+    renderKlassement();
 }
 
 
 
+function renderKlassement(){
+    var table = `<table class='klassement'><tr><td>Pos.</td><td>teamnaam</td>`;
+    for (h = 1 ; h < 19 ; h++){
+        table += `<td>H` + h + `<br>${par[h]}</td>`
+    }
 
+    table += `<td>Projected</td><td>#</td></tr>`;
+
+    var tableRow = JSON.parse(localStorage.getItem('tr'));
+    Object.values(tableRow).forEach(value => {
+        console.log(value.teamRow);
+        table += value.teamRow;
+    });
+
+    table += "</table>";
+    $("#klassement").html(table);
+}
 
 
 
