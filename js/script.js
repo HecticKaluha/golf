@@ -77,7 +77,7 @@ function klassement(game) {
         var kleurObj = JSON.parse(localStorage.getItem(team));
         pos++;
 
-        teamRow += `<tr><td>${pos}</td><td nowrap>${teamNaam}</td>`;
+        teamRow += `<tr><td>${pos}</td><td class=teamNaam>${teamNaam}</td>`;
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;

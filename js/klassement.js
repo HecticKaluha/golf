@@ -1,3 +1,27 @@
+const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
+
+
+
+function renderKlassement(){
+    var table = `<table class='klassement'><tr><td>Pos.</td><td>teamnaam</td>`;
+    for (h = 1 ; h < 19 ; h++){
+        table += `<td>H` + h + `<br>${par[h]}</td>`
+    }
+
+    table += `<td>Projected</td><td>#</td></tr>`;
+
+    var tableRow = JSON.parse(localStorage.getItem('tr'));
+    Object.values(tableRow).forEach(value => {
+        console.log(value.teamRow);
+        table += value.teamRow;
+    });
+
+    table += "</table>";
+    $("#klassement").html(table);
+}
+
+
+
 function executeQuery(query) {
     var result = [];
     $.ajax({
@@ -33,9 +57,137 @@ function executeQuery(query) {
 
 
 
+function klassement(game) {
+    var klasse = {};
+    if (game == '2018'){
+        var scoreTabel = 'scoresCup2018';
+        var gameJoin = '';
+
+    } else {
+        var scoreTabel = 'scores';  
+        var gameJoin = ` left join game on (s.game = game.game)`;  
+        gameJoin = '';    
+    }
+    //var x = 0;
+    kleur();
+    var klasQuery = "select s.team AS team, teams.team as teamnaam,";
+
+    for (i = 1; i < 19; i++) {
+        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
+        if (i < 18){
+            klasQuery += ",";
+        }
+    }
+
+    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+    klasQuery += " from " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team` ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+
+    //console.log(klasQuery);
+    var dbResult = executeQuery(klasQuery);
+    //renderTable(dbResult,"klasse");
+
+    var teamScore = dbResult;
+    var table = "<table class='klassement'>";
+    table += `<tr>
+    <td>Pos.</td>
+    <td >teamnaam</td>`;
+    for (h = 1 ; h < 19 ; h++){
+        table += `<td>H` + h + `<br>${par[h]}</td>`
+    }
+    
+
+    table += `<td>Projected</td>
+    <td>#</td>
+    </tr>`;
+    var pos = 0;
+    var tr = {};
 
 
-function klassement(jaar) {
+    teamScore.forEach(function (teams) {
+        var teamRow = "";
+        var totaal = 0;
+        var team = teams['team'];
+        var teamNaam = teams['teamnaam'];
+        var kleurObj = JSON.parse(localStorage.getItem(team));
+        pos++;
+
+        teamRow += `<tr><td>${pos}</td><td nowrap>${teamNaam}</td>`;
+
+        for (hole = 1; hole < 19; hole++) {
+            var scoreBorder = ``;
+
+
+           if (!teams['H' + hole]){
+            score = par[hole];
+            totaal += parseFloat(score);
+            var bgColor = 'grey';
+
+        } else {
+            score = teams['H' + hole];
+            totaal += parseFloat(score);
+            styleId = `<div class=\"circle\">`
+
+            if (!kleurObj[hole - 1]){
+                bgColor = 'grey';
+            } else {
+                var bgColor = kleurObj[hole - 1]['kleur'];
+            }
+        }
+
+        if (score < par[hole]){
+            scoreBorder += `<div class=\"birdie\">`;
+        }
+        if (score > par[hole]){
+            scoreBorder += `<div  class=\"bogey\">`;
+        }
+
+
+        teamRow += `<td bgcolor= ${bgColor}> ${scoreBorder}`;
+
+
+        teamRow += score;
+        if (styleId != ``){
+            teamRow += `</div>`;
+        }        
+        teamRow += "</td>";
+
+    }
+
+    var parKleur = 'marineblue';
+    if ((totaal-70) < 0 ){
+        var parKleur =  'red';
+    } else if ((totaal-70) == 0 ){
+        var parKleur =  'silver';
+    }
+
+    teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
+
+    teamRow += "</tr>";
+    table += teamRow;
+
+    tr[team] = {
+        team:       team,
+        teamNaam:   teamNaam,
+        totaal:     totaal,
+        teamRow:    teamRow  
+    }
+});
+    
+    localStorage.setItem('tr',JSON.stringify(tr));
+    console.log(tr);
+
+
+    table += "</table>";
+    renderKlassement();
+}
+
+
+
+
+
+
+
+function klassementGoed(jaar) {
     if (jaar == 2018){
         scoreTabel = 'scoresCup2018';
     } else {

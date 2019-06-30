@@ -29,6 +29,10 @@ table{
 /*	width: 100%;
 */}
 
+.teamNaam{
+	margin: 100px;
+}
+
 .birdie {
 padding: 10px;	
     background-color:transparent;
