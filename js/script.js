@@ -6,7 +6,7 @@ const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 let masonries = [];
 let masonriesElements = [];
 
-var holes = 2;
+var holes = 18;
 var min = 0;
 
 $(document).ready(function () {
@@ -772,13 +772,14 @@ function restart() {
     localStorage.removeItem('score');
     localStorage.removeItem('tee');
     localStorage.removeItem('hole');
-    localStorage.removeItem('game');
+    //localStorage.removeItem('game');
 
     finished.style.display = 'none';
 
     results.innerHTML = '';
     replay.innerHTML = '';
     setColorCount();
+    getNextTeamGame();
     generatePage();
 }
 
@@ -861,7 +862,7 @@ function getAllScores() {
 }
 
 function getTeamScore() {
-    var query = `SELECT s.hole,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having team = ${localStorage.getItem('team')}`;
+    var query = `SELECT s.hole,s.game,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${localStorage.getItem('game')} and team = ${localStorage.getItem('team')}`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
