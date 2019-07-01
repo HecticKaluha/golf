@@ -750,7 +750,8 @@ function renderTable(jsonResult, renderName) {
 function finishGame() {
     results.innerHTML = '';
     replay.innerHTML = '';
-    renderTable(getAllScores(), 'finalResults');
+    renderTable(getTeamScore(), 'teamScore');
+
     playing.style.display = 'none';
 
     message.style.display = `block`;
@@ -855,7 +856,7 @@ function kleur() {
 
 
 function getAllScores() {
-    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')}`;
+    var query = `select team, hole,kleur, score from scores where team = ${localStorage.getItem('team')} and game= ${localStorage.getItem('game')}`;
 
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
