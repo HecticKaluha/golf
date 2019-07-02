@@ -54,25 +54,6 @@ function getTeamMembers(val){
 
 
 
-function kleuren(team,game,tabel) {
-
-    var query = `SELECT kleur FROM ${tabel} WHERE team = ${team} and game = ${game} order by id`;
-    return(executeQuery(query));
-};
-
-
-// function kleur() {
-
-//     var query = "select  `s`.`team` AS `team`, sum(`s`.`score`) AS `totaal` from (`scores` `s` left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";// where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()
-//     var dbResult = executeQuery(query);
-
-//     dbResult.forEach(function (teamId) {
-//         var kleurResult = executeQuery("select kleur from scores where team = " + teamId['team']); //+ " and DATE_FORMAT(datum, '%Y-%m-%d') = CURDATE() OR datum = DATE_ADD(CURDATE(), INTERVAL -1 DAY)"
-
-//         localStorage.setItem(teamId['team'], JSON.stringify(kleurResult));
-
-//     });
-// };
 
 function klassement(game) {
     var klasse = {};
@@ -104,9 +85,7 @@ function klassement(game) {
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
         var game = teams['game'];
-        var kleurObj = kleuren(team,game,scoreTabel);
-        log(kleurObj);
-
+        var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
         teamRow += `<tr><td class=teamNaam>${teamNaam}</td>`;
 
@@ -139,7 +118,7 @@ function klassement(game) {
             }
 
 
-            teamRow += `<td width='20px' bgcolor= ${bgColor}> ${scoreBorder}`;
+            teamRow += `<td bgcolor= ${bgColor}> ${scoreBorder}`;
 
 
             teamRow += score;
