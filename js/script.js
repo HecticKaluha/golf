@@ -140,7 +140,7 @@ function klassement(game) {
             }
 
 
-            teamRow += `<td bgcolor= ${bgColor}> ${scoreBorder}`;
+            teamRow += `<td width='20px' bgcolor= ${bgColor}> ${scoreBorder}`;
 
 
             teamRow += score;
@@ -530,7 +530,7 @@ function showTeamSet() {
         scoreButtons.appendChild(div);
     });
 
-    checkContainer.style.backgroundColor = "rgba(255, 255, 255, 0.9)";
+    checkContainer.style.backgroundColor = "#ccc";
 
 }
 
@@ -651,7 +651,7 @@ function renderHole(hole) {
     //holeNumber.innerText = hole;
     holeCheck.innerText = hole;
 
-    checkContainer.style.backgroundColor = '#f8f9fa';
+    checkContainer.style.backgroundColor = '#ccc';
 }
 
 
