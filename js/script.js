@@ -87,7 +87,7 @@ function klassement(game) {
         var game = teams['game'];
         var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
-        teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td><td></td>`;
+        teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
@@ -160,11 +160,11 @@ function renderKlassement(trArray){
     console.log(trArray);
 
     var table = `<table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
-    <tr><td>Pos.</td><td >teamnaam</td>`;//class='klassement'
+    <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
     }
-    table += `<td>Projected</td><td>#</td></tr>`;
+    table += `<td>2B</td><td>#</td></tr>`;
     var pos = 0;
     var prevTotal = "";
     var posT
