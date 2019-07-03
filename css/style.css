@@ -1,5 +1,5 @@
 .bigger-text{
-	font-size: 30px;
+	font-size: 100%;
 }
 .super-big-text{
 	font-size: 50px;
@@ -8,22 +8,19 @@
 	align-items:center;
 }
 
-.klassement td {
+/*.klassement td {
   	color: black;
 	padding: 5px;
-	margin: 30px;
+	margin: 100%;
 	text-align: center;
-/*border-collapse: collapse;
-*/ 	
+border-collapse: collapse;
+ 	
 border: 10px solid #17a2b8;
 height: 40px;
 width: 100px;
 
 }
 
-.bg-info{
-	background-color: red;
-}
 
 table{
 	width: 90%;
@@ -31,17 +28,15 @@ table{
 
 .teamNaam{
 	width: 200px;
-}
+}*/
 
 
 
 
 .birdie {
-padding: 10px;	
     background-color:transparent;
     border: 2px solid #000;
-    height:30px;
-    width:30px;
+
     -webkit-border-radius:50%;
     -moz-border-radius:50%;
 }
@@ -49,8 +44,7 @@ padding: 10px;
 .bogey {
 	 background-color:transparent;
     border: 2px solid #000;
-    height:30px;
-    width:30px;
+
 }
 
 
