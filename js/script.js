@@ -50,22 +50,22 @@ function getTeamMembers(team){
 
 
 function setMemberCount(memberObj,del){
- //    if(del){
- //        log(memberObj);
- //        JSON.parse(memberObj).forEach(function(member){
+    log(memberObj);
+    if(del){
+        memberObj.forEach(function(member){
 
- //            localStorage.removeItem(member);
+            localStorage.removeItem(member);
 
- //        });
+        });
 
- //    }
- //    memberObj.forEach(function(member){
+    }
+    JSON.parse(memberObj).forEach(function(member){
 
- //        if(!localStorage.getItem(member['name'])){
- //         localStorage.setItem(member['name'],0);
- //     }
+        if(!localStorage.getItem(member['name'])){
+         localStorage.setItem(member['name'],0);
+     }
 
- // });
+ });
 }
 
 function updateMemberCount (member){
@@ -458,6 +458,9 @@ function showTeamSet() {
         button.innerHTML = names['name'] + ` ` + localStorage.getItem(names.name) + 'x';
 
         button.onclick = function () {
+            if(localStorage.getItem(names['name']) > 4){
+                alert ('dat mag niet meer');
+            }
             localStorage.setItem('member',names['name']);
             colorCheck.innerText = localStorage.getItem('member');
 
