@@ -20,7 +20,7 @@
     <!-- CSS -->
     <!--bootstrap CDN import-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
 
 
@@ -29,63 +29,67 @@
 </head>
 </html>
 <body class="bg-info">
-<div class="col-12 mt-2">
-    <!-- alleen zichtbaar wanneer een team gezet is -->
-    <!-- wordt verwijderd uit dom zodra een team gekozen is -->
+    <div class="col-12 mt-2">
+        <!-- alleen zichtbaar wanneer een team gezet is -->
+        <!-- wordt verwijderd uit dom zodra een team gekozen is -->
 
 
 
+        <div class="row grid">
+
+
+            <div class="h1 text-secondary col-lg-12 col-12" id="">LipOutCocktailCup</div>
 
 
 
-            <div class="col-6">
-            Speel met een team van 4 personen.<br>Van elke speler dient 4x de afslag worden gebruikt.<br>
-            Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. <br>Gebruik elke kleur minstens 4 keer. <br>
-            Sla alle 4 vanaf die Teebox af en kies vervolgens- de beste ligging.<br>
-            Sla (of putt) alle 4 vanaf die plaats, plaatsen binnen 10cm.<br> Ook op de green krijgt steeds iedereen de gelegenheid uit te holen. <br>Noteer de score, wiens afslag jullie hebben gekozen en omcirkel vanaf welke kleur je sloeg.<Br>
-            Birdies omcirkelen hoeft niet.<br><br>
-            Er wordt gewerkt aan een LipOuts-CocktailCup-App waarmee de scores zullen worden genoteerd en live-scoring in het clubhuis te volgen is. Daarover later meer.
+            <div class="col-12 col-lg-6">
+                Speel met een team van 4 personen.<br>Van elke speler dient 4x de afslag worden gebruikt.<br>
+                Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. <br>Gebruik elke kleur minstens 4 keer. <br>
+                Sla alle 4 vanaf die Teebox af en kies vervolgens- de beste ligging.<br>
+                Sla (of putt) alle 4 vanaf die plaats, plaatsen binnen 10cm.<br> Ook op de green krijgt steeds iedereen de gelegenheid uit te holen. <br>Noteer de score, wiens afslag jullie hebben gekozen en omcirkel vanaf welke kleur je sloeg.<Br>
+                Birdies omcirkelen hoeft niet.<br><br>
+                Er wordt gewerkt aan een LipOuts-CocktailCup-App waarmee de scores zullen worden genoteerd en live-scoring in het clubhuis te volgen is. Daarover later meer.
 
-            Geef je team (naam en deelnemers) door via mailadres   
-            <A HREF="mailto:lipoutscocktailcup@gmail.com">lipoutscocktailcup@gmail.com</A>
+                Geef je team (naam en deelnemers) door via mailadres   
+                <A HREF="mailto:lipoutscocktailcup@gmail.com">lipoutscocktailcup@gmail.com</A>
 
-            <br><br>
-            The LipOuts<br>
-            Koert, Dimitri, Peter en Jeroen
+                <br><br>
+                The LipOuts<br>
+                Koert, Dimitri, Peter en Jeroen
             </Br>
         </div>
-            <div class="col-6">
-            <img src="./images/cocktailcup.png" width="50%" height="50%">
-            </div>
+        <div class="col-12 col-lg-6">
+            <img src="./images/cocktailcup.png" class="img-fluid mt-2">
+        </div>
 
- 
-            <div class="col-12">
+
+        <div class="col-12">
             <div class="m-1 mb-3">
 
                 <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                        onclick="klassement('2018')">Klassement 2018
-                </button> 
-          </div>
+                onclick="klassement('2018')">Klassement 2018
+            </button> 
         </div>
     </div>
-  
-  
-  
-    <div class="row" id="klassement">
-        <div class="col-12 text-center">
-            <h1 class="mb-3" id="message"></h1>
-            <div id="replay" class="m-1 mb-3"></div>
+</div>
+</div>
+
+
+<div class="row" id="klassement">
+    <div class="col-12 text-center">
+        <h1 class="mb-3" id="message"></h1>
+        <div id="replay" class="m-1 mb-3"></div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12 text-center">
+        <div id="results" class="m-1 overflow-auto">
 
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-12 text-center">
-            <div id="results" class="m-1 overflow-auto">
-
-            </div>
-        </div>
-    </div>
+</div>
 
 </div>
 </div>

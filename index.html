@@ -16,7 +16,7 @@
   <!-- sweet alert imports -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
   <!--     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
- -->
+  -->
   <!-- import own js-->
   <script type="text/javascript" src="js/script.js"></script>
 
@@ -68,26 +68,26 @@
             </div>
 
             <hr> -->
-          <div class="row">
-            <div class="col-12">
-              <div id="checkContainer" class="text-center border mb-3 rounded m-1">
-                <div class="row">
-                  <div class="h1 text-secondary col-4" id="holeCheck">-</div>
-                  <div class="h1 text-secondary col-4" id="colorCheck">----</div>
-                  <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
-                </div>
-                <div class="row">
-                  <div class="text-dark col-4">HOLE</div>
+            <div class="row">
+              <div class="col-12">
+                <div id="checkContainer" class="text-center border mb-3 rounded m-1">
+                  <div class="row">
+                    <div class="h1 text-secondary col-4" id="holeCheck">-</div>
+                    <div class="h1 text-secondary col-4" id="colorCheck">----</div>
+                    <div class="h1 text-secondary col-4" id="scoreCheck">-</div>
+                  </div>
+                  <div class="row">
+                    <div class="text-dark col-4">HOLE</div>
                   <!--                             <div class="text-dark col-4">TEE</div>
-                            <div class="text-dark col-4">SCORE</div> -->
+                    <div class="text-dark col-4">SCORE</div> -->
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-12">
+            <div class="row">
+              <div class="col-12">
               <!--                     <h2 class="h3 text-center">Tee</h2>
- -->
+              -->
               <div class="col-12">
                 <div class="row grid" id="teeButtons">
 
@@ -96,13 +96,22 @@
             </div>
           </div>
 
-          <hr>
+          <div class="row>
+            <div class="col-12">
+              <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+              <div class="col-12">
+                <div class="row grid" id="nameButtons"></div>
+                </div>
+              </div>
+  
+
 
           <div class="row mb-3">
             <div class="col-12">
               <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
               <div class="col-12">
                 <div class="row grid " id="scoreButtons">
+
 
                 </div>
               </div>
@@ -115,7 +124,7 @@
             <div class="col-12">
               <div class="m-1">
                 <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
-                        </button>
+                </button>
               </div>
             </div>
           </div>
@@ -124,6 +133,7 @@
 
         </div>
       </div>
+            </div>
 
       <div class="row" id="finished">
         <div class="col-12 text-center">
@@ -150,31 +160,37 @@
                 </button>
             </div>
         </div>
-    </div> -->
+      </div> -->
       <div class="row">
         <div class="col-12">
           <div class="m-1 mb-3">
             <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="restart()">Restart
-                </button>
+            </button>
             <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('9999')">Klassement
-                </button>
+            </button>
             <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('2018')">Klassement 2018
-                </button>
+            </button>
             <!--                                 <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
                         onclick="kleur()">Kleur
-                </button>  -->
-          </div>
-        </div>
-      </div>
+                      </button>  -->
+                    </div>
+                  </div>
+                </div>
 
-      <div class=" col-12">
-        <div class="row grid">
-             <div class="col-12" id="klassement"></div>
-            <div class=" grid-item text-dark col-lg-6 col-12 mb-1">De prijs voor het best geklede team werd gesponsord door:</div>
-            <div class=" grid-item text-dark col-lg-6 col-10 col-auto mb-3"><img width="320px" src="images/logo_VanLangeMode_zwart.png"></div>
-          </div>
-        </div>
-      </div>
+                <div class=" col-12">
+                  <div class="row grid">
+
+                  </div>
+                </div>
+
+                <div class=" grid-item text-dark col-lg-6 col-12 mb-1">De prijs voor het best geklede team werd gesponsord door:</div>
+                <div class=" grid-item text-dark col-lg-6 col-10 col-auto mb-3">
+                  <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
+                </div>
+
+                <div class="col-12" id="klassement"></div>
+
+              </div>
 
       <!--   <button data-toggle="collapse" data-target="#demo">Collapsible</button>
 
@@ -183,15 +199,15 @@ Lorem ipsum dolor text....
 </div> -->
 
 
-    </div>
-  </div>
+</div>
+</div>
 
 
- 
 
 
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
-  </div>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+</div>
 
 </body>
