@@ -51,21 +51,23 @@ function getTeamMembers(team){
 
 function setMemberCount(memberObj,del){
     log(memberObj);
-    if(del){
-        memberObj.forEach(function(member){
+    // if(del){
+    //     memberObj.forEach(function(member){
 
-            localStorage.removeItem(member);
+    //         localStorage.removeItem(member);
 
-        });
+    //     });
 
+    // }}
+    if(localStorage.getItem('team')){
+        JSON.parse(memberObj).forEach(function(member){
+            if(!localStorage.getItem(member['name'])){
+                localStorage.setItem(member['name'],0);
+            }
+        }
+
+        );
     }
-    JSON.parse(memberObj).forEach(function(member){
-
-        if(!localStorage.getItem(member['name'])){
-         localStorage.setItem(member['name'],0);
-     }
-
- });
 }
 
 function updateMemberCount (member){
@@ -198,14 +200,14 @@ function renderKlassement(trArray){
             pos++;
             prevTotal = row[0];
         } else {
-         posT = "*";
+           posT = "*";
 
-     }
-     tableRow = row[3];
-     tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
-     table+= tableRow;
+       }
+       tableRow = row[3];
+       tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
+       table+= tableRow;
 
- });
+   });
 
     table += "</table>";
     $("#klassement").html(table);
@@ -357,11 +359,11 @@ function showNoTeamSet() {
 
     var result = executeQuery(`select * from teams where teams.id IN (select teamId from game where game.game = ${wedstrijd}) `);
     result.forEach(function (team){
-     log(team['id']);
+       log(team['id']);
 
-     localStorage.setItem('team-'+team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
+       localStorage.setItem('team-'+team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
 
- });
+   });
     var size = 12 / result.length;
     if (size < 6 || size === Infinity) {
         size = 6
@@ -417,7 +419,20 @@ function showTeamSet() {
         button.style.backgroundColor = color;
 
         button.onclick = function () {
-            setTee(color);
+
+                setTee(color);
+
+            var colorCount =JSON.parse(localStorage.getItem('colorCount'));
+
+            if(colorCount[localStorage.getItem('tee')] == 5){
+                Swal.fire({
+                    title: 'Helaas!',
+                    text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ik snap het...'
+                })
+            } 
         };
 
         div.appendChild(button);
@@ -458,12 +473,18 @@ function showTeamSet() {
         button.innerHTML = names['name'] + ` ` + localStorage.getItem(names.name) + 'x';
 
         button.onclick = function () {
-            if(localStorage.getItem(names['name']) > 4){
-                alert ('dat mag niet meer');
+            if(localStorage.getItem(names['name']) == 5){
+                Swal.fire({
+                    title: 'Helaas!',
+                    text: "Deze speler heeft geen afslagen meer, kies een ander",
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ik snap het...'
+                })
+            } else {
+                localStorage.setItem('member',names['name']);
+                colorCheck.innerText = localStorage.getItem('member');
             }
-            localStorage.setItem('member',names['name']);
-            colorCheck.innerText = localStorage.getItem('member');
-
         };
 
         div.appendChild(button);
@@ -706,13 +727,15 @@ function finishGame() {
     message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
     setColorCount();
-    setMemberCount();
+    setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team')));
 }
 
 
 
 function restart() {
-    setMemberCount(JSON.stringify(localStorage.getItem(`team-`),'del'));
+    //setMemberCount(JSON.stringify(localStorage.getItem(`team-`),'del'));
+    setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team'), 'DEL' ));
+
 
     localStorage.removeItem('team');
     localStorage.removeItem('score');
