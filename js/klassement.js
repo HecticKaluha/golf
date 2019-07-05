@@ -2,6 +2,11 @@ const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 
 
 
+$(document).ready(function () {
+
+klassement();
+});
+
 
 
 
@@ -137,16 +142,13 @@ function klassement(game) {
 
 
 
-
-
-
 function renderKlassement(trArray){
     trArray.sort(function(a,b){
         return a[0]-b[0];
     });
     console.log(trArray);
 
-    var table = `<table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
+    var table = `<table class="table table-responsive table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`

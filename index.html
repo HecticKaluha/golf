@@ -7,106 +7,82 @@
   </title>
   <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
   <link href="manifest.json" rel="manifest" />
-
-  <!-- JS -->
-  <!-- Ajax import -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
-  </script>
-
-  <!-- sweet alert imports -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <!--     <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
-  -->
-  <!-- import own js-->
   <script type="text/javascript" src="js/script.js"></script>
-
-  <!-- import masonry -->
-
-  <!-- CSS -->
-  <!--bootstrap CDN import-->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- sweetalert css import-->
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
-
-  <!-- bepaal viewport zodat de website kan bepalen hoe grooot het scherm is -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
 </head>
 
 </html>
 
 <body class="bg-info">
-  <div class="splash">
 
-    <div class="col-12 mt-2">
-      <!-- alleen zichtbaar wanneer een team gezet is -->
-      <!-- wordt verwijderd uit dom zodra een team gekozen is -->
-      <div id="noTeamSet">
-        <div class="row mb-2">
+  <div class="col-12 mt-2">
+    <div class="row">
+      <div class="col-10 offset-1 h5 text-center">LipOuts CockTailCup 2019
+      </div>
+    </div>
+    <!-- alleen zichtbaar wanneer een team gezet is -->
+    <!-- wordt verwijderd uit dom zodra een team gekozen is -->
+    <div id="noTeamSet">
+      <div class="row mb-2">
+        <div class="col-12">
+          <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
           <div class="col-12">
-            <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
-            <div class="col-12">
-              <div class="row grid" id="teams">
-
-
-              </div>
+            <div class="row grid" id="teams">
             </div>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- zichtbaar wanneer een team geselecteerd is -->
-      <div id="teamSet">
-        <!-- zichtbaar wanneer hole kleiner of gelijk is aan 18 (het spel is nog bezig) -->
-        <div id="playing">
-          <!--             <div class="row">
-        <span class="col-12 text-center">
-            <h1 class="h2"><span class="mr-2">Hole</span><span id="holeNumber"
-                                                               class="text-dark "></span></h1>
-        </span>
-            </div>
-
-            <hr> -->
-            <div class="row">
-              <div class="col-12">
-                <div id="checkContainer" class="text-center border mb-3 rounded m-1">
-                  <div class="row">
-                    <div class="h1 text-secondary col-4" id="holeCheck">--</div>
-                    <div class="h1 text-secondary col-4" id="colorCheck">--</div>
-                    <div class="h1 text-secondary col-4" id="scoreCheck">--</div>
-                  </div>
-                  <div class="row">
-                    <div class="text-dark col-4">HOLE</div>
-                  <!--                             <div class="text-dark col-4">TEE</div>
-                    <div class="text-dark col-4">SCORE</div> -->
-                  </div>
-                </div>
+    <!-- zichtbaar wanneer een team geselecteerd is -->
+    <div id="teamSet">
+      <div id="playing">
+        <div class="row">
+          <div class="col-12">
+            <div id="checkContainer" class="text-center border rounded m-1">
+              <div class="row">
+                <div class="h1 check col-4" id="holeCheck">--</div>
+                <div class="h1 check col-4" id="colorCheck">--</div>
+                <div class="h1 check col-4" id="scoreCheck">--</div>
+              </div>
+              <div class="row">
+                <div class="text-dark col-4">HOLE</div>
+                <div class="text-dark col-4">SPELER</div>
+                <div class="text-dark col-4">SCORE</div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
               <!--                     <h2 class="h3 text-center">Tee</h2>
               -->
               <div class="col-12">
                 <div class="row grid" id="teeButtons">
-
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="row>
+          <div class="row">
             <div class="col-12">
               <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
               <div class="col-12">
                 <div class="row grid" id="nameButtons"></div>
-                </div>
               </div>
-  
+            </div>
+          </div>
 
 
-          <div class="row mb-3">
+
+          <div class="row">
             <div class="col-12">
               <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
               <div class="col-12">
@@ -117,10 +93,8 @@
               </div>
             </div>
           </div>
-
-
-
-          <div class="row mb-3">
+          <hr>
+          <div class="row">
             <div class="col-12">
               <div class="m-1">
                 <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
@@ -128,86 +102,85 @@
               </div>
             </div>
           </div>
-
           <hr>
-
         </div>
       </div>
-            </div>
+
 
       <div class="row" id="finished">
         <div class="col-12 text-center">
-          <h1 class="mb-3" id="message"></h1>
-          <div id="replay" class="m-1 mb-3"></div>
-
+          <h1 class="mb-1" id="message"></h1>
+          <div id="replay" class="m-1"></div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-12 text-center">
           <div id="results" class="m-1 overflow-auto">
-
           </div>
         </div>
       </div>
 
-      <!-- button en result - altijd zichtbaar wanneer het een team gekozen is, ook na het spelen van 18 holes -->
-      <!--     <div class="row">
-        <div class="col-12">
-            <div class="m-1 mb-3">
-                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                        onclick="testQuery()">Voer query uit
-                </button>
-            </div>
-        </div>
-      </div> -->
+
+
       <div class="row">
         <div class="col-12">
-          <div class="m-1 mb-3">
-            <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="restart()">Restart
+          <div class="m-1">
+            <button id="queryButton" class="btn btn-success border btn-block   text-light p-2 p-sm-3 bigger-text" onclick="restart()">Reset
             </button>
             <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('9999')">Klassement
             </button>
             <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('2018')">Klassement 2018
             </button>
-            <!--                                 <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text"
-                        onclick="kleur()">Kleur
-                      </button>  -->
-                    </div>
-                  </div>
-                </div>
+          </div>
+        </div>
+      </div>
 
-                <div class=" col-12">
-                  <div class="row grid">
-
-                  </div>
-                </div>
-
-                <div class=" grid-item text-dark col-lg-6 col-10 offset-1 mb-1">De prijs voor het best geklede team werd gesponsord door:</div>
-                <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-                  <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
-                </div>
-
-                <div class="col-12" id="klassement"></div>
-
-              </div>
-
-      <!--   <button data-toggle="collapse" data-target="#demo">Collapsible</button>
-
-<div id="demo" class="collapse">
-Lorem ipsum dolor text....
-</div> -->
-
-
-</div>
-</div>
+      <div class=" col-12">
+        <div class="row grid">
+        </div>
+      </div>
+      <div class="col-12" id="klassement">
+      </div>
+      <div class=" grid-item text-dark col-lg-6 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+      </div>
+      <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+        <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
+      </div>
 
 
 
 
 
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 
-</div>
+
+
+
+
+
+
+      <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="showRules()">Regelement
+      </button>
+
+      <div class="row">
+        <div id="regelement" style="display:none">
+          <div class="col-12"><ul>
+            <li>Speel met een team van 4 personen.</li>
+            <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
+            <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
+            <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
+            <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
+            <li>Sla alle 4 vanaf die plaats.</li>
+            <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
+            <li>De laatste holed uit.</li> 
+            <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
+            <li>Succes!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 
 </body>

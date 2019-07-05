@@ -6,38 +6,38 @@ const wedstrijd = 2;
 let masonries = [];
 let masonriesElements = [];
 
-var holes = 4;
+var holes = 18;
 var min = 0;
 
 $(document).ready(function () {
 
-
     var nu =  Date.now();
-
-    if(localStorage.getItem('cookie') > nu){
-
-
-
-    } else {
+    if(localStorage.getItem('cookie') < nu){
         localStorage.clear();
         restart();
-        getNextTeamGame();
-        localStorage.setItem('cookie',Date.now()+(1*60*60*1000));//5*60*60*1000
+        //getNextTeamGame();
+        localStorage.setItem('cookie',Date.now()+(6*60*60*1000));//5*60*60*1000
         console.log('cookie gezet, geldt voor 6 uren');
-
-
     }
     //getTeamMembers();
     generatePage();
-
-//getGameFromURL();
-
 });
+
 
 
 function log(val){
     console.log(val);
 }
+
+
+
+
+function showRules(){
+    $('#regelement').show('slow');
+}
+
+
+
 
 function getTeamMembers(){
     if(localStorage.getItem('team')){
@@ -46,6 +46,7 @@ function getTeamMembers(){
         //localStorage.setItem(getTeamMembers);
     }
 }
+
 
 function resetTeamMembers(){
     getTeamMembers().forEach(function(member){
@@ -56,28 +57,19 @@ function resetTeamMembers(){
 
 
 function setMemberCount(memberObj,del){
-    log(memberObj);
-    // if(del){
-    //     memberObj.forEach(function(member){
+    //log(memberObj);
 
-    //         localStorage.removeItem(member);
-
-    //     });
-
-    // }}
     if(localStorage.getItem('team')){
         JSON.parse(memberObj).forEach(function(member){
             if(!localStorage.getItem(member['name'])){
                 localStorage.setItem(member['name'],0);
             }
-        }
-
-        );
+        });
     }
 }
 
 function updateMemberCount (member){
-    log(member);
+    //log(member);
     var aantal = localStorage.getItem(member);
     aantal++;
     localStorage.setItem(member,aantal);
@@ -88,7 +80,7 @@ function updateMemberCount (member){
     }
 
     var memberTee = JSON.parse(localStorage.getItem('memberTee'));
-    log(memberTee);
+    //log(memberTee);
     memberTee.push(member);
     localStorage.setItem('memberTee',JSON.stringify(memberTee));
 }
@@ -99,13 +91,11 @@ function klassement(game) {
     var trArray = [];
     if (game == '2018'){
         var scoreTabel = 'scoresCup2018';
-
     } else {
         var scoreTabel = 'scores';  
     }
 
     var klasQuery = "select  s.team AS team, teams.team as teamnaam,";
-
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
         if (i < 18){
@@ -113,10 +103,8 @@ function klassement(game) {
         }
     }
 
-    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
     klasQuery += " ,s.game from " + scoreTabel + " `s` left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
 
-    //console.log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
         var teamRow = "";
@@ -165,7 +153,6 @@ function klassement(game) {
                 teamRow += `</div>`;
             }        
             teamRow += "</td>";
-
         }
 
         var parKleur = 'marineblue';
@@ -175,29 +162,18 @@ function klassement(game) {
             var parKleur =  'silver';
         }
 
-        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
-
-        teamRow += "</tr>";
+        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td></tr>`;
         trArray.push([totaal, team, teamNaam, teamRow]);
-         //        log(trArray);
-
      });
 
     renderKlassement(trArray);
 };
 
 
-
-
-
-
-
 function renderKlassement(trArray){
     trArray.sort(function(a,b){
         return a[0]-b[0];
     });
-    console.log(trArray);
-
     var table = `<table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
@@ -282,49 +258,22 @@ function generatePage() {
     //init alle masonries tegelijkertijd
     initializeGrids();
 
-    if (getTeamFromURL()) {
+    // if (getTeamFromURL()) {
+    //     showTeamSet();
+    // } else {
+    //     showNoTeamSet();
+    // }
+
+    if(localStorage.getItem('team'))
+    {
         showTeamSet();
     } else {
         showNoTeamSet();
     }
     
-
     var hole = localStorage.getItem('hole');
     showHole(hole);
-
     restructure();
-}
-
-
-
-function getGameFromURL(){
-    var url = new URL(window.location.href);
-    //vraag url parameter team op
-    var game = url.searchParams.get("game");
-    //team in url gevonden
-
-    if (game) {
-        //console.log(game);
-        //console.log(localStorage.getItem('game'));
-        if (game !== localStorage.getItem('game') || !localStorage.getItem('game')) {
-
-            localStorage.setItem('game', game);
-            //setColorCount();
-        }
-        return true;
-    }
-    //team niet gevonden in url
-    else {
-        //check if exists in localstorage
-        if (localStorage.setItem('game', 9999)) {
-            return true;
-        }
-        //check in url
-        else {
-            return false;
-        }
-    }
-
 }
 
 
@@ -350,7 +299,6 @@ function getTeamFromURL() {
         if (team !== localStorage.getItem('team')) {
             localStorage.setItem('hole', 1);
             setColorCount();
-
         }
         localStorage.setItem('team', team);
         getNextTeamGame(team);
@@ -374,7 +322,7 @@ function showNoTeamSet() {
 
     var result = executeQuery(`select * from teams where teams.id IN (select teamId from game where game.game = ${wedstrijd}) `);
     result.forEach(function (team){
-       log(team['id']);
+       //log(team['id']);
 
        localStorage.setItem('team-'+team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
 
@@ -456,8 +404,6 @@ function showTeamSet() {
     });
 
     
-
-
     scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function (score) {
         var div = document.createElement('div');
@@ -467,17 +413,13 @@ function showTeamSet() {
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
         button.innerHTML = score;
-
         button.onclick = function () {
           //  button.className += 'kader';
             setScore(score);
         };
-
         div.appendChild(button);
         scoreButtons.appendChild(div);
     });
-
-
 
     nameButtons.innerHTML = '';
     JSON.parse(localStorage.getItem('team-'+localStorage.getItem('team'))).forEach(function (names) {
@@ -499,31 +441,20 @@ function showTeamSet() {
                     confirmButtonText: 'Ik snap het...'
                 })
             } else {
-              //document.getElementById("").classList.add("kader");
-          //    button.className += 'kader';
                 localStorage.setItem('member',names['name']);
                 colorCheck.innerText = localStorage.getItem('member');
             }
         };
-
         div.appendChild(button);
         nameButtons.appendChild(div);
     });
-
-
-    checkContainer.style.backgroundColor = "#ccc";
-
+    checkContainer.style.backgroundColor = "darkgrey";
 }
 
 
-
-
 function setTee(color) {
-
     localStorage.setItem('tee', color);
     checkContainer.style.backgroundColor = color;
-
-    //colorCheck.innerText = color;
 }
 
 
@@ -600,7 +531,6 @@ function nextHole() {
     hole++;
     localStorage.setItem('hole', hole);
     showTeamSet();
-
     showHole(hole);
 }
 
@@ -631,7 +561,7 @@ function renderHole(hole) {
     //holeNumber.innerText = hole;
     holeCheck.innerText = hole;
 
-    checkContainer.style.backgroundColor = '#ccc';
+    checkContainer.style.backgroundColor = 'darkgrey';
 }
 
 
@@ -755,7 +685,6 @@ function finishGame() {
 
 function restart() {
     localStorage.clear();
-
 
     // localStorage.removeItem('team');
     // localStorage.removeItem('score');

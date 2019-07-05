@@ -32,7 +32,6 @@ table{
 
 
 
-
 .birdie {
     background-color:transparent;
     border: 2px solid #000;
@@ -60,4 +59,15 @@ table{
 
 a:active { 
   background-color: yellow;
+}
+
+.check {
+  font-size: 75px;
+text-shadow: 2px 2px #ffffff;
+}
+
+
+.big-text{
+   font-size: 25px;
+   text-shadow: 1px 1px #ffffff;
 }
