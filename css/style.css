@@ -47,5 +47,17 @@ table{
 
 }
 
+.vanlange{
+  width: 100%;
+  height: 100%;
+  background-image: url("images/logo_VanLangeMode_zwart.png");
+  background-repeat: none;
+}
 
+.kader {
+  border: 2px solid black;
+}
 
+a:active { 
+  background-color: yellow;
+}

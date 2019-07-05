@@ -42,11 +42,17 @@ function log(val){
 function getTeamMembers(team){
     if(localStorage.getItem('team')){
 
-        return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));        localStorage.setItem(getTeamMembers);
-        log(getTeamMembers);
+        return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
+        //localStorage.setItem(getTeamMembers);
     }
 }
 
+function resetTeamMembers(team){
+    getTeamMembers().forEach(function(member){
+
+        if(localStorage.removeItem(member['name'])){log('gelukt')};
+    });
+}
 
 
 function setMemberCount(memberObj,del){
@@ -76,6 +82,15 @@ function updateMemberCount (member){
     aantal++;
     localStorage.setItem(member,aantal);
 
+    if(!localStorage.getItem('memberTee')){
+        var arr = [];
+        localStorage.setItem('memberTee',JSON.stringify(arr));
+    }
+
+    var memberTee = JSON.parse(localStorage.getItem('memberTee'));
+    log(memberTee);
+    memberTee.push(member);
+    localStorage.setItem('memberTee',JSON.stringify(memberTee));
 }
 
 
@@ -234,8 +249,8 @@ function setColorCount(){
 
 function checkMax(color) {
     var colorCount = JSON.parse(localStorage.getItem('colorCount'));
-    console.log('kleur');
-    console.log(colorCount[color]);
+    //console.log('kleur');
+    //console.log(colorCount[color]);
     //color moet hier eigenlijk verwijzen naar de var met die naam
     if (colorCount[color] < colorCount['max']) {
         colorCount[color]++;
@@ -315,10 +330,10 @@ function getGameFromURL(){
 
 function getNextTeamGame(team){
     var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
-    console.log(teamGame[0]['maxGame']);
+    //console.log(teamGame[0]['maxGame']);
     var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
     localStorage.setItem('game', nextTeamGame);
-    console.log(nextTeamGame);
+    //console.log(nextTeamGame);
 
 }
 
@@ -419,6 +434,7 @@ function showTeamSet() {
         button.style.backgroundColor = color;
 
         button.onclick = function () {
+         //     button.className += 'kader';
 
                 setTee(color);
 
@@ -453,6 +469,7 @@ function showTeamSet() {
         button.innerHTML = score;
 
         button.onclick = function () {
+          //  button.className += 'kader';
             setScore(score);
         };
 
@@ -482,6 +499,8 @@ function showTeamSet() {
                     confirmButtonText: 'Ik snap het...'
                 })
             } else {
+              //document.getElementById("").classList.add("kader");
+          //    button.className += 'kader';
                 localStorage.setItem('member',names['name']);
                 colorCheck.innerText = localStorage.getItem('member');
             }
@@ -512,6 +531,8 @@ function setScore(score) {
     localStorage.setItem('score', score);
     scoreCheck.innerText = score;
 }
+
+
 
 function saveHole() {
     if (localStorage.getItem('tee') && localStorage.getItem('score') && localStorage.getItem('member') !== `-`) {
@@ -734,7 +755,8 @@ function finishGame() {
 
 function restart() {
     //setMemberCount(JSON.stringify(localStorage.getItem(`team-`),'del'));
-    setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team'), 'DEL' ));
+    //setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team'), 'DEL' ));
+    resetTeamMembers();
 
 
     localStorage.removeItem('team');
