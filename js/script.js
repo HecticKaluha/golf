@@ -6,7 +6,7 @@ const wedstrijd = 2;
 let masonries = [];
 let masonriesElements = [];
 
-var holes = 18;
+var holes = 4;
 var min = 0;
 
 $(document).ready(function () {
@@ -19,10 +19,10 @@ $(document).ready(function () {
 
 
     } else {
-
+        localStorage.clear();
         restart();
         getNextTeamGame();
-        localStorage.setItem('cookie',Date.now()+(6*60*60*1000));//5*60*60*1000
+        localStorage.setItem('cookie',Date.now()+(1*60*60*1000));//5*60*60*1000
         console.log('cookie gezet, geldt voor 6 uren');
 
 
@@ -39,7 +39,7 @@ function log(val){
     console.log(val);
 }
 
-function getTeamMembers(team){
+function getTeamMembers(){
     if(localStorage.getItem('team')){
 
         return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
@@ -47,10 +47,10 @@ function getTeamMembers(team){
     }
 }
 
-function resetTeamMembers(team){
+function resetTeamMembers(){
     getTeamMembers().forEach(function(member){
 
-        if(localStorage.removeItem(member['name'])){log('gelukt')};
+        localStorage.removeItem(member['name']);
     });
 }
 
@@ -754,16 +754,13 @@ function finishGame() {
 
 
 function restart() {
-    //setMemberCount(JSON.stringify(localStorage.getItem(`team-`),'del'));
-    //setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team'), 'DEL' ));
-    resetTeamMembers();
+    localStorage.clear();
 
 
-    localStorage.removeItem('team');
-    localStorage.removeItem('score');
-    localStorage.removeItem('tee');
-    localStorage.removeItem('hole');
-    //localStorage.removeItem('game');
+    // localStorage.removeItem('team');
+    // localStorage.removeItem('score');
+    // localStorage.removeItem('tee');
+    // localStorage.removeItem('hole');
 
     finished.style.display = 'none';
 
