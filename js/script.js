@@ -19,7 +19,6 @@ $(document).ready(function () {
         localStorage.setItem('cookie',Date.now()+(6*60*60*1000));//5*60*60*1000
         console.log('cookie gezet, geldt voor 6 uren');
     }
-    //getTeamMembers();
     generatePage();
 });
 
@@ -270,7 +269,7 @@ function generatePage() {
     } else {
         showNoTeamSet();
     }
-    
+    localStorage.setItem('member',`-`);
     var hole = localStorage.getItem('hole');
     showHole(hole);
     restructure();
@@ -552,9 +551,9 @@ function renderHole(hole) {
     localStorage.setItem('hole', hole);
 
     colorCheck.style.color = "black";
-    colorCheck.innerText = "-";
+    colorCheck.innerText = "XX";
 
-    scoreCheck.innerText = "-";
+    scoreCheck.innerText = "XX";
 
     //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
     //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
