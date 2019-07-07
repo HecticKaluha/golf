@@ -11,6 +11,15 @@ var min = 0;
 
 $(document).ready(function () {
 
+    if(localStorage.getItem('team')){
+        $(".splash").hide();
+    } else {
+        $(".splash").show();
+        $(".splash").delay( 5000 ).fadeOut("slow");
+
+    }
+
+
     var nu =  Date.now();
     if(localStorage.getItem('cookie') < nu){
         localStorage.clear();
@@ -20,7 +29,11 @@ $(document).ready(function () {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
+
 });
+
+
+
 
 
 
@@ -163,7 +176,7 @@ function klassement(game) {
 
         teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td></tr>`;
         trArray.push([totaal, team, teamNaam, teamRow]);
-     });
+    });
 
     renderKlassement(trArray);
 };
@@ -190,14 +203,14 @@ function renderKlassement(trArray){
             pos++;
             prevTotal = row[0];
         } else {
-           posT = "*";
+         posT = "*";
 
-       }
-       tableRow = row[3];
-       tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
-       table+= tableRow;
+     }
+     tableRow = row[3];
+     tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
+     table+= tableRow;
 
-   });
+ });
 
     table += "</table>";
     $("#klassement").html(table);
@@ -251,6 +264,10 @@ function checkMax(color) {
 
 
 function generatePage() {
+
+
+
+
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
     teamSet.style.display = noTeamSet.style.display = 'none';
 
@@ -383,24 +400,24 @@ function showTeamSet() {
         button.onclick = function () {
          //     button.className += 'kader';
 
-                setTee(color);
+         setTee(color);
 
-            var colorCount =JSON.parse(localStorage.getItem('colorCount'));
+         var colorCount =JSON.parse(localStorage.getItem('colorCount'));
 
-            if(colorCount[localStorage.getItem('tee')] == 5){
-                Swal.fire({
-                    title: 'Helaas!',
-                    text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
-                    type: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ik snap het...'
-                })
-            } 
-        };
+         if(colorCount[localStorage.getItem('tee')] == 5){
+            Swal.fire({
+                title: 'Helaas!',
+                text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ik snap het...'
+            })
+        } 
+    };
 
-        div.appendChild(button);
-        teeButtons.appendChild(div);
-    });
+    div.appendChild(button);
+    teeButtons.appendChild(div);
+});
 
     
     scoreButtons.innerHTML = '';
@@ -414,11 +431,11 @@ function showTeamSet() {
         button.innerHTML = score;
         button.onclick = function () {
           //  button.className += 'kader';
-            setScore(score);
-        };
-        div.appendChild(button);
-        scoreButtons.appendChild(div);
-    });
+          setScore(score);
+      };
+      div.appendChild(button);
+      scoreButtons.appendChild(div);
+  });
 
     nameButtons.innerHTML = '';
     JSON.parse(localStorage.getItem('team-'+localStorage.getItem('team'))).forEach(function (names) {

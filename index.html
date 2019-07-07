@@ -22,164 +22,170 @@
 
 <body class="bg-info">
 
-  <div class="col-12 mt-2">
-    <div class="row">
-      <div class="col-10 offset-1 h5 text-center">LipOuts CockTailCup 2019
+<div class="container">
+
+  <div class="splash">
+      <div class="welcome h1 text-center">
+        Welkom
       </div>
-    </div>
-    <!-- alleen zichtbaar wanneer een team gezet is -->
-    <!-- wordt verwijderd uit dom zodra een team gekozen is -->
-    <div id="noTeamSet">
-      <div class="row mb-2">
-        <div class="col-12">
-          <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
-          <div class="col-12">
-            <div class="row grid" id="teams">
+      <div class="text-center h5 ">
+        Dit is The LipOuts CockTailCup<br>4 kleuren<br>4 afslagen<br>4 putts
+      </div>
+      <div class="haen">
+        
+      </div>
+  </div>
+
+  <div class="app">
+      <div class="col-12 mt-2">
+        <div class="row">
+          <div class="col-10 offset-1 h5 text-center">LipOuts CockTailCup 2019
+          </div>
+        </div>
+        <!-- alleen zichtbaar wanneer een team gezet is -->
+        <!-- wordt verwijderd uit dom zodra een team gekozen is -->
+        <div id="noTeamSet">
+          <div class="row mb-2">
+            <div class="col-12">
+              <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
+              <div class="col-12">
+                <div class="row grid" id="teams">
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- zichtbaar wanneer een team geselecteerd is -->
-    <div id="teamSet">
-      <div id="playing">
-        <div class="row mb-0">
-          <div class="col-12">
-            <div id="checkContainer" class="text-center border rounded m-1">
-              <div class="row mb-0">
-                <div class="h1 check col-4 p1" id="holeCheck">--</div>
-                <div class="h1 check col-4 p1" id="colorCheck">--</div>
-                <div class="h1 check col-4 p1" id="scoreCheck">--</div>
+        <!-- zichtbaar wanneer een team geselecteerd is -->
+        <div id="teamSet">
+          <div id="playing">
+            <div class="row mb-0">
+              <div class="col-12">
+                <div id="checkContainer" class="text-center border rounded m-1">
+                  <div class="row mb-0">
+                    <div class="h1 check col-4 p1" id="holeCheck">--</div>
+                    <div class="h1 check col-4 p1" id="colorCheck">--</div>
+                    <div class="h1 check col-4 p1" id="scoreCheck">--</div>
+                  </div>
+                  <div class="row">
+                    <div class="text-dark col-4">HOLE</div>
+                    <div class="text-dark col-4">SPELER</div>
+                    <div class="text-dark col-4">SCORE</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                  <!--                     <h2 class="h3 text-center">Tee</h2>
+                  -->
+                  <div class="col-12">
+                    <div class="row grid" id="teeButtons">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-12">
+                  <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                  <div class="col-12">
+                    <div class="row grid" id="nameButtons"></div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="row">
+                <div class="col-12">
+                  <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                  <div class="col-12">
+                    <div class="row grid " id="scoreButtons">
+
+
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="row">
-                <div class="text-dark col-4">HOLE</div>
-                <div class="text-dark col-4">SPELER</div>
-                <div class="text-dark col-4">SCORE</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-              <!--                     <h2 class="h3 text-center">Tee</h2>
-              -->
-              <div class="col-12">
-                <div class="row grid" id="teeButtons">
+                <div class="col-12">
+                  <div class="m-1">
+                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
+                    </button>
+                  </div>
                 </div>
               </div>
+              <hr>
+            </div>
+          </div>
+
+
+          <div class="row" id="finished">
+            <div class="col-12 text-center">
+              <h1 class="mb-1" id="message"></h1>
+              <div id="replay" class="m-1"></div>
             </div>
           </div>
 
           <div class="row">
-            <div class="col-12">
-              <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-              <div class="col-12">
-                <div class="row grid" id="nameButtons"></div>
+            <div class="col-12 text-center">
+              <div id="results" class="m-1 overflow-auto">
               </div>
             </div>
           </div>
 
 
 
-          <div class="row">
-            <div class="col-12">
-              <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-              <div class="col-12">
-                <div class="row grid " id="scoreButtons">
-
-
-                </div>
-              </div>
-            </div>
-          </div>
           <div class="row">
             <div class="col-12">
               <div class="m-1">
-                <button id="opslaanButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
+                <button id="queryButton" class="btn btn-success border btn-block   text-light p-2 p-sm-3 bigger-text" onclick="restart()">Reset
+                </button>
+                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('9999')">Klassement
+                </button>
+                <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('2018')">Klassement 2018
                 </button>
               </div>
             </div>
           </div>
-          <hr>
-        </div>
-      </div>
+
+          <div class=" col-12">
+            <div class="row grid">
+            </div>
+          </div>
+          <div class="col-12" id="klassement">
+          </div>
+          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+          </div>
+          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+            <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
+          </div>
 
 
-      <div class="row" id="finished">
-        <div class="col-12 text-center">
-          <h1 class="mb-1" id="message"></h1>
-          <div id="replay" class="m-1"></div>
-        </div>
-      </div>
+          <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="showRules()">Regelement
+          </button>
 
-      <div class="row">
-        <div class="col-12 text-center">
-          <div id="results" class="m-1 overflow-auto">
+          <div class="row">
+            <div id="regelement" style="display:none">
+              <div class="col-12"><ul>
+                <li>Speel met een team van 4 personen.</li>
+                <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
+                <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
+                <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
+                <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
+                <li>Sla alle 4 vanaf die plaats.</li>
+                <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
+                <li>De laatste holed uit.</li> 
+                <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
+                <li>Succes!</li>
+              </ul>
+            </div>
           </div>
         </div>
+
       </div>
-
-
-
-      <div class="row">
-        <div class="col-12">
-          <div class="m-1">
-            <button id="queryButton" class="btn btn-success border btn-block   text-light p-2 p-sm-3 bigger-text" onclick="restart()">Reset
-            </button>
-            <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('9999')">Klassement
-            </button>
-            <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 bigger-text" onclick="klassement('2018')">Klassement 2018
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class=" col-12">
-        <div class="row grid">
-        </div>
-      </div>
-      <div class="col-12" id="klassement">
-      </div>
-      <div class=" grid-item text-dark col-lg-6 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
-      </div>
-      <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-        <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
-      </div>
-
-
-
-
-
-
-
-
-
-
-
-
-      <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="showRules()">Regelement
-      </button>
-
-      <div class="row">
-        <div id="regelement" style="display:none">
-          <div class="col-12"><ul>
-            <li>Speel met een team van 4 personen.</li>
-            <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
-            <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
-            <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
-            <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
-            <li>Sla alle 4 vanaf die plaats.</li>
-            <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
-            <li>De laatste holed uit.</li> 
-            <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
-            <li>Succes!</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-
+</div>
 </body>
