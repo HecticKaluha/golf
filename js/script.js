@@ -1,6 +1,6 @@
 const colors = ['red', 'blue', 'yellow', 'white'];
-const amountOfScoreButtons = 8;
-const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
+const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
+const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
 
 let masonries = [];
@@ -11,75 +11,111 @@ var min = 0;
 
 $(document).ready(function () {
 
-    if (localStorage.getItem('team')) {
+    if(localStorage.getItem('team')){
         $(".splash").hide();
     } else {
         $(".splash").show();
-        $(".splash").delay(5000).fadeOut("slow");
+        $(".splash").delay( 5000 ).fadeOut("slow");
+
     }
 
-    var nu = Date.now();
-    if (localStorage.getItem('cookie') < nu) {
+
+    var nu =  Date.now();
+    if(localStorage.getItem('cookie') < nu){
         localStorage.clear();
         restart();
         //getNextTeamGame();
-        localStorage.setItem('cookie', Date.now() + (6 * 60 * 60 * 1000));//5*60*60*1000
+        localStorage.setItem('cookie',Date.now()+(6*60*60*1000));//5*60*60*1000
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
+
 });
 
-function getTeamMembers() {
-    if (localStorage.getItem('team')) {
+
+
+
+
+
+function log(val){
+    console.log(val);
+}
+
+
+
+
+function showRules(){
+    $('#regelement').show('slow');
+}
+
+
+
+
+function getTeamMembers(){
+    if(localStorage.getItem('team')){
+
         return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
         //localStorage.setItem(getTeamMembers);
     }
 }
 
-function setMemberCount(memberObj, del) {
-    if (localStorage.getItem('team')) {
-        JSON.parse(memberObj).forEach(function (member) {
-            if (!localStorage.getItem(member['name'])) {
-                localStorage.setItem(member['name'], 0);
+
+function resetTeamMembers(){
+    getTeamMembers().forEach(function(member){
+
+        localStorage.removeItem(member['name']);
+    });
+}
+
+
+function setMemberCount(memberObj,del){
+    //log(memberObj);
+
+    if(localStorage.getItem('team')){
+        JSON.parse(memberObj).forEach(function(member){
+            if(!localStorage.getItem(member['name'])){
+                localStorage.setItem(member['name'],0);
             }
         });
     }
 }
 
-function updateMemberCount(member) {
+function updateMemberCount (member){
+    //log(member);
     var aantal = localStorage.getItem(member);
     aantal++;
-    localStorage.setItem(member, aantal);
+    localStorage.setItem(member,aantal);
 
-    if (!localStorage.getItem('memberTee')) {
-        localStorage.setItem('memberTee', JSON.stringify([]));
+    if(!localStorage.getItem('memberTee')){
+        var arr = [];
+        localStorage.setItem('memberTee',JSON.stringify(arr));
     }
 
     var memberTee = JSON.parse(localStorage.getItem('memberTee'));
+    //log(memberTee);
     memberTee.push(member);
-    localStorage.setItem('memberTee', JSON.stringify(memberTee));
+    localStorage.setItem('memberTee',JSON.stringify(memberTee));
 }
 
 
 function klassement(game) {
     var klasse = {};
     var trArray = [];
-    var scoreTabel = null;
-    if (game === '2018') {
-        scoreTabel = 'scoresCup2018';
+    if (game == '2018'){
+        var scoreTabel = 'scoresCup2018';
     } else {
-        scoreTabel = 'scores';
+        var scoreTabel = 'scores';  
     }
 
-    var klasQuery = `select  s.team AS team, teams.team as teamnaam,`;
-    for (i = 1; i <= holes; i++) {
+    var klasQuery = "select  s.team AS team, teams.team as teamnaam,";
+    for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
-        if (i <= 17) {
-            klasQuery += `,`;
+        if (i < 18){
+            klasQuery += ",";
         }
     }
 
-    klasQuery += ` ,s.game from ${scoreTabel} s left join teams on teams.id = s.team  left join holes h on(h.hole = s.hole)  group by s.team, s.game `;
+    klasQuery += " ,s.game from " + scoreTabel + " `s` left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
 
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
@@ -90,51 +126,55 @@ function klassement(game) {
         var game = teams['game'];
         var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
-        teamRow += `<tr><td colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
+        teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
 
-        for (hole = 1; hole <= holes; hole++) {
+        for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
-            var bgColor = 'grey';
 
-            if (!teams['H' + hole]) {
+
+            if (!teams['H' + hole]){
                 score = par[hole];
                 totaal += parseFloat(score);
+                var bgColor = 'grey';
+
             } else {
                 score = teams['H' + hole];
                 totaal += parseFloat(score);
-                styleId = `<div class="circle">`;
+                styleId = `<div class=\"circle\">`
 
-                if (!kleurObj[hole - 1]) {
+                if (!kleurObj[hole - 1]){
                     bgColor = 'grey';
                 } else {
-                    bgColor = kleurObj[hole - 1]['kleur'];
+                    var bgColor = kleurObj[hole - 1]['kleur'];
                 }
             }
 
-            if (score < par[hole]) {
-                scoreBorder += `<div class="birdie">`;
+            if (score < par[hole]){
+                scoreBorder += `<div class=\"birdie\">`;
             }
-            if (score > par[hole]) {
-                scoreBorder += `<div class="bogey">`;
+            if (score > par[hole]){
+                scoreBorder += `<div  class=\"bogey\">`;
             }
 
-            teamRow += `<td width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
+
+            teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
+
 
             teamRow += score;
-            if (styleId != ``) {
+            if (styleId != ``){
                 teamRow += `</div>`;
-            }
+            }        
             teamRow += "</td>";
         }
 
         var parKleur = 'marineblue';
-        if ((totaal - 70) < 0) {
-            var parKleur = 'red';
-        } else if ((totaal - 70) == 0) {
-            var parKleur = 'silver';
+        if ((totaal-70) < 0 ){
+            var parKleur =  'red';
+        } else if ((totaal-70) == 0 ){
+            var parKleur =  'silver';
         }
 
-        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>` + (totaal - 70) + `</td></tr>`;
+        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td></tr>`;
         trArray.push([totaal, team, teamNaam, teamRow]);
     });
 
@@ -142,13 +182,13 @@ function klassement(game) {
 };
 
 
-function renderKlassement(trArray) {
-    trArray.sort(function (a, b) {
-        return a[0] - b[0];
+function renderKlassement(trArray){
+    trArray.sort(function(a,b){
+        return a[0]-b[0];
     });
     var table = `<table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
-    for (h = 1; h < 19; h++) {
+    for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
     }
     table += `<td>2B</td><td>#</td></tr>`;
@@ -156,41 +196,43 @@ function renderKlassement(trArray) {
     var prevTotal = "";
     var posT
 
-    trArray.forEach(function (row) {
+    trArray.forEach(function(row){
         var posT = '';
         //pos++;
-        if (row[0] != prevTotal) {
+        if(row[0] != prevTotal){
             pos++;
             prevTotal = row[0];
         } else {
-            posT = "*";
+         posT = "*";
 
-        }
-        tableRow = row[3];
-        tableRow = tableRow.replace("<tr>", "<tr><td>" + pos + posT + "</td>");
-        table += tableRow;
+     }
+     tableRow = row[3];
+     tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
+     table+= tableRow;
 
-    });
+ });
 
     table += "</table>";
     $("#klassement").html(table);
 }
 
 
-function setColorCount() {
-    //if(localStorage.getItem('colorCount')){
+
+function setColorCount(){
+  //if(localStorage.getItem('colorCount')){
     var colorCount = {
-        max: 5,
-        maxCount: 0,
-        red: 0,
-        yellow: 0,
-        blue: 0,
-        white: 0
-    }
+        max:        5,
+        maxCount:   0,
+        red:        0,
+        yellow:     0,
+        blue :      0,
+        white:      0
+    }            
 
     localStorage.setItem('colorCount', JSON.stringify(colorCount));
     //}
 }
+
 
 
 function checkMax(color) {
@@ -207,8 +249,8 @@ function checkMax(color) {
             }
         }
 
-        localStorage.setItem('colorCount', JSON.stringify(colorCount));
-
+        localStorage.setItem('colorCount', JSON.stringify(colorCount));        
+        
         return true;
     } else {
 
@@ -218,7 +260,12 @@ function checkMax(color) {
 }
 
 
+
+
+
 function generatePage() {
+
+
 
 
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -233,26 +280,28 @@ function generatePage() {
     //     showNoTeamSet();
     // }
 
-    if (localStorage.getItem('team')) {
+    if(localStorage.getItem('team'))
+    {
         showTeamSet();
     } else {
         showNoTeamSet();
     }
-    localStorage.setItem('member', `-`);
+    localStorage.setItem('member',`-`);
     var hole = localStorage.getItem('hole');
     showHole(hole);
     restructure();
 }
 
 
-function getNextTeamGame(team) {
+function getNextTeamGame(team){
     var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
     //console.log(teamGame[0]['maxGame']);
-    var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
+    var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
     localStorage.setItem('game', nextTeamGame);
     //console.log(nextTeamGame);
 
 }
+
 
 
 function getTeamFromURL() {
@@ -288,12 +337,12 @@ function showNoTeamSet() {
     noTeamSet.style.display = 'block';
 
     var result = executeQuery(`select * from teams where teams.id IN (select teamId from game where game.game = ${wedstrijd}) `);
-    result.forEach(function (team) {
-        //log(team['id']);
+    result.forEach(function (team){
+       //log(team['id']);
 
-        localStorage.setItem('team-' + team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
+       localStorage.setItem('team-'+team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
 
-    });
+   });
     var size = 12 / result.length;
     if (size < 6 || size === Infinity) {
         size = 6
@@ -309,7 +358,7 @@ function showNoTeamSet() {
         button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
 
         button.innerHTML = team.team + '<br>[';
-        JSON.parse(localStorage.getItem('team-' + team.id)).forEach(function (names) {
+        JSON.parse(localStorage.getItem('team-'+team.id)).forEach(function(names){
             button.innerHTML += names['name'] + '-';
         });
         button.innerHTML += ']';
@@ -324,6 +373,7 @@ function showNoTeamSet() {
         teams.appendChild(div);
     });
 }
+
 
 
 function showTeamSet() {
@@ -348,47 +398,47 @@ function showTeamSet() {
         button.style.backgroundColor = color;
 
         button.onclick = function () {
-            //     button.className += 'kader';
+         //     button.className += 'kader';
 
-            setTee(color);
+         setTee(color);
 
-            var colorCount = JSON.parse(localStorage.getItem('colorCount'));
+         var colorCount =JSON.parse(localStorage.getItem('colorCount'));
 
-            if (colorCount[localStorage.getItem('tee')] == 5) {
-                Swal.fire({
-                    title: 'Helaas!',
-                    text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
-                    type: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ik snap het...'
-                })
-            }
-        };
+         if(colorCount[localStorage.getItem('tee')] == 5){
+            Swal.fire({
+                title: 'Helaas!',
+                text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ik snap het...'
+            })
+        } 
+    };
 
-        div.appendChild(button);
-        teeButtons.appendChild(div);
-    });
+    div.appendChild(button);
+    teeButtons.appendChild(div);
+});
 
-
+    
     scoreButtons.innerHTML = '';
-    for (var i = 1; i <= amountOfScoreButtons; i++) {
+    amountOfScoreButtons.forEach(function (score) {
         var div = document.createElement('div');
 
         div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
 
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
-        button.innerHTML = i;
+        button.innerHTML = score;
         button.onclick = function () {
-            //  button.className += 'kader';
-            setScore(i);
-        };
-        div.appendChild(button);
-        scoreButtons.appendChild(div);
-    }
+          //  button.className += 'kader';
+          setScore(score);
+      };
+      div.appendChild(button);
+      scoreButtons.appendChild(div);
+  });
 
     nameButtons.innerHTML = '';
-    JSON.parse(localStorage.getItem('team-' + localStorage.getItem('team'))).forEach(function (names) {
+    JSON.parse(localStorage.getItem('team-'+localStorage.getItem('team'))).forEach(function (names) {
         var div = document.createElement('div');
 
         div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
@@ -398,7 +448,7 @@ function showTeamSet() {
         button.innerHTML = names['name'] + ` ` + localStorage.getItem(names.name) + 'x';
 
         button.onclick = function () {
-            if (localStorage.getItem(names['name']) == 5) {
+            if(localStorage.getItem(names['name']) == 5){
                 Swal.fire({
                     title: 'Helaas!',
                     text: "Deze speler heeft geen afslagen meer, kies een ander",
@@ -407,7 +457,7 @@ function showTeamSet() {
                     confirmButtonText: 'Ik snap het...'
                 })
             } else {
-                localStorage.setItem('member', names['name']);
+                localStorage.setItem('member',names['name']);
                 colorCheck.innerText = localStorage.getItem('member');
             }
         };
@@ -429,9 +479,7 @@ function setScore(score) {
     scoreCheck.innerText = score;
 }
 
-function showRules() {
-    $('#regelement').show('slow');
-}
+
 
 function saveHole() {
     if (localStorage.getItem('tee') && localStorage.getItem('score') && localStorage.getItem('member') !== `-`) {
@@ -458,7 +506,7 @@ function saveHole() {
                             timer: 1500,
                         });
                         updateMemberCount(localStorage.getItem('member'));
-                        localStorage.setItem('member', `-`);
+                        localStorage.setItem('member',`-`);
                         nextHole();
                         renderTable(getTeamScore(), 'teamScore');
                     } else {
@@ -566,6 +614,9 @@ function executeQuery(query) {
 }
 
 
+
+
+
 function renderTable(jsonResult, renderName) {
     var divToRenderIn = null;
 
@@ -582,7 +633,7 @@ function renderTable(jsonResult, renderName) {
     }
 
     divToRenderIn.innerHTML =
-        `<table class="table table-bordered table-striped">
+    `<table class="table table-bordered table-striped">
     <thead>
     <tr role="row" id="${renderName}-thead">
 
@@ -623,6 +674,7 @@ function renderTable(jsonResult, renderName) {
 }
 
 
+
 function finishGame() {
     results.innerHTML = '';
     replay.innerHTML = '';
@@ -642,8 +694,9 @@ function finishGame() {
     message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
     setColorCount();
-    setMemberCount(localStorage.getItem(`team-` + localStorage.getItem('team')));
+    setMemberCount(localStorage.getItem(`team-`+localStorage.getItem('team')));
 }
+
 
 
 function restart() {
@@ -679,8 +732,16 @@ function restructure() {
     });
 }
 
+
+
+
 function getTeamScore() {
     var query = `SELECT s.hole,s.game,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${localStorage.getItem('game')} and team = ${localStorage.getItem('team')}`;
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
+
+
+
+
+
