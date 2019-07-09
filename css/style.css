@@ -1,107 +1,106 @@
 body, html {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.container  {
-
-  /* Full height */
-  height: 100%; 
-  position: relative;
-  padding: 0;
-  margin: 0;
+.container {
+    /* Full height */
+    height: 100%;
+    position: relative;
+    padding: 0;
+    margin: 0;
 }
 
-.splash{
-  z-index: 1;
-  height: 200%;
-  width: 100%;
-  background-color: #17a2b8;
-  position: absolute;
+.splash {
+    z-index: 1;
+    height: 200%;
+    width: 100%;
+    background-color: #17a2b8;
+    position: absolute;
 }
 
-.haen{
-z-index: -1;
+.haen {
+    z-index: -1;
     background-image: url("../images/lipouts.png");
+<<<<<<< HEAD
         background-position: top center;
   background-size: 90%;
   background-repeat: no-repeat;
+=======
+    background-position: top center;
+    background-size: 50%;
+    background-repeat: no-repeat;
+>>>>>>> b594f9fa21603912117d2650ee4fc277d6c2b98c
 
-  height: 100%;
+    height: 100%;
 }
 
-
-.app{
-
-  /* Full height */
-  height: 100%; 
-
+.app {
+    /* Full height */
+    height: 100%;
 }
 
-.bg-info{
-  margin: 0;
-  padding: 0;
+.bg-info {
+    margin: 0;
+    padding: 0;
 }
 
-.bigger-text{
-	font-size: 100%;
+.bigger-text {
+    font-size: 100%;
 }
-.super-big-text{
-	font-size: 50px;
+
+.super-big-text {
+    font-size: 50px;
 }
-.align-items-center{
-	align-items:center;
+
+.align-items-center {
+    align-items: center;
 }
 
 .bogey, .birdie {
- background-color:transparent;
- border: 2px solid #000;
- height: 2rem;
- width:2rem;
+    background-color: transparent;
+    border: 2px solid #000;
+    height: 2rem;
+    width: 2rem;
 }
 
 .birdie {
-  -webkit-border-radius:50%;
-  -moz-border-radius:50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
 }
 
-
-
-.vanlange{
-  width: 100%;
-  height: 100%;
-  background-image: url("images/logo_VanLangeMode_zwart.png");
-  background-repeat: none;
+.vanlange {
+    width: 100%;
+    height: 100%;
+    background-image: url("images/logo_VanLangeMode_zwart.png");
+    background-repeat: none;
 }
 
 .kader {
-  border: 2px solid black;
+    border: 2px solid black;
 }
-
 
 .check {
-  font-size: 50px;
-  text-shadow: 2px 2px #ffffff;
+    font-size: 50px;
+    text-shadow: 2px 2px #ffffff;
 
 }
 
-.big-text{
- font-size: 25px;
- text-shadow: 1px 1px #ffffff;
+.big-text {
+    font-size: 25px;
+    text-shadow: 1px 1px #ffffff;
 }
-
 
 #main {
-  height: 100%;
-  background-image: url("images/logo_VanLangeMode_zwart.png");
-  background-attachment: cover;
+    height: 100%;
+    background-image: url("images/logo_VanLangeMode_zwart.png");
+    background-attachment: cover;
 
 }
 
-
-
 .full-height {
+<<<<<<< HEAD
   height: 100%;
   background-image: url("images/logo_VanLangeMode_zwart.png");
   background-size: cover;
@@ -120,3 +119,10 @@ z-index: -1;
    box-shadow: 3px 3px silver;
 }
 
+=======
+    height: 100%;
+    background-image: url("images/logo_VanLangeMode_zwart.png");
+    background-size: cover;
+    background-attachment: fixed;
+}
+>>>>>>> b594f9fa21603912117d2650ee4fc277d6c2b98c
