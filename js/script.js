@@ -43,11 +43,33 @@ function log(val){
 }
 
 
-
-
 function showRules(){
     $('#regelement').show('slow');
+    $('#regelement').toggle();
+  
+  
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
+    }, 2000);
+  
+  
+    var targetDiv = localStorage.getItem('targetDiv');
+     if (targetDiv === "bottom"){
+         targetDiv = "top";
+     } else {
+         targetDiv = "bottom";
+     }
+     localStorage.setItem('targetDiv', targetDiv);
+   // targetDiv = 'bottom';
+
+
+
+
 }
+
+// function showRules(){
+//     $('#regelement').show('slow');
+// }
 
 
 
