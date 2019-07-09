@@ -25,7 +25,7 @@ body, html {
 z-index: -1;
     background-image: url("../images/lipouts.png");
         background-position: top center;
-  background-size: 50%;
+  background-size: 90%;
   background-repeat: no-repeat;
 
   height: 100%;
@@ -109,7 +109,14 @@ z-index: -1;
 }
 
 
+.bottom{
+  heigth: 800;
+}
 
-
-
+.checkContainer{
+    border: 5px double black;
+  -webkit-border-radius:1rem;
+  -moz-border-radius:1rem;
+   box-shadow: 3px 3px silver;
+}
 

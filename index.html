@@ -13,30 +13,38 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+
 
 </head>
 
 </html>
 
 <body class="bg-info">
+<div class="top"></div>
 
-<div class="container">
+  <div class="container">
 
-  <div class="splash">
-      <div class="welcome h1 text-center">
-        Welkom
-      </div>
-      <div class="text-center h5 ">
-        Dit is The LipOuts CockTailCup<br>4 kleuren<br>4 afslagen<br>4 putts
-      </div>
-      <div class="haen">
-        
-      </div>
-  </div>
+    <div class="splash">
+      <div class="row">
+        <div class=" grid-item text-dark col-lg-10 col-10 offset-1 col-auto mb-3 text-center">
 
-  <div class="app">
+          <div class="h2">
+            Welkom
+          </div>
+          <div class="h5 ">
+            Dit is The LipOuts CockTailCup<br>4 kleuren<br>4 afslagen<br>4 putts
+          </div>
+          <img src="images/lipouts-lg.png"  class="img-fluid mt-5">
+        </div>
+      </div>
+
+    </div>
+
+    <div class="app">
       <div class="col-12 mt-2">
         <div class="row">
           <div class="col-10 offset-1 h5 text-center">LipOuts CockTailCup 2019
@@ -61,7 +69,7 @@
           <div id="playing">
             <div class="row mb-0">
               <div class="col-12">
-                <div id="checkContainer" class="text-center border rounded m-1">
+                <div id="checkContainer" class="checkContainer text-center  m-1">
                   <div class="row mb-0">
                     <div class="h1 check col-4 p1" id="holeCheck">--</div>
                     <div class="h1 check col-4 p1" id="colorCheck">--</div>
@@ -150,42 +158,50 @@
             </div>
           </div>
 
-          <div class=" col-12">
-            <div class="row grid">
-            </div>
-          </div>
           <div class="col-12" id="klassement">
           </div>
-          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
-          </div>
-          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-            <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
-          </div>
-
-
-          <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="showRules()">Regelement
-          </button>
 
           <div class="row">
-            <div id="regelement" style="display:none">
-              <div class="col-12"><ul>
-                <li>Speel met een team van 4 personen.</li>
-                <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
-                <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
-                <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
-                <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
-                <li>Sla alle 4 vanaf die plaats.</li>
-                <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
-                <li>De laatste holed uit.</li> 
-                <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
-                <li>Succes!</li>
-              </ul>
+            <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+            </div>
+            <div id="vanLange" class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+              <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
             </div>
           </div>
+          <div class="row">
+            <div class= "col-12">
+          <button id="queryButton" class="btn btn-warning border btn-block text-light p-2 mb-5 p-sm-3 mb-4 bigger-text" onclick="showRules()">Regelement
+          </button>
         </div>
+        </div>
+ <!--          <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="scherm()">scherm
+ </button> -->
 
-      </div>
+ <div class="row">
+  <div id="regelement" style="display:none">
+    <div class="col-12"><ul>
+      <li>Speel met een team van 4 personen.</li>
+      <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
+      <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
+      <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
+      <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
+      <li>Sla alle 4 vanaf die plaats.</li>
+      <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
+      <li>De laatste holed uit.</li> 
+      <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
+      <li>Succes!</li>
+    </ul>
   </div>
+    
+    
+    
+</div>
+        <div class="bottom"></div>
+</div>
 
 </div>
+</div>
+</div>
+
+
 </body>

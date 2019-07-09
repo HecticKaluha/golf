@@ -3,6 +3,7 @@ const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
 
+
 let masonries = [];
 let masonriesElements = [];
 
@@ -11,11 +12,22 @@ var min = 0;
 
 $(document).ready(function () {
 
+$(".sliding-link").click(function(e) {
+    e.preventDefault();
+    var aid = $(this).attr("href");
+    $('html,body').animate({scrollTop: $(aid).offset().top},'slow');
+});
+
+localStorage.setItem('targetDiv', 'bottom');
+
+
+
+
     if(localStorage.getItem('team')){
         $(".splash").hide();
     } else {
         $(".splash").show();
-        $(".splash").delay( 5000 ).fadeOut("slow");
+        $(".splash").delay( 2000 ).fadeOut("slow");
 
     }
 
@@ -30,8 +42,20 @@ $(document).ready(function () {
     }
     generatePage();
 
+    $("#vanLange").delay(5000).fadeIn();
+
+
 });
 
+
+function scherm(){
+    var txt = "";
+    txt += "Document width/height: " + $(document).width();
+    txt += "x" + $(document).height() + "\n";
+    txt += "Window width/height: " + $(window).width();
+    txt += "x" + $(window).height();
+    alert(txt);
+}
 
 
 
@@ -45,7 +69,26 @@ function log(val){
 
 
 function showRules(){
-    $('#regelement').show('slow');
+    $('#regelement').toggle();
+  
+  
+    $([document.documentElement, document.body]).animate({
+        scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
+    }, 2000);
+  
+  
+    var targetDiv = localStorage.getItem('targetDiv');
+     if (targetDiv === "bottom"){
+         targetDiv = "top";
+     } else {
+         targetDiv = "bottom";
+     }
+     localStorage.setItem('targetDiv', targetDiv);
+   // targetDiv = 'bottom';
+
+
+
+
 }
 
 
@@ -266,8 +309,6 @@ function checkMax(color) {
 function generatePage() {
 
 
-
-
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
     teamSet.style.display = noTeamSet.style.display = 'none';
 
@@ -275,6 +316,8 @@ function generatePage() {
     initializeGrids();
 
     // if (getTeamFromURL()) {
+    //     getTeamMembers(localStorage.getItem('team'));
+    //     setMemberCount(localStorage.getItem('team'));
     //     showTeamSet();
     // } else {
     //     showNoTeamSet();
@@ -286,6 +329,9 @@ function generatePage() {
     } else {
         showNoTeamSet();
     }
+
+
+
     localStorage.setItem('member',`-`);
     var hole = localStorage.getItem('hole');
     showHole(hole);
@@ -355,7 +401,7 @@ function showNoTeamSet() {
         //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
         div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
+        button.className = 'btn-large btn-light col-12 border p-2 bigger-text rounded text-wrap text-break';
 
         button.innerHTML = team.team + '<br>[';
         JSON.parse(localStorage.getItem('team-'+team.id)).forEach(function(names){
@@ -444,7 +490,7 @@ function showTeamSet() {
         div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
 
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large btn-dark col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
+        button.className = 'btn-large btn-dark col-12 border p-2 p-sm-4 p-lg-5 bigger-text rounded';
         button.innerHTML = names['name'] + ` ` + localStorage.getItem(names.name) + 'x';
 
         button.onclick = function () {
@@ -464,7 +510,7 @@ function showTeamSet() {
         div.appendChild(button);
         nameButtons.appendChild(div);
     });
-    checkContainer.style.backgroundColor = "darkgrey";
+    checkContainer.style.backgroundColor = "#A0CABB";
 }
 
 
@@ -577,7 +623,7 @@ function renderHole(hole) {
     //holeNumber.innerText = hole;
     holeCheck.innerText = hole;
 
-    checkContainer.style.backgroundColor = 'darkgrey';
+    checkContainer.style.backgroundColor = '#A0CABB';
 }
 
 
@@ -728,8 +774,13 @@ function initializeGrids() {
 function restructure() {
     masonriesElements.forEach(function (masonry) {
         masonry.reloadItems();
+        //masonry.imagesLoaded().progress().layout();
         masonry.layout();
+
     });
+
+
+
 }
 
 
