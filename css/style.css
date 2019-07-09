@@ -101,7 +101,10 @@ body, html {
 }
 
 .checkContainer{
-  border-style: groove;
+/*   border-style: groove; */
+  border-style: outset;
+    box-shadow: 3px 3px black;
+  
   border-color: silver;
   border-width: 7px;
       -webkit-border-radius: 1rem;
