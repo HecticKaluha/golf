@@ -44,16 +44,16 @@ function log(val){
 
 
 function showRules(){
-    $('#regelement').show('slow');
+   // $('#regelement').show('slow');
     $('#regelement').toggle();
   
-  
+    var targetDiv = localStorage.getItem('targetDiv');
     $([document.documentElement, document.body]).animate({
         scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
     }, 2000);
   
   
-    var targetDiv = localStorage.getItem('targetDiv');
+  
      if (targetDiv === "bottom"){
          targetDiv = "top";
      } else {
