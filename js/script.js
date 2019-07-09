@@ -30,6 +30,7 @@ $(document).ready(function () {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
+
 });
 
 
