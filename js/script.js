@@ -2,9 +2,11 @@ const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
+const dagGame = 1040;
 
 let masonries = [];
 let masonriesElements = [];
+
 
 var holes = 18;
 var min = 0;
@@ -116,8 +118,8 @@ function klassement(game) {
         }
     }
 
-    klasQuery += " ,s.game from " + scoreTabel + " `s` left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
-
+    klasQuery += " ,s.game from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game having (s.game > " + dagGame + ") ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
 
