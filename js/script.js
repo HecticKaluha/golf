@@ -30,6 +30,7 @@ $(document).ready(function () {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
+  localStorage.setItem('targetDiv','bottom');
 
 });
 
@@ -47,13 +48,14 @@ function showRules(){
    // $('#regelement').show('slow');
     $('#regelement').toggle();
   
-    var targetDiv = localStorage.getItem('targetDiv');
+      var targetDiv = localStorage.getItem('targetDiv');
+
     $([document.documentElement, document.body]).animate({
         scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
     }, 2000);
   
-  
-  
+
+    var targetDiv = localStorage.getItem('targetDiv');
      if (targetDiv === "bottom"){
          targetDiv = "top";
      } else {
@@ -661,11 +663,9 @@ function renderTable(jsonResult, renderName) {
     `<table class="table table-bordered table-striped">
     <thead>
     <tr role="row" id="${renderName}-thead">
-
     </tr>
     </thead>
     <tbody id="${renderName}-tbody">
-
     <tbody/>
     </table>`;
 
@@ -770,8 +770,3 @@ function getTeamScore() {
     //Roep de generieke generate functie aan en geef daar de result van de query mee
     return executeQuery(query);
 }
-
-
-
-
-
