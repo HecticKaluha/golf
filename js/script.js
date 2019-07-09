@@ -3,6 +3,7 @@ const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
 
+
 let masonries = [];
 let masonriesElements = [];
 
@@ -29,7 +30,6 @@ $(document).ready(function () {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
-
 });
 
 
@@ -275,6 +275,8 @@ function generatePage() {
     initializeGrids();
 
     // if (getTeamFromURL()) {
+    //     getTeamMembers(localStorage.getItem('team'));
+    //     setMemberCount(localStorage.getItem('team'));
     //     showTeamSet();
     // } else {
     //     showNoTeamSet();
@@ -355,7 +357,7 @@ function showNoTeamSet() {
         //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
         div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
+        button.className = 'btn-large btn-light col-12 border p-2 bigger-text rounded text-wrap text-break';
 
         button.innerHTML = team.team + '<br>[';
         JSON.parse(localStorage.getItem('team-'+team.id)).forEach(function(names){
@@ -444,7 +446,7 @@ function showTeamSet() {
         div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
 
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large btn-dark col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
+        button.className = 'btn-large btn-dark col-12 border p-2 p-sm-4 p-lg-5 bigger-text rounded';
         button.innerHTML = names['name'] + ` ` + localStorage.getItem(names.name) + 'x';
 
         button.onclick = function () {
@@ -464,7 +466,7 @@ function showTeamSet() {
         div.appendChild(button);
         nameButtons.appendChild(div);
     });
-    checkContainer.style.backgroundColor = "darkgrey";
+    checkContainer.style.backgroundColor = "#A0CABB";
 }
 
 
@@ -577,7 +579,7 @@ function renderHole(hole) {
     //holeNumber.innerText = hole;
     holeCheck.innerText = hole;
 
-    checkContainer.style.backgroundColor = 'darkgrey';
+    checkContainer.style.backgroundColor = '#A0CABB';
 }
 
 
@@ -728,8 +730,13 @@ function initializeGrids() {
 function restructure() {
     masonriesElements.forEach(function (masonry) {
         masonry.reloadItems();
+        //masonry.imagesLoaded().progress().layout();
         masonry.layout();
+
     });
+
+
+
 }
 
 
