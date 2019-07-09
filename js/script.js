@@ -3,7 +3,6 @@ const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
 
-
 let masonries = [];
 let masonriesElements = [];
 
@@ -20,7 +19,6 @@ $(document).ready(function () {
 
     }
 
-
     var nu =  Date.now();
     if(localStorage.getItem('cookie') < nu){
         localStorage.clear();
@@ -30,13 +28,9 @@ $(document).ready(function () {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
-  localStorage.setItem('targetDiv','bottom');
+    localStorage.setItem('targetDiv','bottom');
 
 });
-
-
-
-
 
 
 function log(val){
@@ -45,34 +39,20 @@ function log(val){
 
 
 function showRules(){
-   // $('#regelement').show('slow');
     $('#regelement').toggle();
-  
-      var targetDiv = localStorage.getItem('targetDiv');
-
+    var targetDiv = localStorage.getItem('targetDiv');
     $([document.documentElement, document.body]).animate({
         scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
     }, 2000);
   
-
-    var targetDiv = localStorage.getItem('targetDiv');
+    targetDiv = localStorage.getItem('targetDiv');
      if (targetDiv === "bottom"){
          targetDiv = "top";
      } else {
          targetDiv = "bottom";
      }
      localStorage.setItem('targetDiv', targetDiv);
-   // targetDiv = 'bottom';
-
-
-
-
 }
-
-// function showRules(){
-//     $('#regelement').show('slow');
-// }
-
 
 
 
@@ -80,7 +60,6 @@ function getTeamMembers(){
     if(localStorage.getItem('team')){
 
         return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
-        //localStorage.setItem(getTeamMembers);
     }
 }
 
@@ -94,8 +73,6 @@ function resetTeamMembers(){
 
 
 function setMemberCount(memberObj,del){
-    //log(memberObj);
-
     if(localStorage.getItem('team')){
         JSON.parse(memberObj).forEach(function(member){
             if(!localStorage.getItem(member['name'])){
@@ -105,8 +82,8 @@ function setMemberCount(memberObj,del){
     }
 }
 
+
 function updateMemberCount (member){
-    //log(member);
     var aantal = localStorage.getItem(member);
     aantal++;
     localStorage.setItem(member,aantal);
@@ -117,7 +94,6 @@ function updateMemberCount (member){
     }
 
     var memberTee = JSON.parse(localStorage.getItem('memberTee'));
-    //log(memberTee);
     memberTee.push(member);
     localStorage.setItem('memberTee',JSON.stringify(memberTee));
 }
@@ -144,6 +120,7 @@ function klassement(game) {
 
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
+
         var teamRow = "";
         var totaal = 0;
         var team = teams['team'];
@@ -205,6 +182,8 @@ function klassement(game) {
 
     renderKlassement(trArray);
 };
+
+
 
 
 function renderKlassement(trArray){
@@ -290,9 +269,6 @@ function checkMax(color) {
 
 function generatePage() {
 
-
-
-
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
     teamSet.style.display = noTeamSet.style.display = 'none';
 
@@ -360,6 +336,8 @@ function getTeamFromURL() {
     }
 }
 
+
+
 function showNoTeamSet() {
     noTeamSet.style.display = 'block';
 
@@ -408,26 +386,20 @@ function showTeamSet() {
     noTeamSet.style.display = 'none';
     teamSet.style.display = 'block';
     playing.style.display = 'block';
-
     teeButtons.innerHTML = '';
 
     colors.forEach(function (color) {
         var div = document.createElement('div');
         div.className = 'p-1 col-6 col-sm-3 grid-item';
-
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary p-2 p-sm-4 p-lg-5 big-text rounded';
-
         //var colorTimes = localStorage.getItem('colorCount')[color];
         var colorCount = JSON.parse(localStorage.getItem('colorCount'));
-
         button.innerHTML = `${colorCount[color]} x`;
         button.style.backgroundColor = color;
 
         button.onclick = function () {
-         //     button.className += 'kader';
-
-         setTee(color);
+        setTee(color);
 
          var colorCount =JSON.parse(localStorage.getItem('colorCount'));
 
@@ -491,13 +463,17 @@ function showTeamSet() {
         div.appendChild(button);
         nameButtons.appendChild(div);
     });
-    checkContainer.style.backgroundColor = "#A0CABB";
+
+    checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,#A0CABB)";
 }
 
 
 function setTee(color) {
     localStorage.setItem('tee', color);
-    checkContainer.style.backgroundColor = color;
+    checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,"+color+")";
+
+
+
 }
 
 
@@ -536,6 +512,8 @@ function saveHole() {
                         localStorage.setItem('member',`-`);
                         nextHole();
                         renderTable(getTeamScore(), 'teamScore');
+
+
                     } else {
                         //show error
                         Swal.fire({
@@ -569,12 +547,15 @@ function saveHole() {
     }
 }
 
+
+
 function nextHole() {
     var hole = parseFloat(localStorage.getItem('hole'));
     hole++;
     localStorage.setItem('hole', hole);
     showTeamSet();
     showHole(hole);
+
 }
 
 function showHole(hole) {
@@ -589,22 +570,16 @@ function showHole(hole) {
     }
 }
 
+
+
 function renderHole(hole) {
     localStorage.removeItem('score');
     localStorage.removeItem('tee');
     localStorage.setItem('hole', hole);
 
-    colorCheck.style.color = "black";
     colorCheck.innerText = "XX";
-
     scoreCheck.innerText = "XX";
-
-    //holecheck zoekt automatisch in de DOM naar een element met id="holeCheck"
-    //zie voor extra uitleg https://www.tjvantoll.com/2012/07/19/dom-element-references-as-global-variables/
-    //holeNumber.innerText = hole;
     holeCheck.innerText = hole;
-
-    checkContainer.style.backgroundColor = '#A0CABB';
 }
 
 
@@ -676,7 +651,7 @@ function renderTable(jsonResult, renderName) {
 
         //loop over alle columns van de row
         for (let [key, value] of Object.entries(row)) {
-            if (key === 'id') continue;
+            if (key === 'id' || key === 'game' || key === 'team') continue;
             //genereren van alle headers (alleen eerste iteratie)
             if (index === 0) {
                 var theader = document.createElement('td');
@@ -753,16 +728,9 @@ function initializeGrids() {
 function restructure() {
     masonriesElements.forEach(function (masonry) {
         masonry.reloadItems();
-        //masonry.imagesLoaded().progress().layout();
         masonry.layout();
-
     });
-
-
-
 }
-
-
 
 
 function getTeamScore() {
