@@ -2,7 +2,8 @@ const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 const wedstrijd = 2;
-const dagGame = 1040;
+const dagGame = 1;
+var styleId = '';
 
 let masonries = [];
 let masonriesElements = [];
@@ -17,7 +18,7 @@ $(document).ready(function () {
         $(".splash").hide();
     } else {
         $(".splash").show();
-        $(".splash").delay( 5000 ).fadeOut("slow");
+        $(".splash").delay( 1000 ).fadeOut("slow");
 
     }
 
@@ -31,13 +32,31 @@ $(document).ready(function () {
     }
     generatePage();
     localStorage.setItem('targetDiv','bottom');
+    
+    //prepareScore();
 
 });
 
 
+function prepareScore (){
+    for (i=1 ; i< 20 ; i++){
+        log(executeQuery ("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`) VALUES (null," + i + ",0,0,0,0,2)"));
+    }
+}
+
 function log(val){
     console.log(val);
 }
+
+
+$('#dropdown').change(function(input){
+    log(input);
+    // $('#textBoxContainer').empty();
+    // var number = $(this).find('option:selected').attr('data-number');
+    // for (var i = 0; i < number; i++){
+    //       $('#textBoxContainer').append('<input type="text"/>');
+    // }
+});
 
 
 function showRules(){
@@ -104,13 +123,29 @@ function updateMemberCount (member){
 function klassement(game) {
     var klasse = {};
     var trArray = [];
-    if (game == '2018'){
-        var scoreTabel = 'scoresCup2018';
-    } else {
+    var datumKeuze = "";
+    switch(game) {
+  case `2018`:
+        var scoreTabel = 'scoresCup2018'
+    break;
+  case `2019`:
         var scoreTabel = 'scores';  
-    }
+    break;
+  case `datum`:
+        var scoreTabel = 'scores';  
+        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 10 DAY AND curdate())`
+    break;
+  case `toDay`:
+        var scoreTabel = 'scores';  
+        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`
+    break;
 
-    var klasQuery = "select  s.team AS team, teams.team as teamnaam,";
+  default:
+    // code block
+}
+
+
+    var klasQuery = `select s.datum, s.team AS team, teams.team as teamnaam,`;
     for (i = 1; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
         if (i < 18){
@@ -118,7 +153,9 @@ function klassement(game) {
         }
     }
 
-    klasQuery += " ,s.game from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game having (s.game > " + dagGame + ") ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
+    klasQuery += " ,s.game from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
+//  having ( date_format(s.datum,'%Y-%m-%d') between curdate() - 10 DAY AND curdate() )
+    // date_format(s.datum,'%Y-%m-%d') = curdate() - INTERVAL 1 DAY |||| s.game > " + dagGame + "
 log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
@@ -192,6 +229,9 @@ function renderKlassement(trArray){
     trArray.sort(function(a,b){
         return a[0]-b[0];
     });
+
+
+
     var table = `<table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
@@ -614,6 +654,7 @@ function executeQuery(query) {
             console.log('dat is niet gelukt!')
         }
     });
+    //log(result);
     return result;
 }
 
