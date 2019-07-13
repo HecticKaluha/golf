@@ -3,10 +3,13 @@ const par = [0,4,4,5,3,5,4,3,3,4,3,4,3,5,4,4,4,4,4];
 
 
 $(document).ready(function () {
+setTimeout(function(){
+         window.location = window.location.href; 
+         console.log('reload');
+     }, 1000);
 
-klassement();
+klassement("2018");
 });
-
 
 
 
@@ -110,7 +113,7 @@ function klassement(game) {
             }
 
 
-            teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
+            teamRow += `<td   bgcolor= ${bgColor}> ${scoreBorder}`;
 
 
             teamRow += score;
@@ -148,7 +151,7 @@ function renderKlassement(trArray){
     });
     console.log(trArray);
 
-    var table = `<table class="table table-responsive table-border table-hover table-sm table-responsive-md text-center thead-dark">
+    var table = `<table class="table table-responsive table-border table-hover table-sm table-responsive-lg  table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`

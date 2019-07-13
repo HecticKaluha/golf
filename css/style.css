@@ -114,8 +114,28 @@ body, html {
   
 }
 
-h5{
+.locc-titel {
+ 
+  font-size: 3rem;
+
+
+@include media-breakpoint-up(sm) {
+  html {
+    font-size: 2rem;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  html {
     font-size: 3rem;
-    font-weight: bolder;
-    vertical-align: bottom;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  html {
+    font-size: 4rem;
+  }
+}
+/*    font-size: 5em;
+    font-weight: bolder;*/
 }
