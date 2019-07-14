@@ -334,6 +334,7 @@ function generatePage() {
     localStorage.setItem('member',`-`);
     var hole = localStorage.getItem('hole');
     showHole(hole);
+
     restructure();
 }
 
@@ -413,12 +414,13 @@ function showNoTeamSet() {
         button.onclick = function () {
             localStorage.setItem('team', team.id);
             showTeamSet();
-            restructure();
+            //restructure();
         };
 
         div.appendChild(button);
         teams.appendChild(div);
     });
+    restructure();
 }
 
 
@@ -507,6 +509,7 @@ function showTeamSet() {
     });
 
     checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,#A0CABB)";
+    restructure();
 }
 
 
@@ -760,7 +763,7 @@ function restart() {
 }
 
 function initializeGrids() {
-    masonries = document.getElementsByClassName('grid');
+    masonries = document.getElementsByClassName('gridddd');
     Array.from(masonries).forEach(function (grid, index) {
         masonriesElements[index] = new Masonry(grid, {
             itemSelector: '.grid-item',
@@ -768,7 +771,9 @@ function initializeGrids() {
     });
 }
 
+
 function restructure() {
+    //initializeGrids(); // added jv
     masonriesElements.forEach(function (masonry) {
         masonry.reloadItems();
         masonry.layout();
