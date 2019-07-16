@@ -47,8 +47,11 @@ $(document).ready(function () {
 
 
 function prepareScore (){
-    for (i=1 ; i< 20 ; i++){
-        log(executeQuery ("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`) VALUES (null," + i + ",0,0,0,0,2)"));
+    var niet = [2,4,5,8,9,99];
+    for (i = 1 ; i < 20 ; i++){
+        if (niet.indexOf(i) < 0 ){
+        executeQuery ("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`) VALUES (null," + i + ",0,0,0,0,2)");
+        }
     }
 }
 
@@ -86,7 +89,7 @@ function showNews(){
 
 
 function focus(){
-    
+
     //var targetDiv = localStorage.getItem('targetDiv');
     var targetDiv = "bottom";
     $([document.documentElement, document.body]).animate({
