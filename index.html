@@ -5,19 +5,22 @@
   <title>
     LOCC
   </title>
-  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
-  <link href="manifest.json" rel="manifest" />
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
   <script type="text/javascript" src="js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+  <link href="manifest.json" rel="manifest" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
   <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<!--   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
-
+-->
 
 
 </head>
@@ -31,7 +34,7 @@
 
     <div class="splash">
       <div class="row">
-        <div class=" grid-item text-dark col-lg-10 col-10 offset-1 col-auto mb-3 text-center">
+        <div class="text-dark col-lg-10 col-10 offset-1 col-auto mb-3 text-center">
 
           <div class="h2">
             Welkom
@@ -42,16 +45,14 @@
           <img src="images/lipouts-lg.png"  class="img-fluid mt-5">
         </div>
       </div>
-
     </div>
+
 
     <div class="app">
       <div class="col-12 mt-2">
         <div class="row">
           <div class="col-10 offset-1 h5 text-center">LipOuts CockTailCup 2019
-
           </div>
-
         </div>
         <!-- alleen zichtbaar wanneer een team gezet is -->
         <!-- wordt verwijderd uit dom zodra een team gekozen is -->
@@ -71,7 +72,7 @@
         <div id="teamSet">
           <div id="playing">
             <div class="row mb-0">
-              <div class="col-12 mb-4">
+              <div class="col-12 mb-3">
                 <div id="checkContainer" class="checkContainer text-center">
                   <div class="row mb-0">
                     <div class="h1 check col-4 p1" id="holeCheck">--</div>
@@ -119,7 +120,7 @@
               <div class="row">
                 <div class="col-12">
                   <div class="m-1">
-                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-5 p-sm-5 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
+                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
                     </button>
                   </div>
                 </div>
@@ -135,9 +136,45 @@
               <div id="replay" class="m-1"></div>
             </div>
           </div>
+<!--           <div class="col-12" id="klassement">
+          </div> -->
+
+
+
+<div class="row">
+  <div class="col-12">
+
+    <hr>
+    <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
+      <button type="button" class="btn btn-secondary" onclick="showRules()">Regelement</button>
+      <button type="button" class="btn btn-secondary" onclick="showNews()">Nieuws</button>
+
+      <div class="btn-group" role="group">
+        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Klassement
+        </button>
+        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+          <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
+          <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
+          <a class="dropdown-item" href="#" onclick="klassement('today')">Today</a>
+          <a class="dropdown-item" href="#" onclick="klassement('datum')">Datum</a>
+          <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
+          
+        </div>
+      </div>
+    </div>
+    <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
+      <button type="button" class="btn btn-secondary" onclick="restart()">Reset (!)</button>
+      <button type="button" class="btn btn-secondary" onclick="showTeamSet()">---</button>
+
+    </div>
+    
+  </div>
+</div>
 
           <div class="row">
-            <div class="col-12 text-center">
+          <div class="bottom"></div>
+            <div class="col-12">
               <div id="results" class="m-1 overflow-auto">
               </div>
             </div>
@@ -145,8 +182,12 @@
 
 
 
-          <div class="col-12" id="klassement">
-          </div>
+
+<div class="row mb-3">
+ <div class= "col-8 offset-2">
+  <img src="images/lipouts.png" class="img-fluid">
+</div>
+</div>
 
           <div class="row">
             <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
@@ -156,66 +197,10 @@
             </div>
           </div> 
 
-          <div class="row">
-            <div class= "col-12">
-              <button id="queryButton" class="btn btn-warning border btn-block text-light p-2 mb-5 p-sm-3 mb-4 bigger-text" onclick="showRules()">Regelement
-              </button>
-            </div>
-          </div>
- <!--          <button id="queryButton" class="btn btn-success border btn-block text-light p-2 p-sm-3 mb-3 bigger-text" onclick="scherm()">scherm
- </button> -->
 
- <div class="row">
-  <div id="regelement" style="display:none">
-    <div class="col-12"><ul>
-      <li>Speel met een team van 4 personen.</li>
-      <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
-      <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li>
-      <li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>
-      <li>Sla alle 4 vanaf af en kies de beste ligging.</li>
-      <li>Sla alle 4 vanaf die plaats.</li>
-      <li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li>
-      <li>De laatste holed uit.</li> 
-      <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li>
-      <li>Succes!</li>
-    </ul>
-  </div>
-  
-  
-  
 </div>
-<div class="bottom"></div>
-</div>
-<div class="row">
- <div class= "col-8 offset-2">
-  <img src="images/lipouts.png" class="img-fluid mt-5">
 </div>
 </div>
 
-<div class="row">
-  <div class="col-12">
-    <div class="m-1">
-      <button id="queryButton" class="btn border col-12 col-lg-12  text-light p-2 p-sm-3 bigger-text" onclick="restart()">Reset
-      </button>
 
-
-<!-- 
-                <button id="queryButton" class="btn  border col-2 col-lg-4 text-light p-2 p-sm-3 bigger-text" onclick="klassement('2019')">2019
-                </button>
-                <button id="queryButton" class="btn  border col-2 col-lg-4 text-light p-2 p-sm-3 bigger-text" onclick="klassement('2018')">2018
-                </button>
-                 <button id="queryButton" class="btn  border col-2 col-lg-4 text-light p-2 p-sm-3 bigger-text" onclick="klassement('toDay')">toDay
-                </button>               
-                <button id="queryButton" class="btn  border col-2 col-lg-4 text-light p-2 p-sm-3 bigger-text" onclick="klassement('datum')">Datum
-                </button> -->
-              </div>
-            </div>
-          </div>
-
-
-        </div>
-      </div>
-    </div>
-
-
-  </body>
+</body>
