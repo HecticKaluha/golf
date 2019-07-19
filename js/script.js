@@ -52,22 +52,28 @@ $(document).ready(function () {
 
 
 function setStartHole(start){
-
-  localStorage.setItem('startHole', 10);
-  localStorage.setItem('stopHole', parseFloat(9));
-  renderHole(10);
-  showTeamSet();
+  if (confirm("Zeker weten") == true) {
+      localStorage.setItem('startHole', 10);
+      localStorage.setItem('stopHole', parseFloat(9));
+      renderHole(10);
+      showTeamSet();
   //generatePage();  
+} else {
+    return;
+}
+
+
 }
 
 
 
 
 function prepareScore (){
+    executeQuery(`TRUNCATE TABLE scores`);
     var niet = [2,4,5,8,9,99];
     for (i = 1 ; i < 20 ; i++){
         if (niet.indexOf(i) < 0 ){
-        executeQuery ("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`) VALUES (null," + i + ",0,0,0,0,2)");
+            executeQuery ("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`, `startHole`) VALUES (null," + i + ",0,0,0,0,2,1)");
         }
     }
 }
@@ -77,14 +83,14 @@ function log(val){
 }
 
 
-$('#dropdown').change(function(input){
-    log(input);
-    // $('#textBoxContainer').empty();
-    // var number = $(this).find('option:selected').attr('data-number');
-    // for (var i = 0; i < number; i++){
-    //       $('#textBoxContainer').append('<input type="text"/>');
-    // }
-});
+// $('#dropdown').change(function(input){
+//     log(input);
+//     // $('#textBoxContainer').empty();
+//     // var number = $(this).find('option:selected').attr('data-number');
+//     // for (var i = 0; i < number; i++){
+//     //       $('#textBoxContainer').append('<input type="text"/>');
+//     // }
+// });
 
 
 function showRules(){
@@ -98,7 +104,7 @@ function showRules(){
 }
 
 function showNews(){
-        var news = '<h1>Nieuws</h1>';
+    var news = '<h1>Nieuws</h1>';
     $('#results').html(news);
     focus();
 }
@@ -112,7 +118,7 @@ function focus(){
     $([document.documentElement, document.body]).animate({
         scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
     }, 2000);
-  
+    
     // targetDiv = localStorage.getItem('targetDiv');
     //  if (targetDiv === "bottom"){
     //      targetDiv = "top";
@@ -173,38 +179,38 @@ function klassement(game) {
     var trArray = [];
     var datumKeuze = "";
     switch(game) {
-  case `2018`:
-        var scoreTabel = 'scoresCup2018'
-    break;
-  case `2019`:
-        var scoreTabel = 'scores';  
-    break;
-  case `datum`:
-        var scoreTabel = 'scores';  
-        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 10 DAY AND curdate())`
-    break;
-  case `today`:
-        var scoreTabel = 'scores';  
-        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`
-    break;
+      case `2018`:
+      var scoreTabel = 'scoresCup2018'
+      break;
+      case `2019`:
+      var scoreTabel = 'scores';  
+      break;
+      case `datum`:
+      var scoreTabel = 'scores';  
+      var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 10 DAY AND curdate())`
+      break;
+      case `today`:
+      var scoreTabel = 'scores';  
+      var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`
+      break;
 
-  default:
+      default:
     // code block
 }
 
 
-    var klasQuery = `select s.datum, s.team AS team, teams.team as teamnaam,`;
-    for (i = 1; i < 19; i++) {
-        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
-        if (i < 18){
-            klasQuery += ",";
-        }
+var klasQuery = `select s.datum, s.team AS team, teams.team as teamnaam,`;
+for (i = 0; i < 19; i++) {
+    klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
+    if (i < 18){
+        klasQuery += ",";
     }
+}
 
-    klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
+klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
 //  having ( date_format(s.datum,'%Y-%m-%d') between curdate() - 10 DAY AND curdate() )
     // date_format(s.datum,'%Y-%m-%d') = curdate() - INTERVAL 1 DAY |||| s.game > " + dagGame + "
-log(klasQuery);
+    //log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
 
@@ -218,18 +224,24 @@ log(klasQuery);
 
         teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
         
+            //log(startHole);
 
 
 
         // hier moet starthole 10 iets anders gaan doen
+        if (parseFloat(startHole) == 10){
+            log(`startHole=` + startHole);
+            kleurObj = reOrder(kleurObj);
 
+        }
 
 
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
 
-
+            // heeft het team deze hole nog niet gespeeld dan wordt de score volgens par opgehaald
+            // om een projected score te kunnen bepalen
             if (!teams['H' + hole]){
                 score = par[hole];
                 totaal += parseFloat(score);
@@ -238,7 +250,7 @@ log(klasQuery);
             } else {
                 score = teams['H' + hole];
                 totaal += parseFloat(score);
-                styleId = `<div class=\"circle\">`
+                styleId = `<div class=\"circle\">`;
 
                 if (!kleurObj[hole - 1]){
                     bgColor = 'grey';
@@ -281,6 +293,18 @@ log(klasQuery);
 
 
 
+function reOrder(kleurObj){
+    var reOrdered  = [];
+    for (i=9 ; i<18 ; i++){
+        reOrdered.push(kleurObj[i]);
+    }
+    for (i=0 ; i<9 ; i++){
+        reOrdered.push(kleurObj[i]);
+    }
+
+    return(reOrdered);
+}
+
 
 function renderKlassement(trArray){
     trArray.sort(function(a,b){
@@ -307,14 +331,14 @@ function renderKlassement(trArray){
             pos++;
             prevTotal = row[0];
         } else {
-         posT = "*";
+           posT = "*";
 
-     }
-     tableRow = row[3];
-     tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
-     table+= tableRow;
+       }
+       tableRow = row[3];
+       tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
+       table+= tableRow;
 
- });
+   });
 
     table += "</table>";
     $("#results").html(table);
@@ -332,7 +356,9 @@ function setColorCount(){
         yellow:     0,
         blue :      0,
         white:      0
-    }            
+    }  
+
+
 
     localStorage.setItem('colorCount', JSON.stringify(colorCount));
     //}
@@ -419,6 +445,7 @@ function getTeamFromURL() {
         if (team !== localStorage.getItem('team')) {
             localStorage.setItem('hole', localStorage.getItem('startHole'));
             setColorCount();
+
         }
         localStorage.setItem('team', team);
         getNextTeamGame(team);
@@ -440,7 +467,7 @@ function getTeamFromURL() {
 
 
 function showNoTeamSet() {
-        $('.navbar').show();
+    $('.navbar').show();
     noTeamSet.style.display = 'block';
 
     var result = executeQuery(`select * from teams where teams.id IN (select teamId from game where game.game = ${wedstrijd}) `);
@@ -503,24 +530,24 @@ function showTeamSet() {
         button.style.backgroundColor = color;
 
         button.onclick = function () {
-        setTee(color);
+            setTee(color);
 
-         var colorCount =JSON.parse(localStorage.getItem('colorCount'));
+            var colorCount =JSON.parse(localStorage.getItem('colorCount'));
 
-         if(colorCount[localStorage.getItem('tee')] == 5){
-            Swal.fire({
-                title: 'Helaas!',
-                text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Ik snap het...'
-            })
-        } 
-    };
+            if(colorCount[localStorage.getItem('tee')] == 5){
+                Swal.fire({
+                    title: 'Helaas!',
+                    text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ik snap het...'
+                })
+            } 
+        };
 
-    div.appendChild(button);
-    teeButtons.appendChild(div);
-});
+        div.appendChild(button);
+        teeButtons.appendChild(div);
+    });
 
     
     scoreButtons.innerHTML = '';
@@ -664,30 +691,30 @@ function nextHole() {
 
 function showHole(hole) {
     //if not set set to 0
-    log(hole);
+    //log(hole);
     if (!hole) {
         hole = 1;
     }
     var stopHole = parseFloat(localStorage.getItem('stopHole'))+1 ;
-    log (stopHole);
+    //log (stopHole);
     
-  
+    
     if ( localStorage.getItem('startHole') == 10  &&  hole == stopHole ) {
         finishGame();
     }
-  
-     if ( localStorage.getItem('startHole') == 1 &&  hole == stopHole ) {
+    
+    if ( localStorage.getItem('startHole') == 1 &&  hole == stopHole ) {
         finishGame();
     } 
     
     if (localStorage.getItem('startHole') == 10 && hole == 19 )
-      {
+    {
         hole = 1;
-      }
-  
-    
-        renderHole(hole);
     }
+    
+    
+    renderHole(hole);
+}
 
 
 

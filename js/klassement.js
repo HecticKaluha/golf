@@ -6,7 +6,7 @@ $(document).ready(function () {
 setTimeout(function(){
          window.location = window.location.href; 
          console.log('reload');
-     }, 1000);
+     }, 10000);
 
 klassement("2018");
 });
@@ -53,41 +53,71 @@ function executeQuery(query) {
 function klassement(game) {
     var klasse = {};
     var trArray = [];
-    if (game == '2018'){
-        var scoreTabel = 'scoresCup2018';
-
-    } else {
+    var datumKeuze = "";
+    switch(game) {
+  case `2018`:
+        var scoreTabel = 'scoresCup2018'
+    break;
+  case `2019`:
         var scoreTabel = 'scores';  
-    }
+    break;
+  case `datum`:
+        var scoreTabel = 'scores';  
+        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 10 DAY AND curdate())`
+    break;
+  case `today`:
+        var scoreTabel = 'scores';  
+        var datumKeuze =`having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`
+    break;
 
-    var klasQuery = "select  s.team AS team, teams.team as teamnaam,";
+  default:
+    // code block
+}
 
-    for (i = 1; i < 19; i++) {
+
+    var klasQuery = `select s.datum, s.team AS team, teams.team as teamnaam,`;
+    for (i = 0; i < 19; i++) {
         klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
         if (i < 18){
             klasQuery += ",";
         }
     }
 
-    //klasQuery += " sum(`s`.`score`) AS `totaal` , (select sum(s.score)-70) as '#' from ( " + scoreTabel + " `s` left join teams on teams.id = s.team   "  +  gameJoin + "   left join `holes` `h` on(`h`.`hole` = `s`.`hole`))  group by `s`.`team` order by sum(`s`.`score`)";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
-    klasQuery += " ,s.game from " + scoreTabel + " `s` left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game ";//where date_format(`s`.`datum`,'%Y-%m-%d') = curdate()  |||| , `s`.game`
-
-    //console.log(klasQuery);
+    klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
+//  having ( date_format(s.datum,'%Y-%m-%d') between curdate() - 10 DAY AND curdate() )
+    // date_format(s.datum,'%Y-%m-%d') = curdate() - INTERVAL 1 DAY |||| s.game > " + dagGame + "
+    //log(klasQuery);
     var dbResult = executeQuery(klasQuery);
     dbResult.forEach(function (teams) {
+
         var teamRow = "";
         var totaal = 0;
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
         var game = teams['game'];
+        var startHole = teams['startHole'];
         var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
         teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
+        
+            //log(startHole);
+
+
+
+        // hier moet starthole 10 iets anders gaan doen
+        if (parseFloat(startHole) == 10){
+            log(`startHole=` + startHole);
+            kleurObj = reOrder(kleurObj);
+
+        }
+
+
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
 
-
+            // heeft het team deze hole nog niet gespeeld dan wordt de score volgens par opgehaald
+            // om een projected score te kunnen bepalen
             if (!teams['H' + hole]){
                 score = par[hole];
                 totaal += parseFloat(score);
@@ -96,7 +126,7 @@ function klassement(game) {
             } else {
                 score = teams['H' + hole];
                 totaal += parseFloat(score);
-                styleId = `<div class=\"circle\">`
+                styleId = `<div class=\"circle\">`;
 
                 if (!kleurObj[hole - 1]){
                     bgColor = 'grey';
@@ -113,7 +143,7 @@ function klassement(game) {
             }
 
 
-            teamRow += `<td   bgcolor= ${bgColor}> ${scoreBorder}`;
+            teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
 
 
             teamRow += score;
@@ -121,7 +151,6 @@ function klassement(game) {
                 teamRow += `</div>`;
             }        
             teamRow += "</td>";
-
         }
 
         var parKleur = 'marineblue';
@@ -131,12 +160,8 @@ function klassement(game) {
             var parKleur =  'silver';
         }
 
-        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td>`;
-
-        teamRow += "</tr>";
+        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>`  + (totaal-70) + `</td></tr>`;
         trArray.push([totaal, team, teamNaam, teamRow]);
-         //        log(trArray);
-
     });
 
     renderKlassement(trArray);
@@ -144,14 +169,28 @@ function klassement(game) {
 
 
 
+function reOrder(kleurObj){
+    var reOrdered  = [];
+    for (i=9 ; i<18 ; i++){
+        reOrdered.push(kleurObj[i]);
+    }
+    for (i=0 ; i<9 ; i++){
+        reOrdered.push(kleurObj[i]);
+    }
+
+    return(reOrdered);
+}
+
 
 function renderKlassement(trArray){
     trArray.sort(function(a,b){
         return a[0]-b[0];
     });
-    console.log(trArray);
 
-    var table = `<table class="table table-responsive table-border table-hover table-sm table-responsive-lg  table-responsive-md text-center thead-dark">
+
+
+    var table = `<h1>klassement</h1>
+    <table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`;//class='klassement'
     for (h = 1 ; h < 19 ; h++){
         table += `<td>H` + h + `<br>${par[h]}</td>`
@@ -168,23 +207,19 @@ function renderKlassement(trArray){
             pos++;
             prevTotal = row[0];
         } else {
-           posT = "*";
+         posT = "*";
 
-       }
-       tableRow = row[3];
-       tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
-       table+= tableRow;
+     }
+     tableRow = row[3];
+     tableRow = tableRow.replace("<tr>","<tr><td>"+pos+posT+"</td>") ;
+     table+= tableRow;
 
-   });
+ });
 
     table += "</table>";
-    $("#klassement").html(table);
+    $("#results").html(table);
+    focus();
 }
-
-
-
-
-
 
 
 
