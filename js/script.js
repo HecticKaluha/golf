@@ -8,8 +8,14 @@ var styleId = '';
 let masonries = [];
 let masonriesElements = [];
 
+if ( localStorage.getItem('startHole') == 10 ){
+  //var holes = 9
+  localStorage.setItem('stopHole', parseFloat(9));
+} else {
+  //var holes = 18;
+  localStorage.setItem('stopHole', parseFloat(18));
+}
 
-var holes = 18;
 var min = 0;
 
 $(document).ready(function () {
@@ -32,16 +38,27 @@ $(document).ready(function () {
     }
     generatePage();
     localStorage.setItem('targetDiv','bottom');
+
+
     
     //prepareScore();
-
+//     if (!localStorage.getItem('startHole') ) {
+//         localStorage.setItem('startHole',1);
+//     }
 
 });
 
 
 
 
+function setStartHole(start){
 
+  localStorage.setItem('startHole', 10);
+  localStorage.setItem('stopHole', parseFloat(9));
+  renderHole(10);
+  showTeamSet();
+  //generatePage();  
+}
 
 
 
@@ -184,7 +201,7 @@ function klassement(game) {
         }
     }
 
-    klasQuery += " ,s.game from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
+    klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game "+datumKeuze;
 //  having ( date_format(s.datum,'%Y-%m-%d') between curdate() - 10 DAY AND curdate() )
     // date_format(s.datum,'%Y-%m-%d') = curdate() - INTERVAL 1 DAY |||| s.game > " + dagGame + "
 log(klasQuery);
@@ -196,9 +213,18 @@ log(klasQuery);
         var team = teams['team'];
         var teamNaam = teams['teamnaam'];
         var game = teams['game'];
+        var startHole = teams['startHole'];
         var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
         teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
+        
+
+
+
+        // hier moet starthole 10 iets anders gaan doen
+
+
+
 
         for (hole = 1; hole < 19; hole++) {
             var scoreBorder = ``;
@@ -375,7 +401,8 @@ function getNextTeamGame(team){
     //console.log(teamGame[0]['maxGame']);
     var nextTeamGame = parseFloat(teamGame[0]['maxGame'])+1;
     localStorage.setItem('game', nextTeamGame);
-    //console.log(nextTeamGame);
+    localStorage.setItem('startHole',1);
+
 
 }
 
@@ -390,7 +417,7 @@ function getTeamFromURL() {
 
     if (team) {
         if (team !== localStorage.getItem('team')) {
-            localStorage.setItem('hole', 1);
+            localStorage.setItem('hole', localStorage.getItem('startHole'));
             setColorCount();
         }
         localStorage.setItem('team', team);
@@ -546,12 +573,10 @@ function showTeamSet() {
 }
 
 
+
 function setTee(color) {
     localStorage.setItem('tee', color);
     checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,"+color+")";
-
-
-
 }
 
 
@@ -572,7 +597,8 @@ function saveHole() {
                     hole: localStorage.getItem('hole'),
                     tee: localStorage.getItem('tee'),
                     score: localStorage.getItem('score'),
-                    game: localStorage.getItem('game')
+                    game: localStorage.getItem('game'),
+                    startHole: localStorage.getItem('startHole')
                 },
                 type: "post",
                 success: function (res) {
@@ -638,15 +664,31 @@ function nextHole() {
 
 function showHole(hole) {
     //if not set set to 0
+    log(hole);
     if (!hole) {
         hole = 1;
     }
-    if (hole > holes) {
+    var stopHole = parseFloat(localStorage.getItem('stopHole'))+1 ;
+    log (stopHole);
+    
+  
+    if ( localStorage.getItem('startHole') == 10  &&  hole == stopHole ) {
         finishGame();
-    } else {
+    }
+  
+     if ( localStorage.getItem('startHole') == 1 &&  hole == stopHole ) {
+        finishGame();
+    } 
+    
+    if (localStorage.getItem('startHole') == 10 && hole == 19 )
+      {
+        hole = 1;
+      }
+  
+    
         renderHole(hole);
     }
-}
+
 
 
 

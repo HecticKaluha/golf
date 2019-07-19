@@ -17,9 +17,10 @@ function saveScore() {
 	$hole = $_POST['hole'];
 	$team = $_POST['team'];
 	$game = $_POST['game'];
+	$startHole = $_POST['startHole'];
 
-	$sql = "INSERT INTO scores (id, team, hole, kleur, score,game)
-            VALUES (NULL, '$team', '$hole', '$tee', '$score','$game')";
+	$sql = "INSERT INTO scores (id, team, hole, kleur, score,game,startHole)
+            VALUES (NULL, '$team', '$hole', '$tee', '$score','$game','$startHole')";
 
 	$conn = null;
 
