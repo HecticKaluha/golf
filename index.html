@@ -12,17 +12,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
   <link href="manifest.json" rel="manifest" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
-  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!--   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
--->
-
-
+   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<!--   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
+ -->
 </head>
 
 </html>
@@ -66,7 +64,7 @@
             <div class="col-12">
               <h2 class="h2 col-12 bigger-text text-center">Selecteer een team waarvoor je wilt spelen</h2>
               <div class="col-12">
-                <div class="row grid" id="teams">
+                <div class="row" id="teams">
                 </div>
               </div>
             </div>
@@ -97,7 +95,7 @@
                 <!--                     <h2 class="h3 text-center">Tee</h2>
                   -->
                 <div class="col-12">
-                  <div class="row grid" id="teeButtons">
+                  <div class="row" id="teeButtons">
                   </div>
                 </div>
               </div>
@@ -107,7 +105,7 @@
               <div class="col-12 mb-2">
                 <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
                 <div class="col-12">
-                  <div class="row grid" id="nameButtons"></div>
+                  <div class="row" id="nameButtons"></div>
                 </div>
               </div>
             </div>
@@ -116,7 +114,7 @@
               <div class="col-12 mb-2">
                 <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
                 <div class="col-12">
-                  <div class="row grid " id="scoreButtons">
+                  <div class="row" id="scoreButtons">
                   </div>
                 </div>
               </div>
@@ -155,15 +153,15 @@
               <button type="button" class="btn btn-secondary" onclick="showNews()">Nieuws</button>
             </div>
 
-            <div class="mb-2 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
-              <div class="btn-group" role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="mb-2 btn-group btn-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
+              <div class="btn-group col-12 p-0"  role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Klassement
         </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                   <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
                   <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
-                  <a class="dropdown-item" href="#" onclick="klassement('today')">Today</a>
+                  <a class="dropdown-item" href="#" onclick="klassement('today')">Vandaag</a>
                   <a class="dropdown-item" href="#" onclick="klassement('datum')">Laatste week</a>
 
                 </div>
@@ -180,7 +178,7 @@
         </div>
 
         <div class="row">
-          <div class="bottom"></div>
+          <div class="focus"></div>
           <div class="col-12">
             <div id="results" class="m-1 overflow-auto">
             </div>
@@ -197,17 +195,17 @@
         </div>
         <hr>
         <div class="row">
-          <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
           </div>
-          <div id="vanLange" class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+          <div id="vanLange" class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
             <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
           </div>
         </div>
         <hr>
         <div class="row">
-          <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
+          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
           </div>
-          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+          <div class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
             <img src="images/wijncollectief.png" class="img-fluid">
           </div>
         </div>

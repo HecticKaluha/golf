@@ -26,7 +26,7 @@ $(document).ready(function() {
     $(".splash").hide();
   } else {
     $(".splash").show();
-    $(".splash").delay(3500).fadeOut("slow");
+    $(".splash").delay(500).fadeOut("slow");
 
   }
 
@@ -34,16 +34,21 @@ $(document).ready(function() {
   if (localStorage.getItem('cookie') < nu) {
     localStorage.clear();
     restart();
-    //getNextTeamGame();
     localStorage.setItem('cookie', Date.now() + (6 * 60 * 60 * 1000)); //5*60*60*1000
     console.log('cookie gezet, geldt voor 6 uren');
   }
   generatePage();
   localStorage.setItem('targetDiv', 'bottom');
-
+//restructure();
 });
 
 
+function restructure(){
+  //return;
+  $('#teams').masonry({
+  itemSelector: '.grid-item'
+  });
+}
 
 function chooseStartHole() {
   Swal.fire({
@@ -128,8 +133,12 @@ function showRules() {
 
 function showNews() {
   var news = '<h1>Nieuws</h1>';
-  renderTable(executeQuery(`select * from news order by id desc`), 'results');
-  //$('#results').html(news);
+  var newsObj = executeQuery(`select * from news order by id desc`);
+  newsObj.forEach(function(content){
+    news += `<h5>${content.Titel}</h5>${content.Bericht}<hr>`;
+
+  })
+  $('#results').html(news);
   focus();
 }
 
@@ -138,7 +147,7 @@ function showNews() {
 function focus() {
 
   $([document.documentElement, document.body]).animate({
-    scrollTop: $(`.${localStorage.getItem('targetDiv')}`).offset().top
+    scrollTop: $(`.focus`).offset().top
   }, 2000);
 
 }
@@ -238,17 +247,11 @@ function klassement(game) {
 
     teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
 
-    //log(startHole);
-
-
-
-    // hier moet starthole 10 iets anders gaan doen
     if (parseFloat(startHole) == 10) {
       log(`startHole=` + startHole);
       kleurObj = reOrder(kleurObj);
 
     }
-
 
 
     for (hole = 1; hole < 19; hole++) {
@@ -280,10 +283,7 @@ function klassement(game) {
         scoreBorder += `<div  class=\"bogey\">`;
       }
 
-
       teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
-
-
       teamRow += score;
       if (styleId != ``) {
         teamRow += `</div>`;
@@ -315,7 +315,6 @@ function reOrder(kleurObj) {
   for (i = 0; i < 9; i++) {
     reOrdered.push(kleurObj[i]);
   }
-
   return (reOrdered);
 }
 
@@ -324,7 +323,6 @@ function renderKlassement(trArray) {
   trArray.sort(function(a, b) {
     return a[0] - b[0];
   });
-
 
 
   var table = `<h1>klassement</h1>
@@ -372,8 +370,6 @@ function setColorCount() {
     white: 0
   }
 
-
-
   localStorage.setItem('colorCount', JSON.stringify(colorCount));
   //}
 }
@@ -407,7 +403,6 @@ function generatePage() {
   //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
   teamSet.style.display = noTeamSet.style.display = 'none';
 
-
   if (localStorage.getItem('team')) {
     showTeamSet();
   } else {
@@ -424,10 +419,6 @@ function getNextTeamGame(team) {
   //console.log(teamGame[0]['maxGame']);
   var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
   localStorage.setItem('game', nextTeamGame);
-
-  //localStorage.setItem('startHole', 1);
-
-
 }
 
 
@@ -452,9 +443,11 @@ function showNoTeamSet() {
   result.forEach(function(team) {
     var div = document.createElement('div');
     //rond size af naar bove en gebruik size om een class te geven die de groote bepaald
-    div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
+    //div.className = `col-${Math.ceil(size)} p-1 col-sm-4 grid-item`;
+    div.className = `col-${Math.ceil(size)} col-6 col-md-4 col-sm-4 col-lg-3 p-1 grid-item`;
+
     var button = document.createElement('BUTTON');
-    button.className = 'btn-large btn-light col-12 border p-2 bigger-text rounded text-wrap text-break';
+    button.className = 'btn-large btn-light col-12 p-2 bigger-text rounded text-wrap text-break';
 
     button.innerHTML = team.team + '<br>[';
     JSON.parse(localStorage.getItem('team-' + team.id)).forEach(function(names) {
@@ -465,14 +458,15 @@ function showNoTeamSet() {
     button.onclick = function() {
       localStorage.setItem('team', team.id);
       showTeamSet();
-      //restructure();
     };
 
     div.appendChild(button);
     teams.appendChild(div);
   });
-  // restructure();
+   restructure();
 }
+
+
 
 
 
@@ -823,6 +817,7 @@ function restart() {
   setColorCount();
   getNextTeamGame();
   generatePage();
+
 }
 
 
