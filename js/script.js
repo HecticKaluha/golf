@@ -128,7 +128,8 @@ function showRules() {
 
 function showNews() {
   var news = '<h1>Nieuws</h1>';
-  $('#results').html(news);
+  renderTable(executeQuery(`select * from news order by id desc`), 'results');
+  //$('#results').html(news);
   focus();
 }
 
@@ -155,7 +156,7 @@ function getTeamMembers() {
 function resetTeamMembers() {
   getTeamMembers().forEach(function(member) {
 
-    localStorage.removeItem(member['name']);
+    localStorage.removeItem(member.name);
   });
 }
 
@@ -193,18 +194,18 @@ function klassement(game) {
   var datumKeuze = "";
   switch (game) {
     case `2018`:
-      var scoreTabel = 'scoresCup2018'
+      var scoreTabel = 'scoresCup2018';
       break;
     case `2019`:
       var scoreTabel = 'scores';
       break;
     case `datum`:
       var scoreTabel = 'scores';
-      var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 10 DAY AND curdate())`
+      var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
       break;
     case `today`:
       var scoreTabel = 'scores';
-      var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`
+      var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
       break;
 
     default:
@@ -229,10 +230,10 @@ function klassement(game) {
 
     var teamRow = "";
     var totaal = 0;
-    var team = teams['team'];
-    var teamNaam = teams['teamnaam'];
-    var game = teams['game'];
-    var startHole = teams['startHole'];
+    var team = teams.team;
+    var teamNaam = teams.teamnaam;
+    var game = teams.game;
+    var startHole = teams.startHole;
     var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
 
     teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
@@ -608,7 +609,7 @@ function saveHole() {
             });
             updateMemberCount(localStorage.getItem('member'));
             localStorage.setItem('member', `-`);
-            localStorage.setItem('holePlayed','yes');
+            localStorage.setItem('holePlayed', 'yes');
             nextHole();
             renderTable(getTeamScore(), 'teamScore');
 
@@ -663,14 +664,14 @@ function showHole(hole) {
   if (!hole) {
     hole = 1;
   }
-  var stopHole = parseFloat(localStorage.getItem('stopHole')) ;
-  log (stopHole);
+  var stopHole = parseFloat(localStorage.getItem('stopHole'));
+  log(stopHole);
 
-  if (localStorage.getItem('startHole') == 10 && hole == parseFloat(stopHole)+1 && localStorage.getItem('holePlayed')) {
+  if (localStorage.getItem('startHole') == 10 && hole == parseFloat(stopHole) + 1 && localStorage.getItem('holePlayed')) {
     finishGame();
   }
 
-  if (localStorage.getItem('startHole') == 1 && hole == parseFloat(stopHole)+1) {
+  if (localStorage.getItem('startHole') == 1 && hole == parseFloat(stopHole) + 1) {
     finishGame();
   }
 

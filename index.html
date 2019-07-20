@@ -18,7 +18,7 @@
   <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
   <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <!--   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
 -->
 
@@ -47,7 +47,7 @@
               <li>4 putts</li>
             </ul>
           </div>
-          <img src="images/lipouts-lg.png"  class="img-fluid mt-5">
+          <img src="images/lipouts-lg.png" class="img-fluid mt-5">
         </div>
       </div>
     </div>
@@ -94,119 +94,127 @@
             </div>
             <div class="row">
               <div class="col-12 mb-2">
-                  <!--                     <h2 class="h3 text-center">Tee</h2>
+                <!--                     <h2 class="h3 text-center">Tee</h2>
                   -->
-                  <div class="col-12">
-                    <div class="row grid" id="teeButtons">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-12 mb-2">
-                  <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-                  <div class="col-12">
-                    <div class="row grid" id="nameButtons"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-12 mb-2">
-                  <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-                  <div class="col-12">
-                    <div class="row grid " id="scoreButtons">
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
                 <div class="col-12">
-                  <div class="m-1">
-                    <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
-                    </button>
+                  <div class="row grid" id="teeButtons">
                   </div>
                 </div>
               </div>
-              <hr>
             </div>
+
+            <div class="row">
+              <div class="col-12 mb-2">
+                <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                <div class="col-12">
+                  <div class="row grid" id="nameButtons"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 mb-2">
+                <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                <div class="col-12">
+                  <div class="row grid " id="scoreButtons">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12">
+                <div class="m-1">
+                  <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
+                    </button>
+                </div>
+              </div>
+            </div>
+            <hr>
           </div>
+        </div>
 
 
-          <div class="row" id="finished">
-            <div class="col-12 text-center">
-              <h1 class="mb-1" id="message"></h1>
-              <div id="replay" class="m-1"></div>
-            </div>
+        <div class="row" id="finished">
+          <div class="col-12 text-center">
+            <h1 class="mb-1" id="message"></h1>
+            <div id="replay" class="m-1"></div>
           </div>
-<!--           <div class="col-12" id="klassement">
+        </div>
+        <!--           <div class="col-12" id="klassement">
           </div> -->
 
 
 
-<div class="row">
-  <div class="col-12">
+        <div class="row">
+          <div class="col-12">
 
-    <hr>
-    <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
-      <button type="button" class="btn btn-secondary" onclick="showRules()">Regelement</button>
-      <button type="button" class="btn btn-secondary" onclick="showNews()">Nieuws</button>
+            <hr>
+            <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
+              <button type="button" class="btn btn-secondary" onclick="showRules()">Regelement</button>
+              <button type="button" class="btn btn-secondary" onclick="showNews()">Nieuws</button>
+            </div>
 
-      <div class="btn-group" role="group">
-        <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <div class="mb-2 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
+              <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Klassement
         </button>
-        <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-          <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
-          <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
-          <a class="dropdown-item" href="#" onclick="klassement('today')">Today</a>
-          <a class="dropdown-item" href="#" onclick="klassement('datum')">Datum</a>
-          
-        </div>
-      </div>
-    </div>
-    <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
-      <button type="button" class="btn btn-secondary" onclick="restart()">Reset (!)</button>
-      <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
-      <button type="button" class="btn btn-secondary" onclick="setStartHole()">Starthole 10</button>
-      
+                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
+                  <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
+                  <a class="dropdown-item" href="#" onclick="klassement('today')">Today</a>
+                  <a class="dropdown-item" href="#" onclick="klassement('datum')">Laatste week</a>
 
-    </div>
-    
-  </div>
-</div>
-
-          <div class="row">
-          <div class="bottom"></div>
-            <div class="col-12">
-              <div id="results" class="m-1 overflow-auto">
+                </div>
               </div>
             </div>
+
+
+            <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
+              <button type="button" class="btn btn-secondary" onclick="restart()">Reset (!)</button>
+              <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
+            </div>
+
           </div>
+        </div>
 
-
-
-
-<div class="row mb-3">
- <div class= "col-8 offset-2">
-  <img src="images/lipouts.png" class="img-fluid">
-</div>
-</div>
-
-          <div class="row">
-            <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+        <div class="row">
+          <div class="bottom"></div>
+          <div class="col-12">
+            <div id="results" class="m-1 overflow-auto">
             </div>
-            <div id="vanLange" class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-              <img src="images/logo_VanLangeMode_zwart.png"  class="img-fluid">
-            </div>
-          </div> 
+          </div>
+        </div>
 
 
-</div>
-</div>
-</div>
+
+
+        <div class="row mb-3">
+          <div class="col-8 offset-2">
+            <img src="images/lipouts.png" class="img-fluid">
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+          </div>
+          <div id="vanLange" class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+            <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class=" grid-item text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
+          </div>
+          <div class=" grid-item text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+            <img src="images/wijncollectief.png" class="img-fluid">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
 
 </body>
