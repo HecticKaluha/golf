@@ -4,9 +4,15 @@ const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
 const wedstrijd = 2;
 const dagGame = 1;
 var styleId = '';
+
+
 $(document).ready(function() {
-  if (window.location.href == "http://j-roen.nl/golf/") {
+  if (window.location.href == "http://j-roen.nl/golf/" 
+    || window.location.href == "http://localhost/golf/"
+    || window.location.href == "http://localhost/golf/#"
+    ) {
     log(window.location.href);
+
     if (localStorage.getItem('team')) {
       $(".splash").hide();
     } else {
@@ -157,11 +163,12 @@ function updateMemberCount(member) {
   localStorage.setItem('memberTee', JSON.stringify(memberTee));
 }
 
-function klassement(game) {
+function klassement(jaar) {
   var klasse = {};
   var trArray = [];
   var datumKeuze = "";
-  switch (game) {
+  localStorage.setItem('jaar',jaar);
+  switch (jaar) {
     case `2018`:
       var scoreTabel = 'scoresCup2018';
       break;
@@ -199,7 +206,7 @@ function klassement(game) {
     var game = teams.game;
     var startHole = teams.startHole;
     var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
-    teamRow += `<tr><td  colspan=22 class=text-left>${teamNaam}</td></tr><tr><td></td>`;
+    teamRow += `<tr><td  colspan=22 class="text-left teamName">${teamNaam}</td></tr><tr><td></td>`;
     if (parseFloat(startHole) == 10) {
       log(`startHole=` + startHole);
       kleurObj = reOrder(kleurObj);
@@ -247,6 +254,9 @@ function klassement(game) {
   renderKlassement(trArray);
 };
 
+
+
+
 function reOrder(kleurObj) {
   var reOrdered = [];
   for (i = 9; i < 18; i++) {
@@ -257,6 +267,9 @@ function reOrder(kleurObj) {
   }
   return (reOrdered);
 }
+
+
+
 
 function renderKlassement(trArray) {
   trArray.sort(function(a, b) {
@@ -288,6 +301,10 @@ function renderKlassement(trArray) {
   table += "</table>";
   $("#results").html(table);
   focus();
+
+  setTimeout(function(){
+    klassement( localStorage.getItem('jaar'));
+      }, 10000 );
 }
 
 function setColorCount() {
@@ -323,6 +340,12 @@ function checkMax(color) {
     return false;
     //mischien zelfs knop weghalen
   }
+  setTimeout(function(){
+         window.location = window.location.href; 
+         console.log('reload');
+     }, 10000);
+
+klassement("2018");
 }
 
 function generatePage() {

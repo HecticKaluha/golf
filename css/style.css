@@ -125,11 +125,11 @@ html {
   background-color: rgb(123,188,66);
   border-bottom: 2px solid;
   border-top: 50px #fff;
-  font-size: 2rem;
+padding-top: 20px;
   background-image: url("http://www.j-roen.nl/golf/images/lipouts.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: right top;
+  background-position: right 50px top;
   background-size: auto 100px;
   
 }
@@ -137,6 +137,10 @@ html {
  .loccKlassement, .loccKlassement .results{
   margin-top: 100px;
 } 
+.loccKlassement .focus{
+  margin-top: -100px;
+}
+
 
 @include media-breakpoint-up(sm) {
   html {
