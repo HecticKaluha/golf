@@ -20,9 +20,12 @@ $(document).ready(function() {
         console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
-    //localStorage.setItem('targetDiv', 'bottom');
-    //restructure();
-  /*
+
+  
+});
+
+function adminButtons(){
+    
   
   var div = document.createElement('div');
 div.className = `col-12 p-1 col-sm-4 grid-item`;
@@ -34,10 +37,9 @@ button.onclick = function () {
 };
 
 div.appendChild(button);
-document.body.appendChild(div);
-  */
+document.adminMenu.appendChild(div);
   
-});
+}
 
 function restructure() {
     //return;
@@ -348,10 +350,6 @@ function showNoTeamSet() {
         //log(team['id']);
         localStorage.setItem('team-' + team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
     });
-    // var size = 12 / result.length;
-    // if (size < 6 || size === Infinity) {
-    //   size = 6
-    // }
     //generate buttons voor elk bestaand team in database
     teams.innerHTML = '';
     result.forEach(function(team) {
@@ -363,7 +361,7 @@ function showNoTeamSet() {
         button.className = 'btn-large btn-light col-12 p-2 bigger-text rounded text-wrap text-break';
         button.innerHTML = team.team + '<br>';
         JSON.parse(localStorage.getItem('team-' + team.id)).forEach(function(names) {
-          
+
             button.innerHTML += names['name'] + '.';
         });
         button.onclick = function() {
@@ -540,7 +538,6 @@ function showHole(hole) {
         hole = 1;
     }
     var stopHole = parseFloat(localStorage.getItem('stopHole'));
-    log(stopHole);
     if (localStorage.getItem('startHole') == 10 && hole == parseFloat(stopHole) + 1 && localStorage.getItem('holePlayed')) {
         finishGame();
     }
