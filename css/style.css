@@ -59,7 +59,15 @@ html {
   width: 2rem;
 }
 
-.birdie {
+.eagle, .double
+ {
+  background-color: transparent;
+  border: 2px double #000;
+  height: 2rem;
+  width: 2rem;
+}
+
+.birdie, .eagle {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
 }
@@ -151,7 +159,7 @@ html {
 
 .memberName{
   color: white;
-  font-size: 15px;
+  font-size: 11px;
     text-shadow: 1px 1px #000;
 
 }
