@@ -6,16 +6,19 @@ var styleId = '';
 
 
 $(document).ready(function() {
-  if (window.location.href == "http://j-roen.nl/golf/" 
-    || window.location.href == "http://localhost/golf/"
-    || window.location.href == "http://localhost/golf/#"
-    ) {
+  // if (window.location.href != "http://j-roen.nl/golf/locc.html") {
     log(window.location.href);
 
     if (localStorage.getItem('team')) {
       $(".splash").hide();
     } else {
       //$(".splash").show();
+      // $(".li-1").hide().slideDown(1500);
+      // $(".li-2").hide().slideDown(2500);
+      // $(".li-3").hide().slideDown(3500);
+      // $(".zoom").animate({width:(300)},2000);
+
+
       $(".splash").delay(3500).fadeOut("slow");
     }
 
@@ -27,7 +30,7 @@ $(document).ready(function() {
       console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
-  }
+  //}
 });
 
 
@@ -168,7 +171,7 @@ function klassement(jaar) {
     default:
       // code block
   }
-  var klasQuery = `select s.datum, s.team AS team, teams.team as teamnaam,`;
+  var klasQuery = `select s.member,s.datum, s.team AS team, teams.team as teamnaam,`;
   for (i = 0; i < 19; i++) {
     klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
     if (i < 18) {
@@ -178,19 +181,23 @@ function klassement(jaar) {
   klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game " + datumKeuze;
   var dbResult = executeQuery(klasQuery);
   dbResult.forEach(function(teams) {
+    //log(teams);
     var teamRow = "";
     var totaal = 0;
     var team = teams.team;
     var teamNaam = teams.teamnaam;
     var game = teams.game;
     var startHole = teams.startHole;
+    var memberObj = executeQuery(`SELECT member FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
+log(memberObj);
     var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
-    teamRow += `<tr><td  colspan=22 class="text-left teamName">${teamNaam}</td></tr><tr><td></td>`;
+    teamRow += `<tr><td colspan=22 class="text-left teamName ">${teamNaam}</td></tr><tr class="rowHight"><td></td>`;
     if (parseFloat(startHole) == 10) {
       log(`startHole=` + startHole);
       kleurObj = reOrder(kleurObj);
     }
     for (hole = 1; hole < 19; hole++) {
+      var member = ``;
       var scoreBorder = ``;
       // heeft het team deze hole nog niet gespeeld dan wordt de score volgens par opgehaald
       // om een projected score te kunnen bepalen
@@ -199,6 +206,7 @@ function klassement(jaar) {
         totaal += parseFloat(score);
         var bgColor = 'grey';
       } else {
+
         score = teams['H' + hole];
         totaal += parseFloat(score);
         styleId = `<div class=\"circle\">`;
@@ -216,9 +224,13 @@ function klassement(jaar) {
       }
       teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
       teamRow += score;
+      if(memberObj[hole - 1]){
+      member = memberObj[hole - 1]['member'];
+    }
       if (styleId != ``) {
-        teamRow += `</div>`;
+        teamRow += `<br><span class="memberName">${member}</span></div>`;
       }
+
       teamRow += "</td>";
     }
     var parKleur = 'marineblue';
@@ -280,8 +292,9 @@ function renderKlassement(trArray) {
 
   setTimeout(function(){
     klassement( localStorage.getItem('jaar'));
-      }, 10000 );
+      }, 60000 );
 }
+
 
 function setColorCount() {
   var colorCount = {
@@ -471,7 +484,8 @@ function saveHole() {
           tee: localStorage.getItem('tee'),
           score: localStorage.getItem('score'),
           game: localStorage.getItem('game'),
-          startHole: localStorage.getItem('startHole')
+          startHole: localStorage.getItem('startHole'),
+          member: localStorage.getItem('member')
         },
         type: "post",
         success: function(res) {

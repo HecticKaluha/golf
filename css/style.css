@@ -3,6 +3,7 @@ html {
   height: 100%;
   margin: 0;
   padding: 0;
+
 }
 
 .bg-info {
@@ -98,9 +99,10 @@ html {
 
 .loccTitle {
 /*  position: fixed;
-*/  text-align: center;
+*/  z-index: 1;
+  text-align: center;
   height: 100px;
-  background-color: rgb(123,188,66);
+  background-color: rgb(42,185,208);
   border-bottom: 2px solid;
   padding-top: 20px;
 /*  background-image: url("http://www.j-roen.nl/golf/images/lipouts.png");
@@ -141,6 +143,16 @@ html {
   height: 100px;
   
 }
+
+.rowHight{
+  height: 50px;
+  padding: 20px;
+}
+
+.memberName{
+  color: white;
+  font-size: 15px;
+    text-shadow: 1px 1px #000;
 
 }
 
