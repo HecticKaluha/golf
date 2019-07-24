@@ -2,7 +2,6 @@ const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
 const wedstrijd = 2;
-const dagGame = 1;
 var styleId = '';
 
 
@@ -28,27 +27,9 @@ $(document).ready(function() {
       console.log('cookie gezet, geldt voor 6 uren');
     }
     generatePage();
-
-
   }
-  //localStorage.setItem('targetDiv', 'bottom');
-  //restructure();
-  /*
-  
-  var div = document.createElement('div');
-div.className = `col-12 p-1 col-sm-4 grid-item`;
-var button = document.createElement('BUTTON');
-button.className = 'btn-large btn-light col-12 border p-3 bigger-text rounded text-wrap text-break';
-button.innerHTML = "reset";
-button.onclick = function () {
- restart();
-};
-
-div.appendChild(button);
-document.body.appendChild(div);
-  */
-
 });
+
 
 function restructure() {
   //return;
@@ -122,7 +103,7 @@ function showNews() {
   var news = '<h1>Nieuws</h1>';
   var newsObj = executeQuery(`select * from news order by id desc`);
   newsObj.forEach(function(content) {
-    news += `<h5>${content.Titel}</h5>${content.Bericht}<hr>`;
+    news += `<h4>${content.Titel}</h4>${content.Bericht}<hr>`;
   })
   $('#results').html(news);
   focus();
@@ -163,6 +144,7 @@ function updateMemberCount(member) {
   localStorage.setItem('memberTee', JSON.stringify(memberTee));
 }
 
+
 function klassement(jaar) {
   var klasse = {};
   var trArray = [];
@@ -194,9 +176,6 @@ function klassement(jaar) {
     }
   }
   klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game " + datumKeuze;
-  //  having ( date_format(s.datum,'%Y-%m-%d') between curdate() - 10 DAY AND curdate() )
-  // date_format(s.datum,'%Y-%m-%d') = curdate() - INTERVAL 1 DAY |||| s.game > " + dagGame + "
-  //log(klasQuery);
   var dbResult = executeQuery(klasQuery);
   dbResult.forEach(function(teams) {
     var teamRow = "";
@@ -256,7 +235,6 @@ function klassement(jaar) {
 
 
 
-
 function reOrder(kleurObj) {
   var reOrdered = [];
   for (i = 9; i < 18; i++) {
@@ -267,8 +245,6 @@ function reOrder(kleurObj) {
   }
   return (reOrdered);
 }
-
-
 
 
 function renderKlassement(trArray) {
@@ -308,7 +284,6 @@ function renderKlassement(trArray) {
 }
 
 function setColorCount() {
-  //if(localStorage.getItem('colorCount')){
   var colorCount = {
     max: 5,
     maxCount: 0,
@@ -318,7 +293,6 @@ function setColorCount() {
     white: 0
   }
   localStorage.setItem('colorCount', JSON.stringify(colorCount));
-  //}
 }
 
 function checkMax(color) {
@@ -376,10 +350,6 @@ function showNoTeamSet() {
     //log(team['id']);
     localStorage.setItem('team-' + team['id'], JSON.stringify(executeQuery(`select name from teamleden where teamId = ${team['id']}`)));
   });
-  // var size = 12 / result.length;
-  // if (size < 6 || size === Infinity) {
-  //   size = 6
-  // }
   //generate buttons voor elk bestaand team in database
   teams.innerHTML = '';
   result.forEach(function(team) {
@@ -447,7 +417,6 @@ function showTeamSet() {
     button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
     button.innerHTML = score;
     button.onclick = function() {
-      //  button.className += 'kader';
       setScore(score);
     };
     div.appendChild(button);
