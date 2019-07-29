@@ -232,19 +232,6 @@ function klassement(jaar) {
 }
 
 
-
-
-// function reOrder(kleurObj) {
-//     var reOrdered = [];
-//     for (i = 9; i < 18; i++) {
-//         reOrdered.push(kleurObj[i]);
-//     }
-//     for (i = 0; i < 9; i++) {
-//         reOrdered.push(kleurObj[i]);
-//     }
-//     return (reOrdered);
-// }
-
 function renderKlassement(trArray) {
     trArray.sort(function(a, b) {
         return a[0] - b[0];
@@ -329,17 +316,15 @@ function generatePage() {
     showHole(hole);
 }
 
-function getNextTeamGame() {
-    var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
-    //var team = J.get('team');
-    //var teamGame = executeQuery(`SELECT max(game) as maxGame, COUNT(id) as countHoles FROM scores where team = ${team} and scores.game IN (select max(game) from scores where team = ${team})`);
-    // J.log(teamGame);
-    // if (teamGame[0]['maxGame'] === null){
-    //     var nextTeamGame = parseFloat(teamGame[0]['maxGame']);
-    // } else {
-    //     var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
-    // }
-    var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
+function getNextTeamGame(team) {
+    //var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
+    var teamGame = executeQuery(`SELECT max(game) as maxGame, COUNT(id) as countHoles FROM scores where team = ${team} and scores.game IN (select max(game) from scores where team = ${team})`);
+    J.log(teamGame);
+    if (parseFloat(teamGame[0].countHoles) === 1){
+        var nextTeamGame = parseFloat(teamGame[0]['maxGame']);
+    } else {
+        var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
+    }
     J.set('game', nextTeamGame);
 }
 
@@ -377,6 +362,9 @@ function showNoTeamSet() {
 function showTeamSet() {
     if (!J.get('startHole')) {
         chooseStartHole();
+    }
+    if(!J.get('game')){
+        getNextTeamGame(J.get('team'));
     }
     $('.navbar').hide();
     setMemberCount(J.get(`team-${J.get('team')}`));
@@ -645,7 +633,7 @@ function renderTable(jsonResult, renderName) {
 function finishGame() {
     results.innerHTML = '';
     replay.innerHTML = '';
-    renderTable(J.getTeamScore(), 'teamScore');
+    renderTable(getTeamScore(), 'teamScore');
     playing.style.display = 'none';
     message.style.display = `block`;
     replay.style.display = `block`;
@@ -669,116 +657,35 @@ function restart() {
     results.innerHTML = '';
     replay.innerHTML = '';
     setColorCount();
-    getNextTeamGame();
+    //getNextTeamGame();
     generatePage();
     restructure();
     location.reload();
 }
 
 function getTeamScore() {
-    var query = `SELECT s.hole,s.game,s.kleur,s.score,sum(s.score-h.par) as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${J.get('game')} and team = ${J.get('team')}`;
-    //Roep de generieke generate functie aan en geef daar de result van de query mee
-    return executeQuery(query);
+    var query = `SELECT s.hole,s.game,s.kleur,s.score, s.score - h.par as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${J.get('game')} and team = ${J.get('team')}`;
+    var verschil = 0;
+    var obj = executeQuery(query);
+    J.log(obj);
+     obj.forEach(function(result){
+        verschil += result.verschil;
+        J.log(verschil);
+    });
+    obj.push(['Per Saldo'],[verschil]);
+    renderTable(obj);
+    //J.log(verschil);
+    //return executeQuery(query);
 }
 
-function klassementGoed(jaar) {
-    J.log(executeQuery("select * from scores group by game"));
-    var klasse = {};
-    var trArray = [];
-    var datumKeuze = "";
-    J.set('jaar', jaar);
-    switch (jaar) {
-        case `2018`:
-            var scoreTabel = 'scoresCup2018';
-            break;
-        case `2019`:
-            var scoreTabel = 'scores';
-            break;
-        case `datum`:
-            var scoreTabel = 'scores';
-            var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
-            break;
-        case `today`:
-            var scoreTabel = 'scores';
-            var datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
-            break;
-        default:
-            // code block
-    }
-    var klasQuery = `select s.member,s.datum, s.team AS team, teams.team as teamnaam,`;
-    for (i = 0; i < 19; i++) {
-        klasQuery += (` sum(case when s.hole = ${i} then s.score end) AS H${i}`);
-        if (i < 18) {
-            klasQuery += ",";
-        }
-    }
-    klasQuery += " ,s.game, s.startHole from " + scoreTabel + " `s`  left join teams on teams.id = s.team  left join `holes` `h` on(`h`.`hole` = `s`.`hole`)  group by `s`.`team`, s.game " + datumKeuze;
-    var dbResult = executeQuery(klasQuery);
-    dbResult.forEach(function(teams) {
-        //J.log(teams);
-        var teamRow = "";
-        var totaal = 0;
-        var team = teams.team;
-        var teamNaam = teams.teamnaam;
-        var game = teams.game;
-        var startHole = teams.startHole;
-        var memberObj = executeQuery(`SELECT member FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
-        J.log(memberObj);
-        var kleurObj = executeQuery(`SELECT kleur FROM ${scoreTabel} WHERE team = ${team} and game = ${game} order by id`);
-        teamRow += `<tr><td colspan=22 class="text-left teamName ">${teamNaam}</td></tr><tr class="rowHight"><td></td>`;
-        if (parseFloat(startHole) == 10) {
-            J.log(`startHole=` + startHole);
-            kleurObj = reOrder(kleurObj);
-        }
-        for (hole = 1; hole < 19; hole++) {
-            var member = ``;
-            var scoreBorder = ``;
-            // heeft het team deze hole nog niet gespeeld dan wordt de score volgens par opgehaald
-            // om een projected score te kunnen bepalen
-            if (!teams['H' + hole]) {
-                score = par[hole];
-                totaal += parseFloat(score);
-                var bgColor = 'grey';
-            } else {
-                score = teams['H' + hole];
-                totaal += parseFloat(score);
-                styleId = `<div class=\"circle\">`;
-                if (!kleurObj[hole - 1]) {
-                    bgColor = 'grey';
-                } else {
-                    var bgColor = kleurObj[hole - 1]['kleur'];
-                }
-            }
-            if (score < par[hole]) {
-                scoreBorder += `<div class=\"birdie\">`;
-            }
-            if (score < (par[hole] - 1)) {
-                scoreBorder += `<div class=\"eagle\">`;
-            }
-            if (score > par[hole]) {
-                scoreBorder += `<div  class=\"bogey\">`;
-            }
-            if (score > (par[hole] + 1)) {
-                scoreBorder += `<div  class=\"double\">`;
-            }
-            teamRow += `<td  width=4%  bgcolor= ${bgColor}> ${scoreBorder}`;
-            teamRow += score;
-            if (memberObj[hole - 1]) {
-                member = memberObj[hole - 1]['member'];
-            }
-            if (styleId != ``) {
-                teamRow += `<br><span class="memberName">${member}</span></div>`;
-            }
-            teamRow += "</td>";
-        }
-        var parKleur = 'marineblue';
-        if ((totaal - 70) < 0) {
-            var parKleur = 'red';
-        } else if ((totaal - 70) == 0) {
-            var parKleur = 'silver';
-        }
-        teamRow += `<td>` + totaal + `</td><td bgcolor=${parKleur}>` + (totaal - 70) + `</td></tr>`;
-        trArray.push([totaal, team, teamNaam, teamRow]);
-    });
-    renderKlassement(trArray);
-};
+
+
+function getTeamScore_() {
+    var query = `SELECT s.hole,s.game,s.kleur,s.score, s.score - h.par as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${J.get('game')} and team = ${J.get('team')}`;
+    return executeQuery(query);
+
+
+}
+
+
+
