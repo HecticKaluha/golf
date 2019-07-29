@@ -177,7 +177,7 @@ function klassement(jaar) {
     var team, teamNaam, totaal, score, totaal, bgColor, member, scoreBorder, parKleur, teamRow, objHole;
     executeQuery(`select distinct s.game, s.datum from ${scoreTabel} as s group by s.game ${datumKeuze}`)
     .forEach(function(gameResult) {
-        //J.log(gameResult);
+        J.log(gameResult);
         objHole = {};
         totaal = 0;
         executeQuery(`select * from ${scoreTabel} as s  left join teams as t on s.team = t.id  where s.game = ${gameResult.game} group by s.hole ${datumKeuze} order by s.hole`) // ${datumKeuze}
@@ -317,6 +317,17 @@ function generatePage() {
 }
 
 function getNextTeamGame(team) {
+    var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
+    var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
+    J.set('game', nextTeamGame);
+}
+
+function deleteEmptyGame(team){
+   executeQuery( `delete from scores where team = ${team} and datum = "0000-00-00 00:00:00"`);
+}
+
+
+function getNextTeamGame_nietgoed(team) {
     //var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
     var teamGame = executeQuery(`SELECT max(game) as maxGame, COUNT(id) as countHoles FROM scores where team = ${team} and scores.game IN (select max(game) from scores where team = ${team})`);
     J.log(teamGame);
@@ -476,6 +487,7 @@ function saveHole() {
                         updateMemberCount(J.get('member'));
                         J.set('member', `-`);
                         J.set('holePlayed', 'yes');
+                        deleteEmptyGame(J.get('team'));
                         nextHole();
                         renderTable(getTeamScore(), 'teamScore');
                     } else {
