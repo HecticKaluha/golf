@@ -75,12 +75,14 @@ function chooseStartHole() {
 
 function prepareScore() {
     executeQuery(`TRUNCATE TABLE scores`);
-    var niet = [2, 4, 5, 8, 9, 99];
-    for (i = 1; i < 20; i++) {
-        if (niet.indexOf(i) < 0) {
-            executeQuery("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`, `startHole`) VALUES (null," + i + ",0,0,0,0," + i + ",1)");
-        }
-    }
+    var wel = executeQuery(`select teamId from game where game = "2"`);
+    J.log(wel);
+    //var wel = Object.keys(wel);
+    wel.forEach(function(result){
+        J.log(result.teamId);
+        executeQuery("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`, `startHole`) VALUES (null," + result.teamId + ",0,0,0,0," + result.teamId + ",1)");
+ 
+    });
 }
 var J = {
     get: function(cookie) {
@@ -185,7 +187,8 @@ function klassement(jaar) {
                 //J.log(result);
                 objHole[result.hole] = result;
                 teamNaam = result.team;
-                teamRow = `<tr><td colspan=22 class="text-left teamName ">${teamNaam}</td></tr><tr class="rowHight"><td></td>`;
+                team = result.id;
+                teamRow = `<tr><td colspan=22 class="text-left teamName ">${teamNaam} (${team})</td></tr><tr class="rowHight"><td></td>`;
             });
         for (H = 1; H < 19; H++) {
             member = '';
