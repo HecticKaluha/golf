@@ -116,18 +116,9 @@ var J = {
         }
         return value;
     },
-    /*    
-      get: function(cookie) {
-          return localStorage.getItem(cookie);
-      },
-      set: function(cookie, value) {
-          localStorage.setItem(cookie, value);
-      },
-      */
       log: function(val) {
           console.log(val);
-      }
-      
+      }    
 }
 
 function showRules() {
@@ -155,35 +146,30 @@ function focus() {
     }, 2000);
 }
 
-function getTeamMembers(team) {
-    if (localStorage.getItem('team')) {
-        return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
-    }
-}
+// function getTeamMembers(team) {
+//     if (localStorage.getItem('team')) {
+//         return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
+//     }
+// }
 
-function setMemberCount(memberObj) {
+// function setMemberCount(memberObj) {
 
-    memberObj.forEach(function(member) {
-        if (!J.get(member['name'])) {
-            J.set(member['name'], 0);
-        }
-    });
-}
+//     memberObj.forEach(function(member) {
+//         if (!J.get(member['name'])) {
+//             J.set(member['name'], 0);
+//         }
+//     });
+// }
 
 function updateMemberCount(member) {
-    J.log(member);
-    teamObj = J.get('teamObj');
-    J.log(teamObj);
-    J.log(teamObj[member]);
+     //teamObj.teller(member);
+
+    var teamObj = J.get('teamObj');
+    J.log (J.get('teamObj')[member]);
     var aantal = teamObj[member];
-    J.log(aantal);
     aantal++;
     teamObj[member] = aantal;
-    J.set('teamObj', teamObj);
-    var aantal = J.get(member);
-    aantal++;
-    J.set(member, aantal);
-
+     J.set('teamObj', teamObj);
 }
 
 function klassement(jaar) {
@@ -399,7 +385,7 @@ function showNoTeamSet() {
         // });
         button.onclick = function() {
             J.set('team', team.id);
-            J.set('team-' + team['id'], executeQuery(`select name from teamleden where teamId = ${team['id']}`));
+            //J.set('team-' + team['id'], executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             var teamObj = {};
             var result = (executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             //J.log(result);
@@ -407,7 +393,9 @@ function showNoTeamSet() {
                 //J.log(result.name);
                 teamObj[result.name] = 0;
             });
-            //J.log(teamObj);
+            teamObj.teller = function(member){
+                this.member = this.member + 1;
+            };
             J.set('teamObj', teamObj);
             showTeamSet();
         }
@@ -424,10 +412,7 @@ function showTeamSet() {
     if (!J.get('game')) {
         getNextTeamGame();
     }
-    //getTeamMembers(J.get('team'));
     $('.navbar').hide();
-    //setMemberCount(J.get(`team-${J.get('team')}`));
-    //setMemberCount(J.get(`teamObj`));
     noTeamSet.style.display = 'none';
     teamSet.style.display = 'block';
     playing.style.display = 'block';
@@ -717,7 +702,7 @@ function finishGame() {
     message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
     setColorCount();
-    setMemberCount(J.get(`team-` + J.get('team')));
+    //setMemberCount(J.get(`team-` + J.get('team')));
 }
 
 function restart() {
