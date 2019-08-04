@@ -33,8 +33,8 @@ $(document).ready(function() {
         console.timeEnd();
 
      })();
-      */
-});
+     */
+ });
 
 function restructure() {
     //return;
@@ -92,7 +92,13 @@ function prepareScore() {
         executeQuery("INSERT INTO scores(`id`, `team`, `hole`, `kleur`, `score`, `datum`, `game`, `startHole`) VALUES (null," + result.teamId + ",0,0,0,0," + result.teamId + ",1)");
     });
 }
+
+
 var J = {
+    print: function (data){
+        $('#result').html(data);
+    },
+
     set: function(key, value) {
         if (!key || !value) {
             return;
@@ -116,16 +122,56 @@ var J = {
         }
         return value;
     },
-      log: function(val) {
-          console.log(val);
-      }    
+    log: function(val) {
+      console.log(val);
+  }    
 }
+
+
+function plussen(wie){
+    var obj = J.get('obj');
+    console.log(obj);
+    wie.forEach(function(wie){
+        if (checkPlus(wie)){
+            obj.method(wie);
+            J.print(obj[wie].strokes);
+            if(obj[wie].strokes  > obj.strokeMax){
+                var kleuren = ['red','yellow', 'red','white'];
+                if (kleuren.indexOf(wie) > -1){
+                    obj.cMax++;
+                } else {
+                    obj.sMax++;
+                    J.print (obj.sMax);
+                }
+            }
+
+            if(obj.sMax == 2){
+                obj.strokeMax = 4;
+                alert(sMax + ' nu sMax');
+            }
+        } else {
+            alert('mag niet meer');
+        }
+}); 
+    J.log(obj);
+J.set('obj', obj);
+}// van functie
+
+
+function checkPlus(wie) {
+    if (obj[wie]['strokes'] <=    obj.strokeMax) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 
 function showRules() {
     var rules = `<h1>Regelement</h1>
-  <ul><li>Speel met een team van 4 personen.</li>
-  <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
-  <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li><li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>  <li>Sla alle 4 vanaf af en kies de beste ligging.</li><li>Sla alle 4 vanaf die plaats.</li><li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li><li>De laatste holed uit.</li> <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li><li>Succes!</li> </ul>`;
+    <ul><li>Speel met een team van 4 personen.</li>
+    <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
+    <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li><li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>  <li>Sla alle 4 vanaf af en kies de beste ligging.</li><li>Sla alle 4 vanaf die plaats.</li><li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li><li>De laatste holed uit.</li> <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li><li>Succes!</li> </ul>`;
     $('#results').html(rules);
     focus();
 }
@@ -164,15 +210,15 @@ function focus() {
 function updateMemberCount(member) {
      //teamObj.teller(member);
 
-    var teamObj = J.get('teamObj');
-    J.log (J.get('teamObj')[member]);
-    var aantal = teamObj[member];
-    aantal++;
-    teamObj[member] = aantal;
+     var teamObj = J.get('teamObj');
+     J.log (J.get('teamObj')[member]);
+     var aantal = teamObj[member];
+     aantal++;
+     teamObj[member] = aantal;
      J.set('teamObj', teamObj);
-}
+ }
 
-function klassement(jaar) {
+ function klassement(jaar) {
     $('.splash').show();
     var datumKeuze = '';
     var scoreTabel = '';
@@ -180,31 +226,31 @@ function klassement(jaar) {
     J.log(jaar);
     switch (jaar) {
         case `2018`:
-            scoreTabel = 'scoresCup2018';
-            break;
+        scoreTabel = 'scoresCup2018';
+        break;
         case `2019`:
-            scoreTabel = 'scores';
-            break;
+        scoreTabel = 'scores';
+        break;
         case `datum`:
-            scoreTabel = 'scores';
-            datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
-            break;
+        scoreTabel = 'scores';
+        datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
+        break;
         case `today`:
-            scoreTabel = 'scores';
-            datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
-            break;
+        scoreTabel = 'scores';
+        datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
+        break;
         default:
             // code block
-    }
-    console.time();
-    var trArray = [];
-    var team, teamNaam, totaal, score, totaal, bgColor, member, scoreBorder, parKleur, teamRow, objHole;
-    executeQuery(`select distinct s.game, s.datum from ${scoreTabel} as s group by s.game ${datumKeuze}`).forEach(function(gameResult) {
-        J.log(gameResult);
-        objHole = {};
-        totaal = 0;
+        }
+        console.time();
+        var trArray = [];
+        var team, teamNaam, totaal, score, totaal, bgColor, member, scoreBorder, parKleur, teamRow, objHole;
+        executeQuery(`select distinct s.game, s.datum from ${scoreTabel} as s group by s.game ${datumKeuze}`).forEach(function(gameResult) {
+            J.log(gameResult);
+            objHole = {};
+            totaal = 0;
         executeQuery(`select * from ${scoreTabel} as s  left join teams as t on s.team = t.id  where s.game = ${gameResult.game} group by s.hole ${datumKeuze} order by s.hole`) // ${datumKeuze}
-            .forEach(function(result) {
+        .forEach(function(result) {
                 //J.log(result);
                 objHole[result.hole] = result;
                 teamNaam = result.team;
@@ -238,7 +284,7 @@ function klassement(jaar) {
                 bgColor = 'grey';
             }
             teamRow += `<td  width=4% class="cel" bgcolor= ${bgColor}><div ${scoreBorder}> ${score}
-             <br><div class="memberName m-0">${member}</div></div></td>`;
+            <br><div class="memberName m-0">${member}</div></div></td>`;
         } // van 1 tot 18
         parKleur = 'marineblue';
         if ((totaal - 70) < 0) {
@@ -250,16 +296,16 @@ function klassement(jaar) {
         trArray.push([totaal, teamRow]);
         teamRow = 'resetten die shit';
     });
-    renderKlassement(trArray);
-    console.timeEnd();
-}
+        renderKlassement(trArray);
+        console.timeEnd();
+    }
 
-function renderKlassement(trArray) {
-    trArray.sort(function(a, b) {
-        return a[0] - b[0];
-    });
-    var table = `<h1>klassement</h1>
-  <table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
+    function renderKlassement(trArray) {
+        trArray.sort(function(a, b) {
+            return a[0] - b[0];
+        });
+        var table = `<h1>klassement</h1>
+        <table class="table table-border table-hover table-sm table-responsive-md text-center thead-dark">
     <tr><td>Pos.</td>`; //class='klassement'
     for (h = 1; h < 19; h++) {
         table += `<td>H` + h + `<br>${par[h]}</td>`
@@ -387,17 +433,27 @@ function showNoTeamSet() {
             J.set('team', team.id);
             //J.set('team-' + team['id'], executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             var teamObj = {};
+            var obj={};
             var result = (executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             //J.log(result);
             result.forEach(function(result) {
                 //J.log(result.name);
-                teamObj[result.name] = 0;
+            teamObj[result.name] = 0;
+                obj[result.name] = {"strokes" :0};
             });
-            teamObj.teller = function(member){
-                this.member = this.member + 1;
-            };
+            obj.colorMax = 5;
+            obj.strokeMax = 5;
+            obj.sMax = 0;
+            obj.cMax = 0;
+            J.log(obj);
+            J.set('obj',obj);
+            J.log(teamObj);
             J.set('teamObj', teamObj);
             showTeamSet();
+            obj.method = function(wie){ 
+                this[wie].strokes++;
+            }
+
         }
         div.appendChild(button);
         teams.appendChild(div);
@@ -456,35 +512,35 @@ function showTeamSet() {
         scoreButtons.appendChild(div);
     });
     nameButtons.innerHTML = '';
-        
-for (let [name, aantal] of Object.entries(J.get('teamObj'))) {
-  console.log(`${name}: ${aantal}`);
 
-        var div = document.createElement('div');
-        div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
-        var button = document.createElement('BUTTON');
-        button.className = 'btn-large btn-dark col-12 border p-2 p-sm-4 p-lg-5 bigger-text rounded';
-        button.innerHTML = name + ` ` + aantal + 'x';
+    for (let [name, aantal] of Object.entries(J.get('teamObj'))) {
+      console.log(`${name}: ${aantal}`);
 
-        button.onclick = function() {
-            if (aantal == 5) {
-                Swal.fire({
-                    title: 'Helaas!',
-                    text: "Deze speler heeft geen afslagen meer, kies een ander",
-                    type: 'warning',
-                    confirmButtonColor: '#3085d6',
-                    confirmButtonText: 'Ik snap het...'
-                })
-            } else {
-                J.set('member', name);
-                colorCheck.innerText = name;
-            }
+      var div = document.createElement('div');
+      div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
+      var button = document.createElement('BUTTON');
+      button.className = 'btn-large btn-dark col-12 border p-2 p-sm-4 p-lg-5 bigger-text rounded';
+      button.innerHTML = name + ` ` + aantal + 'x';
 
-        };
-        div.appendChild(button);
-        nameButtons.appendChild(div);
+      button.onclick = function() {
+        if (aantal == 5) {
+            Swal.fire({
+                title: 'Helaas!',
+                text: "Deze speler heeft geen afslagen meer, kies een ander",
+                type: 'warning',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Ik snap het...'
+            })
+        } else {
+            J.set('member', name);
+            colorCheck.innerText = name;
+        }
+
     };
-    checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,#A0CABB)";
+    div.appendChild(button);
+    nameButtons.appendChild(div);
+};
+checkContainer.style.backgroundImage = "linear-gradient(#A0CABB,#A0CABB)";
 }
 
 function setTee(color) {
@@ -522,6 +578,7 @@ function saveHole() {
                             showConfirmButton: false,
                             timer: 1500,
                         });
+                        plussen(J.get('member'),J.get('tee'));
                         updateMemberCount(J.get('member'));
                         J.set('member', `-`);
                         if (J.get('holePlayed') != "yes") {
@@ -651,13 +708,13 @@ function renderTable(jsonResult, renderName) {
         }
     }
     divToRenderIn.innerHTML = `<table class="table table-bordered table-striped">
-  <thead>
-  <tr role="row" id="${renderName}-thead">
-  </tr>
-  </thead>
-  <tbody id="${renderName}-tbody">
-  <tbody/>
-  </table>`;
+    <thead>
+    <tr role="row" id="${renderName}-thead">
+    </tr>
+    </thead>
+    <tbody id="${renderName}-tbody">
+    <tbody/>
+    </table>`;
     //loop over alle rows
     jsonResult.forEach(function(row, index) {
         var tableRow = document.createElement('tr');

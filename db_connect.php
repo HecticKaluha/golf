@@ -3,8 +3,10 @@
 // Create connection
 function dbConnect() {
 	$servername = "localhost";
-	$username = "jroea";
-	$password = "hf4a9NZ2-";
+	//$username = "jroea";
+	//$password = "hf4a9NZ2-";
+	$username = "root";
+	$password = "";	
 	$dbname = "jroea_2";
 
 	// $servername = "localhost";
