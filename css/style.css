@@ -185,3 +185,8 @@ hr {
   position: relative;
 
 }
+
+.red {
+  border: red 1px double;
+  background-color: red;
+}

@@ -130,41 +130,37 @@ var J = {
 
 function plussen(wie){
     var obj = J.get('obj');
-    console.log(obj);
     wie.forEach(function(wie){
-        if (checkPlus(wie)){
-            obj.method(wie);
-            J.print(obj[wie].strokes);
-            if(obj[wie].strokes  > obj.strokeMax){
-                var kleuren = ['red','yellow', 'red','white'];
-                if (kleuren.indexOf(wie) > -1){
-                    obj.cMax++;
-                } else {
-                    obj.sMax++;
-                    J.print (obj.sMax);
-                }
-            }
+            if (colors.indexOf(wie) > -1){
+               var sectie = 'colors'; 
+               var max='colorMax'
+           } else {
+            sectie = 'members'; 
+            max='strokeMax';
+        }
 
-            if(obj.sMax == 2){
-                obj.strokeMax = 4;
-                alert(sMax + ' nu sMax');
+
+        obj[sectie][wie].strokes++;
+        if(obj[sectie][wie].strokes  == obj[max]){
+            if (colors.indexOf(wie) > -1){
+                obj.cMax++;
+            } else {
+                obj.sMax++;
             }
-        } else {
-            alert('mag niet meer');
+        }
+
+        if(obj.sMax == 2){
+            obj.strokeMax = 4;
+        }
+        if(obj.cMax == 2){
+            obj.colorMax = 4;
         }
 }); 
     J.log(obj);
-J.set('obj', obj);
+    J.set('obj', obj);
 }// van functie
 
 
-function checkPlus(wie) {
-    if (obj[wie]['strokes'] <=    obj.strokeMax) {
-        return true;
-    } else {
-        return false;
-    }
-};
 
 
 function showRules() {
@@ -192,31 +188,6 @@ function focus() {
     }, 2000);
 }
 
-// function getTeamMembers(team) {
-//     if (localStorage.getItem('team')) {
-//         return (executeQuery(`select name from teamleden where teamId= ${localStorage.getItem('team')}`));
-//     }
-// }
-
-// function setMemberCount(memberObj) {
-
-//     memberObj.forEach(function(member) {
-//         if (!J.get(member['name'])) {
-//             J.set(member['name'], 0);
-//         }
-//     });
-// }
-
-function updateMemberCount(member) {
-     //teamObj.teller(member);
-
-     var teamObj = J.get('teamObj');
-     J.log (J.get('teamObj')[member]);
-     var aantal = teamObj[member];
-     aantal++;
-     teamObj[member] = aantal;
-     J.set('teamObj', teamObj);
- }
 
  function klassement(jaar) {
     $('.splash').show();
@@ -336,40 +307,7 @@ function updateMemberCount(member) {
     }, 60000);
 }
 
-function setColorCount() {
-    var colorCount = {
-        max: 5,
-        maxCount: 0,
-        red: 0,
-        yellow: 0,
-        blue: 0,
-        white: 0
-    }
-    J.set('colorCount', colorCount);
-}
 
-function checkMax(color) {
-    var colorCount = J.get('colorCount');
-    if (colorCount[color] < colorCount['max']) {
-        colorCount[color]++;
-        if (colorCount[color] == colorCount['max']) {
-            colorCount['maxCount']++;
-            if (colorCount['maxCount'] == 2) {
-                colorCount['max'] = 4;
-            }
-        }
-        J.set('colorCount', colorCount);
-        return true;
-    } else {
-        return false;
-        //mischien zelfs knop weghalen
-    }
-    setTimeout(function() {
-        window.location = window.location.href;
-        J.log('reload');
-    }, 10000);
-    klassement("2018");
-}
 
 function generatePage() {
     //teamSet zoekt automatisch in de DOM naar een element met id="teamSet"
@@ -387,8 +325,6 @@ function generatePage() {
 function getNextTeamGame(team) {
     var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
     var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
-    // var nextTeamGame = '_' + Math.random().toString(36).substr(2, 9);
-    // J.log(nextTeamGame);
     J.set('game', nextTeamGame);
 }
 
@@ -397,7 +333,6 @@ function deleteEmptyGame(team) {
 }
 
 function getNextTeamGame_nietgoed(team) {
-    //var teamGame = executeQuery(`SELECT max(game) as maxGame FROM scores `); //WHERE team = ` + team
     var teamGame = executeQuery(`SELECT max(game) as maxGame, COUNT(id) as countHoles FROM scores where team = ${team} and scores.game IN (select max(game) from scores where team = ${team})`);
     J.log(teamGame);
     if (parseFloat(teamGame[0].countHoles) === 1) {
@@ -431,28 +366,26 @@ function showNoTeamSet() {
         // });
         button.onclick = function() {
             J.set('team', team.id);
-            //J.set('team-' + team['id'], executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             var teamObj = {};
             var obj={};
+            obj.members ={};
+            obj.colors = {};
             var result = (executeQuery(`select name from teamleden where teamId = ${team['id']}`));
             //J.log(result);
             result.forEach(function(result) {
-                //J.log(result.name);
-            teamObj[result.name] = 0;
-                obj[result.name] = {"strokes" :0};
+                obj.members[result.name] = {"strokes" :0};
+            });
+            colors.forEach(function(color){
+                obj.colors[color] = {"strokes" :0};
             });
             obj.colorMax = 5;
             obj.strokeMax = 5;
             obj.sMax = 0;
             obj.cMax = 0;
+
             J.log(obj);
             J.set('obj',obj);
-            J.log(teamObj);
-            J.set('teamObj', teamObj);
             showTeamSet();
-            obj.method = function(wie){ 
-                this[wie].strokes++;
-            }
 
         }
         div.appendChild(button);
@@ -462,6 +395,7 @@ function showNoTeamSet() {
 }
 
 function showTeamSet() {
+    obj = J.get('obj');
     if (!J.get('startHole')) {
         chooseStartHole();
     }
@@ -478,14 +412,11 @@ function showTeamSet() {
         div.className = 'p-1 col-6 col-sm-3';
         var button = document.createElement('BUTTON');
         button.className = 'btn-large col-12 border text-secondary big-text p-1 rounded';
-        //var colorTimes = J.get('colorCount')[color];
-        var colorCount = J.get('colorCount');
-        button.innerHTML = `${colorCount[color]} x`;
+        button.innerHTML = obj.colors[color].strokes + 'x';
         button.style.backgroundColor = color;
         button.onclick = function() {
             setTee(color);
-            var colorCount = J.get('colorCount');
-            if (colorCount[J.get('tee')] == 5) {
+            if (obj.colors[color].strokes >= obj.colorMax) {
                 Swal.fire({
                     title: 'Helaas!',
                     text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
@@ -513,17 +444,16 @@ function showTeamSet() {
     });
     nameButtons.innerHTML = '';
 
-    for (let [name, aantal] of Object.entries(J.get('teamObj'))) {
-      console.log(`${name}: ${aantal}`);
-
+    obj = J.get('obj');
+    for (let [key, value] of Object.entries(obj.members)) {
       var div = document.createElement('div');
       div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
       var button = document.createElement('BUTTON');
       button.className = 'btn-large btn-dark col-12 border p-2 p-sm-4 p-lg-5 bigger-text rounded';
-      button.innerHTML = name + ` ` + aantal + 'x';
+      button.innerHTML = key + ` ` + value.strokes + 'x';
 
       button.onclick = function() {
-        if (aantal == 5) {
+        if (value.strokes  >= obj.strokeMax) {
             Swal.fire({
                 title: 'Helaas!',
                 text: "Deze speler heeft geen afslagen meer, kies een ander",
@@ -532,8 +462,8 @@ function showTeamSet() {
                 confirmButtonText: 'Ik snap het...'
             })
         } else {
-            J.set('member', name);
-            colorCheck.innerText = name;
+            J.set('member', key);
+            colorCheck.innerText = key;
         }
 
     };
@@ -554,32 +484,54 @@ function setScore(score) {
 }
 
 function saveHole() {
-    if (J.get('tee') && J.get('score') && J.get('member') !== `-`) {
-        if (checkMax(J.get('tee'))) {
-            $.ajax({
-                url: "db_write.php?method=saveScore",
-                data: {
-                    team: J.get('team'),
-                    hole: J.get('hole'),
-                    tee: J.get('tee'),
-                    score: J.get('score'),
-                    game: J.get('game'),
-                    startHole: J.get('startHole'),
-                    member: J.get('member')
-                },
-                type: "post",
-                success: function(res) {
-                    var response = JSON.parse(res);
-                    if (response.success) {
+    var warnText = 'Je hebt ';
+    if (!J.get('tee')){
+        $('#teeButtons').addClass('red');
+        warnText += 'Teekleur, ';
+        } else {
+        $('#teeButtons').removeClass('red');
+        }
+
+    if (!J.get('score')){
+        $('#scoreButtons').addClass('red');
+        warnText += 'Score, ';
+        } else {
+        $('#scoreButtons').removeClass('red');
+        } 
+
+    if (J.get('member') == '-'){
+        $('#nameButtons').addClass('red');
+        warnText += 'Afslag, ';
+        } else {
+        $('#nameButtons').removeClass('red');
+        }    
+
+        if (J.get('tee') && J.get('score') && J.get('member') !== `-`) {
+
+        $.ajax({
+            url: "db_write.php?method=saveScore",
+            data: {
+                team: J.get('team'),
+                hole: J.get('hole'),
+                tee: J.get('tee'),
+                score: J.get('score'),
+                game: J.get('game'),
+                startHole: J.get('startHole'),
+                member: J.get('member')
+            },
+            type: "post",
+            success: function(res) {
+                var response = JSON.parse(res);
+                if (response.success) {
                         //je response message is beschikbaar vie response.message
+                        J.log(response.message);
                         Swal.fire({
                             title: 'Opgeslagen!',
                             type: 'success',
                             showConfirmButton: false,
                             timer: 1500,
                         });
-                        plussen(J.get('member'),J.get('tee'));
-                        updateMemberCount(J.get('member'));
+                        plussen([J.get('member'),J.get('tee')]);
                         J.set('member', `-`);
                         if (J.get('holePlayed') != "yes") {
                             deleteEmptyGame(J.get('team'));
@@ -600,19 +552,11 @@ function saveHole() {
                     J.log('dat is niet gelukt!')
                 }
             });
-        } else {
-            Swal.fire({
-                title: 'Helaas!',
-                text: "Je hebt het maximale aantal afslagen voor deze tee bereikt, kies een andere tee",
-                type: 'warning',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Ik snap het...'
-            })
-        }
+
     } else {
         Swal.fire({
             title: 'OOPS',
-            text: "Teekleur, Afslag en Score ingevuld??",
+            text: warnText + ' niet ingevuld!',
             type: 'warning',
             confirmButtonColor: '#3085d6',
             confirmButtonText: 'Ik begrijp het, sorry...'
@@ -758,20 +702,11 @@ function finishGame() {
     replay.appendChild(replayButton);
     message.innerHTML = `Ronde volbracht, hieronder de resultaten.`;
     finished.style.display = `block`;
-    setColorCount();
-    //setMemberCount(J.get(`team-` + J.get('team')));
 }
 
 function restart() {
     $(".container").hide();
     localStorage.clear();
-    // finished.style.display = 'none';
-    // results.innerHTML = '';
-    // replay.innerHTML = '';
-    setColorCount();
-    // getNextTeamGame();
-    //generatePage();
-    // //restructure();
     location.reload();
 }
 
