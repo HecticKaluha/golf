@@ -8,50 +8,70 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <script type="text/javascript" src="js/script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
-  <link href="manifest.json" rel="manifest" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/style.css">
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<!--   <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.js"></script>
- -->
-  <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<!--   <script type="text/javascript" src="js/script.js?random=<?php echo filemtime('js/script.js'); ?>"></script>
+-->  
+<script type="text/javascript" src="js/script.js?v=10"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+<link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
+<link href="manifest.json" rel="manifest" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="css/style.css?v=8">
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="https://kit.fontawesome.com/9dbd794a68.js"></script>
+
+<!-- 
+<meta http-equiv="refresh" content="2; URL=index.html?random=<?php echo filemtime('js/script.js'); ?>">
+
+-->
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
 </head>
 
 </html>
 
 <body class="bg-info">
-  <div class="top"></div>
+  <div class="top m-0"></div>
 
-  <div class="container">
-
-    <div class="splash">
-      <div class="row">
-        <div class="text-dark col-lg-10 col-10 offset-1 col-auto mb-3 ">
-
-          <div class="h2 col-12 text-center">
-            Welkom
+  <div class="container col-12 m-0">
+    <div class="loader hidden">
+      <div class="loaderBg">
+        <div class="loaderImg">
+          <div class="loading vw-1 text-light text-center">Loading...
           </div>
-          <div>
-            <div class="h5 text-left">
-            Dit is The LipOuts CockTailCup
-          </div>
-            <ul class="text-left">
-              <li><div class="li-1">4 kleuren</div></li>
-              <li><div class="li-2">4 afslagen</div></li>
-              <li><div class="li-3">4 putts</div></li>
-            </ul>
-          </div>
-          <img src="images/lipouts-lg.png" class="zoom  mt-5 img-fluid">
         </div>
       </div>
     </div>
+
+    <div class='splash m-0'>
+      <div class="splashBg col-12"></div>
+      <div class="row onTop col-12">
+        <div class="text-dark text-center col-12 m-1">
+
+          <div class="vw-2 text-dark">
+            Welkom
+          </div>
+          <div>
+            <div class="text-dark vw-1">
+              The LipOuts<br>CockTailCup
+            </div>
+            <div class="ulPlace">
+              <ul class="text-left">
+                <li><div class="li-1">4 kleuren</div></li>
+                <li><div class="li-2">4 afslagen</div></li>
+                <li><div class="li-3">4 putts</div></li>
+              </ul>
+            </div>
+            <div class='logo'>
+              <img src="images/lipouts.png" class="img-fluid">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
 
     <div class="app">
@@ -62,7 +82,7 @@
         </div>
         <!-- alleen zichtbaar wanneer een team gezet is -->
         <!-- wordt verwijderd uit dom zodra een team gekozen is -->
-        <div id="noTeamSet">
+        <div id="noTeamSet" class='row hidden'>
           <div class="row mb-2">
             <div class="col-12">
               <div class="h3 col-12 bigger-text text-center">Selecteer je team</div>
@@ -75,8 +95,8 @@
         </div>
 
         <!-- zichtbaar wanneer een team geselecteerd is -->
-        <div id="teamSet">
-          <div id="playing">
+        <div id="teamSet" class='hidden'>
+          <!--<div id="playing">-->
             <div class="row mb-0">
               <div class="col-12 mb-3">
                 <div id="checkContainer" class="checkContainer text-center">
@@ -86,7 +106,7 @@
                     <div class="check col-3 m-0 p-0" id="scoreCheck">--</div>
                     <div class="check col-3 m-0 p-0 cel text-center"><div id="saldo" class="text-center">
                       0
-                      </div></div>
+                    </div></div>
 
                   </div>
                   <div class="row">
@@ -102,7 +122,7 @@
             <div class="row">
               <div class="col-12 mb-2">
                 <!--                     <h2 class="h3 text-center">Tee</h2>
-                  -->
+                -->
                 <div class="col-12">
                   <div class="row" id="teeButtons">
                   </div>
@@ -132,24 +152,24 @@
             <div class="row">
               <div class="col-12">
                 <div class="m-1">
-                  <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()">Opslaan
-                    </button>
+                  <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()"><i class="fas fa-golf-ball"></i> Opslaan
+                  </button>
                 </div>
               </div>
             </div>
             <hr>
+            <!--</div>-->
           </div>
-        </div>
 
 
-        <div class="row" id="finished">
-          <div class="col-12 text-center">
-            <h1 class="mb-1" id="message"></h1>
-            <div id="replay" class="m-1"></div>
+          <div class="row" id="finished">
+            <div class="col-12 text-center">
+              <h1 class="mb-1" id="message"></h1>
+              <div id="replay" class="m-1"></div>
+            </div>
           </div>
-        </div>
         <!--           <div class="col-12" id="klassement">
-          </div> -->
+        </div> -->
 
 
 
@@ -157,16 +177,22 @@
           <div class="col-12">
 
             <hr>
+            <div class="btn-group btn-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
+              <button type="button" class="btn btn-success btn-block btn-secondary  p-25 bigger-text playButton" onclick="firstChoice()"><i class="fas fa-golf-ball"></i> Ik wil een ronde spelen</button>
+            </div>
             <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-secondary" onclick="showRules()">Regelement</button>
-              <button type="button" class="btn btn-secondary" onclick="showNews()">Nieuws</button>
+              <button type="button" class="btn btn-secondary" onclick="showRules()"><i class="fas fa-receipt"></i> Regelement</button>
+              <button type="button" class="btn btn-secondary" onclick="showNews()"><i class="fas fa-book-reader"></i> Nieuws</button>
+
+
+
+              
             </div>
 
             <div class="mb-2 btn-group btn-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
               <div class="btn-group col-12 p-0"  role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Klassement
-        </button>
+                <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-align-justify"></i> Klassement
+                </button>
                 <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                   <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
                   <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
@@ -179,10 +205,10 @@
 
 
             <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-secondary" onclick="restart()">Reset (!)</button>
-            
-<button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
-       </div>
+              <button type="button" class="btn btn-secondary" onclick="restart()"><i class="far fa-calendar-times"></i> Reset (!)</button>
+
+              <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
+            </div>
 
           </div>
         </div>
@@ -191,40 +217,40 @@
           <div class="focus"></div>
           <div class="col-12">
             <div id="results" class="m-1 overflow-auto">
-               <div id="verschil"></div>
+             <div id="verschil"></div>
 
-            </div>
-          </div>
+           </div>
+         </div>
+       </div>
+
+
+
+
+       <div class="row mb-3">
+        <div class="col-10 offset-1">
+          <img src="images/lipouts.png" class="img-fluid">
         </div>
-
-
-
-
-        <div class="row mb-3">
-          <div class="col-8 offset-2">
-            <img src="images/lipouts.png" class="img-fluid">
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
-          </div>
-          <div id="vanLange" class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-            <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
-          </div>
-          <div class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-            <img src="images/wijncollectief.png" class="img-fluid">
-          </div>
-        </div>
-
       </div>
+      <hr>
+      <div class="row">
+        <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+        </div>
+        <div id="vanLange" class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+          <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
+        </div>
+        <div class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
+          <img src="images/wijncollectief.png" class="img-fluid">
+        </div>
+      </div>
+
     </div>
   </div>
+</div>
 
 
 </body>

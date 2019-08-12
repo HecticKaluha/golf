@@ -1,9 +1,9 @@
 body,
 html {
   height: 100%;
-  margin: 0;
-  padding: 0;
-
+  margin: 0px;
+  padding: 0px;
+  width:100%;
 }
 
 .bg-info {
@@ -14,32 +14,123 @@ html {
   /* Full height */
   height: 100%;
   position: relative;
-  padding: 0;
-  margin: 0;
+  padding: 0px;
+  margin: 0px;
 }
+
+.ulPlace{
+  position: absolute;
+  border: 5px solid white;
+  border-radius: 25px;
+  background: rgba(255,255,255,0.4);
+  padding:5px;
+  width:75%;
+  right: 20px;
+  margin-top: 15px;
+}
+
+
 
 
 .teamName{
   letter-spacing: 0.25em;  
 }
 
+.splashCont{
+  position: relative;
+}
 
-.splash {
-  z-index: 1;
-  height: 500%;
-  width: 100%;
-  background-color: #17a2b8;
+.splashBg {
+
+  /*overflow: hidden;*/
   position: absolute;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  
+  background: url("../images/haenen.PNG") no-repeat center center fixed; 
+
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-filter: opacity(70%); 
+
+  filter: opacity(70%); 
+  margin: 0px;
 }
 
-.haen {
-  z-index: -1;
-  background-image: url("../images/lipouts.png");
-  background-position: top center;
-  background-size: 50%;
-  background-repeat: no-repeat;
-  height: 100%;
+.noScroll{
+  overflow: hidden;
 }
+
+.onTop{
+ width: 100%;
+ height: 99%;
+ position: absolute;
+ z-index:5;
+ padding-top: 50px;
+ text-shadow: 1px 1px #eee;
+ margin: 0px;
+ margin-bottom:20px;
+}
+
+
+.logo {
+  position: absolute;
+  right: 0px;
+  bottom: 10px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.loaderBg{
+  position: fixed;
+  overflow: hidden;
+  z-index: 1;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  background-color: #17a2b8;
+  top:0px;
+}
+
+.loaderImg{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  background: url("../images/haenen.PNG") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+  -webkit-filter: opacity(70%); 
+
+  filter: opacity(70%);
+  z-index: 2;
+}
+
+.loading{
+    height: 100%;
+  width: 100%;
+  margin: 0px;
+  position: absolute;
+  z-index: 5;
+  margin-top: 50px;
+}
+
+.loader {
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+
+  
+}
+
 
 .app {
   /* Full height */
@@ -62,7 +153,7 @@ html {
 }
 
 .eagle, .double
- {
+{
   border: 4px double ;
 }
 
@@ -107,11 +198,11 @@ html {
 .loccTitle {
 /*  position: fixed;
 */  z-index: 1;
-  text-align: center;
-  height: 100px;
-  background-color: rgb(42,185,208);
-  border-bottom: 2px solid;
-  padding-top: 20px;
+text-align: center;
+height: 100px;
+background-color: rgb(42,185,208);
+border-bottom: 2px solid;
+padding-top: 20px;
 /*  background-image: url("http://www.j-roen.nl/golf/images/lipouts.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -120,7 +211,7 @@ html {
   
 }
 
- .loccKlassement, .loccKlassement .results{
+.loccKlassement, .loccKlassement .results{
   margin-top: 100px;
 } 
 .loccKlassement .focus{
@@ -161,10 +252,10 @@ html {
   position: absolute;
   bottom:0;
   margin: 0 auto;
- width:50%;
+  width:50%;
   color: white;
   font-size: 9px;
-    text-shadow: 1px 1px #000;
+  text-shadow: 1px 1px #000;
 
 }
 
@@ -189,4 +280,34 @@ hr {
 .red {
   border: red 1px double;
   background-color: red;
+}
+
+.ball{
+  width: 100px;
+  height: 100px;
+  
+}
+
+.zoom {
+  width:100%;
+  MARGIN-LEFT: AUTO;
+  Margin-right:auto;
+  Margin-top: auto;
+  margin-bottom:auto;
+}
+
+.hidden{
+  display: none;
+}
+
+.p-25{
+  padding: 25px;
+}
+
+.vw-1{
+  font-size: 10vw;
+}
+
+.vw-2{
+  font-size: 8vw;
 }
