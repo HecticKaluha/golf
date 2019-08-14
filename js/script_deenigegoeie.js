@@ -1,26 +1,19 @@
-//"use strict";
+"use strict";
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
 const wedstrijd = 2;
 var styleId = '';
-
-
-
 $(document).ready(function() {
     J.log(window.location.href);
     if (J.get('team')) {
         $(".splash").hide();
-         //$('.container').removeClass('noScroll');
-
-    } else {   
-        $('.app').hide();
+    } else {
         $(".splash").show();
-       $(".splash").delay(3500).fadeOut(500);
-                setTimeout(function(){
-                    $('.app').fadeIn(2000);
-                },4000);
-
+        $(".li-1").hide().slideDown(500);
+        $(".li-2").hide().slideDown(800);
+        $(".li-3").hide().slideDown(1100);
+        $(".splash").delay(2500).fadeOut();
     }
     var nu = Date.now();
     if (!J.get(`cookie`) || J.get('cookie') < nu) {
@@ -47,10 +40,8 @@ $(document).ready(function() {
      })();
      */
 
-//alert(window.location.href);
 
  });
-
 
 function firstChoice(){
     if (J.get('firstChoice')){
@@ -89,7 +80,9 @@ function chooseStartHole() {
         if (result.value) {
             Swal.fire({
                 title: "Veel succes, StartHole 1!",
-                showConfirmButton: false,
+                type: 'info',
+                showConformButton: false,
+                buttons: false,
                 timer: 1550
             });
             J.set('startHole', 1);
@@ -98,6 +91,7 @@ function chooseStartHole() {
         } else {
             Swal.fire({
                 title: "Veel plezier, StartHole 10!",
+                type: 'info',
                 showConfirmButton: false,
                 timer: 1550
             });
@@ -195,11 +189,10 @@ function showRules() {
     <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
     <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li><li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>  <li>Sla alle 4 vanaf af en kies de beste ligging.</li><li>Sla alle 4 vanaf die plaats.</li><li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li><li>De laatste holed uit.</li> <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li><li>Succes!</li> </ul>`;
     $('#results').html(rules);
+    focus();
   setTimeout(function(){
     $('#results').html('');
-  },20000);
-      focus();
-
+  },5000)
 }
 
 function showNews() {
@@ -209,11 +202,10 @@ function showNews() {
         news += `<h4>${content.Titel}</h4>${content.Bericht}<hr>`;
     })
     $('#results').html(news);
+    focus();
   setTimeout(function(){
     $('#results').html('');
-  },20000);
-      focus();
-
+  },5000);
 }
 
 function focus() {
@@ -225,17 +217,17 @@ function focus() {
 
   
   function klassement(jaar){
- $('.loader').show();
- //$('.container').addClass('noScroll');
+ $('.splash').show();
   setTimeout(function(){
     klassementt(jaar);
-  },500);
+  },100);
 }
 
  function klassementt(jaar) {
     //$('.splash').show();
   
-    var datumKeuze = '', scoreTabel = '', gameSearch='';
+    var datumKeuze = '';
+    var scoreTabel = '';
     J.set('jaar', jaar);
    // J.log(jaar);
     switch (jaar) {
@@ -254,16 +246,12 @@ function focus() {
         datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
         break;
         default:
-        scoreTabel = 'scores';
-        gameSearch = `where s.game = ${jaar}`;
-
-
             // code block
         }
         console.time();
         var trArray = [];
         var team, teamNaam, totaal, score, totaal, bgColor, member, scoreBorder, parKleur, teamRow, objHole;
-        executeQuery(`select distinct s.game, s.datum from ${scoreTabel} as s ${gameSearch} group by s.game ${datumKeuze}`).forEach(function(gameResult) {
+        executeQuery(`select distinct s.game, s.datum from ${scoreTabel} as s group by s.game ${datumKeuze}`).forEach(function(gameResult) {
             //J.log(gameResult);
             objHole = {};
             totaal = 0;
@@ -347,11 +335,9 @@ function focus() {
     });
     table += "</table>";
     $("#results").html(table);
-   $('.loader').hide();
-
     focus();
      
-
+    $('.splash').hide();
     if(window.location.pathname == 'locc.html'){
     setTimeout(function() {
         klassement(J.get('jaar'));
@@ -408,7 +394,7 @@ function showNoTeamSet() {
     teams.innerHTML = '';
     result.forEach(function(team) {
         var div = document.createElement('div');
-        div.className = `col-6 col-md-4 col-lg-3 p-1 grid-item`;
+        div.className = `col-6 col-md-4 col-sm-4 col-lg-3 p-1 grid-item`;
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 p-2 bigger-text rounded text-wrap text-break';
         // de initialen ophalen van de spelers en in de knop laten zien
@@ -467,9 +453,9 @@ function showTeamSet() {
     teeButtons.innerHTML = '';
     colors.forEach(function(color) {
         var div = document.createElement('div');
-        div.className = 'p-1 col-3';
+        div.className = 'p-1 col-6 col-sm-3';
         var button = document.createElement('BUTTON');
-        button.className = 'btn-large col-12 border text-secondary big-text p-1 rounded shadow';
+        button.className = 'btn-large col-12 border text-secondary big-text p-1 rounded';
         button.innerHTML = obj.colors[color].strokes + 'x';
         button.style.backgroundColor = color;
         button.onclick = function() {
@@ -492,7 +478,7 @@ function showTeamSet() {
     scoreButtons.innerHTML = '';
     amountOfScoreButtons.forEach(function(score) {
         var div = document.createElement('div');
-        div.className = 'p-1 m-0 col-3 grid-item';
+        div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
         var button = document.createElement('BUTTON');
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
         button.innerHTML = score;
@@ -509,9 +495,9 @@ function showTeamSet() {
     obj = J.get('obj');
     for (let [key, value] of Object.entries(obj.members)) {
       var div = document.createElement('div');
-      div.className = 'p-1 m-0 col-3 grid-item';
+      div.className = 'p-1 m-0 col-3 col-sm-4 col-lg-3 grid-item';
       var button = document.createElement('BUTTON');
-      button.className = 'btn-large btn-dark col-12 border p-2 p-sm-2 p-lg-2 big-text rounded';
+      button.className = 'btn-large btn-dark col-12 border p-2 p-sm-2 p-lg-2 bigger-text rounded';
       button.innerHTML = key + ` ` + value.strokes + 'x';
 
       button.onclick = function() {
@@ -597,12 +583,11 @@ function saveHole() {
                         });
                         plussen([J.get('member'),J.get('tee')]);
                         J.set('member', `-`);
-                        if (J.get('holePlayed') !== "yes") {
+                        if (J.get('holePlayed') != "yes") {
                             deleteEmptyGame(J.get('team'));
                         }
                         J.set('holePlayed', 'yes');
                         renderTable(getTeamScore(), 'results');
-                        //getTeamScoreNew();
                         nextHole();
                     } else {
                         //show error
@@ -644,7 +629,7 @@ function showHole(hole) {
         hole = 1;
     }
     var stopHole = parseFloat(J.get('stopHole'));
-    J.log(hole);
+    //J.log(stopHole);
     if (J.get('startHole') == 10 && hole == parseFloat(stopHole) + 1 && J.get('holePlayed')) {
         finishGame();
     }
@@ -755,7 +740,7 @@ function finishGame() {
     results.innerHTML = '';
     replay.innerHTML = '';
     renderTable(getTeamScore(), 'teamScore');
-    teamSet.style.display = 'none';
+    playing.style.display = 'none';
     message.style.display = `block`;
     replay.style.display = `block`;
     var replayButton = document.createElement('button');
@@ -770,7 +755,7 @@ function finishGame() {
 }
 
 function restart() {
-    //$(".container").hide();
+    $(".container").hide();
     localStorage.clear();
     location.reload();
 }
@@ -792,8 +777,7 @@ function getTeamScore() {
     return executeQuery(query);
 }
 
-function getTeamScoreNew() {
-    //var query = `SELECT s.hole,s.game,s.kleur,s.score, s.score - h.par as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${J.get('game')} and team = ${J.get('team')}`;
-    //return executeQuery(query);
-    klassement(J.get('game'));
+function getTeamScore_() {
+    var query = `SELECT s.hole,s.game,s.kleur,s.score, s.score - h.par as verschil,s.team as team FROM scores as s left join holes as h on h.hole=s.hole group by s.id having s.game =  ${J.get('game')} and team = ${J.get('team')}`;
+    return executeQuery(query);
 }

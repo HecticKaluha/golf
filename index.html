@@ -8,20 +8,18 @@
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-<!--   <script type="text/javascript" src="js/script.js?random=<?php echo filemtime('js/script.js'); ?>"></script>
--->  
-<script type="text/javascript" src="js/script.js?v=10"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
 <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
 <link href="manifest.json" rel="manifest" />
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="css/style.css?v=8">
 <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
 <script src="https://kit.fontawesome.com/9dbd794a68.js"></script>
+
 
 <!-- 
 <meta http-equiv="refresh" content="2; URL=index.html?random=<?php echo filemtime('js/script.js'); ?>">
@@ -39,7 +37,7 @@
     <div class="loader hidden">
       <div class="loaderBg">
         <div class="loaderImg">
-          <div class="loading vw-1 text-light text-center">Loading...
+          <div class="loading bigger-text vw-1 text-light text-center">Loading...
           </div>
         </div>
       </div>
@@ -54,12 +52,12 @@
             Welkom
           </div>
           <div>
-            <div class="text-dark vw-1">
+            <div class="text-dark vw-1 bigger-text">
               The LipOuts<br>CockTailCup
             </div>
             <div class="ulPlace">
               <ul class="text-left">
-                <li><div class="li-1">4 kleuren</div></li>
+                <li><div class="li-1">4 Teekleuren</div></li>
                 <li><div class="li-2">4 afslagen</div></li>
                 <li><div class="li-3">4 putts</div></li>
               </ul>
@@ -158,7 +156,6 @@
               </div>
             </div>
             <hr>
-            <!--</div>-->
           </div>
 
 
@@ -173,20 +170,14 @@
 
 
 
-        <div class="row">
-          <div class="col-12">
-
-            <hr>
+        <div class="row p-0">
+          <div class="col-12 p-0">
             <div class="btn-group btn-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
               <button type="button" class="btn btn-success btn-block btn-secondary  p-25 bigger-text playButton" onclick="firstChoice()"><i class="fas fa-golf-ball"></i> Ik wil een ronde spelen</button>
             </div>
             <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
               <button type="button" class="btn btn-secondary" onclick="showRules()"><i class="fas fa-receipt"></i> Regelement</button>
               <button type="button" class="btn btn-secondary" onclick="showNews()"><i class="fas fa-book-reader"></i> Nieuws</button>
-
-
-
-              
             </div>
 
             <div class="mb-2 btn-group btn-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
@@ -206,7 +197,6 @@
 
             <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
               <button type="button" class="btn btn-secondary" onclick="restart()"><i class="far fa-calendar-times"></i> Reset (!)</button>
-
               <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
             </div>
 
@@ -218,7 +208,6 @@
           <div class="col-12">
             <div id="results" class="m-1 overflow-auto">
              <div id="verschil"></div>
-
            </div>
          </div>
        </div>
@@ -227,7 +216,7 @@
 
 
        <div class="row mb-3">
-        <div class="col-10 offset-1">
+        <div class="col-12">
           <img src="images/lipouts.png" class="img-fluid">
         </div>
       </div>
@@ -252,5 +241,7 @@
   </div>
 </div>
 
+<link rel="stylesheet" href="css/style.css?v=70">
+<script type="text/javascript" src="js/script.js?v=13"></script>
 
 </body>
