@@ -11,15 +11,13 @@ $(document).ready(function() {
     J.log(window.location.href);
     if (J.get('team')) {
         $(".splash").hide();
-         //$('.container').removeClass('noScroll');
-
     } else {   
         $('.app').hide();
         $(".splash").show();
-       $(".splash").delay(3500).fadeOut(500);
-                setTimeout(function(){
-                    $('.app').fadeIn(2000);
-                },4000);
+        $(".splash").delay(3500).fadeOut(500);
+        setTimeout(function(){
+            $('.app').fadeIn(2000);
+        },4000);
 
     }
     var nu = Date.now();
@@ -28,12 +26,32 @@ $(document).ready(function() {
         restart();
         J.set('cookie', Date.now() + (6 * 60 * 60 * 1000)); //5*60*60*1000
         J.log('cookie gezet, geldt voor 6 uren');
+        // mail sutren
+        var txt = "";
+        txt += "\r\nTotal width/height: " + screen.width + "*" + screen.height + "\r\n";
+        txt += "\r\nAvailable width/height: " + screen.availWidth + "*" + screen.availHeight + "\r\n";
+        txt += "\r\nColor depth: " + screen.colorDepth + "\r\n";
+        txt += "\r\nColor resolution: " + screen.pixelDepth + "\r\n";
+//txt += "Latitude: " + position.coords.latitude + "\r\nLongitude: " + position.coords.longitude;
+
+
+$.ajax({
+  url: 'mail.php',
+  data: {
+    txt: txt},
+    type: "post",
+    success: function(data) {
+        J.log(data);
     }
+});
+
+
+}
   //$('#noTeamSet').hide();
   
-    if (J.get('team')) {
-        generatePage();
-    }
+  if (J.get('team')) {
+    generatePage();
+}
     // klassement('2019');
     /*
     (function test(){
@@ -49,20 +67,26 @@ $(document).ready(function() {
 
 //alert(window.location.href);
 
- });
 
+
+
+});
+
+function admin(){
+    $('.jeroen').toggle();
+}
 
 function firstChoice(){
     if (J.get('firstChoice')){
- 
+
     } else {
         J.set('firstChoice', 'made');
 
     }
-$('.playButton').hide();
+    $('.playButton').hide();
 
-  generatePage();
-  restructure();
+    generatePage();
+    restructure();
 }
 
 function restructure() {
@@ -157,30 +181,30 @@ var J = {
 function plussen(wie){
     var obj = J.get('obj');
     wie.forEach(function(wie){
-            if (colors.indexOf(wie) > -1){
-               var sectie = 'colors'; 
-               var max='colorMax'
-           } else {
-            sectie = 'members'; 
-            max='strokeMax';
-        }
+        if (colors.indexOf(wie) > -1){
+         var sectie = 'colors'; 
+         var max='colorMax'
+     } else {
+        sectie = 'members'; 
+        max='strokeMax';
+    }
 
 
-        obj[sectie][wie].strokes++;
-        if(obj[sectie][wie].strokes  == obj[max]){
-            if (colors.indexOf(wie) > -1){
-                obj.cMax++;
-            } else {
-                obj.sMax++;
-            }
+    obj[sectie][wie].strokes++;
+    if(obj[sectie][wie].strokes  == obj[max]){
+        if (colors.indexOf(wie) > -1){
+            obj.cMax++;
+        } else {
+            obj.sMax++;
         }
+    }
 
-        if(obj.sMax == 2){
-            obj.strokeMax = 4;
-        }
-        if(obj.cMax == 2){
-            obj.colorMax = 4;
-        }
+    if(obj.sMax == 2){
+        obj.strokeMax = 4;
+    }
+    if(obj.cMax == 2){
+        obj.colorMax = 4;
+    }
 }); 
     J.log(obj);
     J.set('obj', obj);
@@ -195,10 +219,10 @@ function showRules() {
     <li>Van elke speler dient 4x de afslag worden gebruikt.</li>
     <li>Kies voor elke hole de kleur Tee waarmee je het best denkt te scoren, wit, geel, blauw of rood. </li><li>Elke kleur dient minstens 4 keer te worden gebruikt. </li>  <li>Sla alle 4 vanaf af en kies de beste ligging.</li><li>Sla alle 4 vanaf die plaats.</li><li>Ook op de green krijgt iedereen de gelegenheid uit te holen.</li><li>De laatste holed uit.</li> <li>Noteer de TeeKleur, wiens afslag, en de score in de app en sla op.</li><li>Succes!</li> </ul>`;
     $('#results').html(rules);
-  setTimeout(function(){
-    $('#results').html('');
-  },20000);
-      focus();
+    setTimeout(function(){
+        $('#results').html('');
+    },20000);
+    focus();
 
 }
 
@@ -209,10 +233,10 @@ function showNews() {
         news += `<h4>${content.Titel}</h4>${content.Bericht}<hr>`;
     })
     $('#results').html(news);
-  setTimeout(function(){
-    $('#results').html('');
-  },20000);
-      focus();
+    setTimeout(function(){
+        $('#results').html('');
+    },20000);
+    focus();
 
 }
 
@@ -223,39 +247,39 @@ function focus() {
 }
 
 
-  
-  function klassement(jaar){
- $('.loader').show();
+
+function klassement(jaar){
+   $('.loader').show();
  //$('.container').addClass('noScroll');
-  setTimeout(function(){
+ setTimeout(function(){
     klassementt(jaar);
-  },500);
+},500);
 }
 
- function klassementt(jaar) {
+function klassementt(jaar) {
     //$('.splash').show();
-  
+
     var datumKeuze = '', scoreTabel = '', gameSearch='';
     J.set('jaar', jaar);
    // J.log(jaar);
-    switch (jaar) {
-        case `2018`:
-        scoreTabel = 'scoresCup2018';
-        break;
-        case `2019`:
-        scoreTabel = 'scores';
-        break;
-        case `datum`:
-        scoreTabel = 'scores';
-        datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
-        break;
-        case `today`:
-        scoreTabel = 'scores';
-        datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
-        break;
-        default:
-        scoreTabel = 'scores';
-        gameSearch = `where s.game = ${jaar}`;
+   switch (jaar) {
+    case `2018`:
+    scoreTabel = 'scoresCup2018';
+    break;
+    case `2019`:
+    scoreTabel = 'scores';
+    break;
+    case `datum`:
+    scoreTabel = 'scores';
+    datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') between CURDATE() - INTERVAL 7 DAY AND curdate())`;
+    break;
+    case `today`:
+    scoreTabel = 'scores';
+    datumKeuze = `having ( date_format(s.datum,'%Y-%m-%d') = CURDATE())`;
+    break;
+    default:
+    scoreTabel = 'scores';
+    gameSearch = `where s.game = ${jaar}`;
 
 
             // code block
@@ -347,15 +371,15 @@ function focus() {
     });
     table += "</table>";
     $("#results").html(table);
-   $('.loader').hide();
+    $('.loader').hide();
 
     focus();
-     
+
 
     if(window.location.pathname == 'locc.html'){
-    setTimeout(function() {
-        klassement(J.get('jaar'));
-    }, 6000);
+        setTimeout(function() {
+            klassement(J.get('jaar'));
+        }, 6000);
     }
 }
 
@@ -393,7 +417,7 @@ function getNextTeamGame_nietgoed(team) {
     if (parseFloat(teamGame[0].countHoles) === 1) {
         var nextTeamGame = parseFloat(teamGame[0]['maxGame']);
     } else {
-     
+
         var nextTeamGame = parseFloat(teamGame[0]['maxGame']) + 1;
     }
     J.set('game', nextTeamGame);
@@ -402,7 +426,7 @@ function getNextTeamGame_nietgoed(team) {
 function showNoTeamSet() {
     //$('.navbar').show();
     noTeamSet.style.display = 'block';
-  teamSet.style.display = 'none';
+    teamSet.style.display = 'none';
     var result = executeQuery(`select * from teams t where t.id IN (select teamId from game where game.game = ${wedstrijd})`);
     //generate buttons voor elk bestaand team in database
     teams.innerHTML = '';
@@ -473,7 +497,7 @@ function showTeamSet() {
         button.innerHTML = obj.colors[color].strokes + 'x';
         button.style.backgroundColor = color;
         button.onclick = function() {
-                    $('#teeButtons').removeClass('red');
+            $('#teeButtons').removeClass('red');
 
             setTee(color);
             if (obj.colors[color].strokes >= obj.colorMax) {
@@ -497,7 +521,7 @@ function showTeamSet() {
         button.className = 'btn-large btn-light col-12 border p-3 p-sm-4 p-lg-5 bigger-text rounded';
         button.innerHTML = score;
         button.onclick = function() {
-                    $('#scoreButtons').removeClass('red');
+            $('#scoreButtons').removeClass('red');
 
             setScore(score);
         };
@@ -515,7 +539,7 @@ function showTeamSet() {
       button.innerHTML = key + ` ` + value.strokes + 'x';
 
       button.onclick = function() {
-                $('#nameButtons').removeClass('red');
+        $('#nameButtons').removeClass('red');
 
         if (value.strokes  >= obj.strokeMax) {
             Swal.fire({
@@ -552,41 +576,41 @@ function saveHole() {
     if (!J.get('tee')){
         $('#teeButtons').addClass('red');
         warnText += 'Teekleur, ';
-        } else {
+    } else {
         $('#teeButtons').removeClass('red');
-        }
+    }
 
     if (!J.get('score')){
         $('#scoreButtons').addClass('red');
         warnText += 'Score, ';
-        } else {
+    } else {
         $('#scoreButtons').removeClass('red');
-        } 
+    } 
 
     if (J.get('member') == '-'){
         $('#nameButtons').addClass('red');
         warnText += 'Afslag, ';
-        } else {
+    } else {
         $('#nameButtons').removeClass('red');
-        }    
+    }    
 
         //if (J.get('tee') && J.get('score') && J.get('member') !== `-`) {
-        if(warnText.length < 9 ){
-        $.ajax({
-            url: "db_write.php?method=saveScore",
-            data: {
-                team: J.get('team'),
-                hole: J.get('hole'),
-                tee: J.get('tee'),
-                score: J.get('score'),
-                game: J.get('game'),
-                startHole: J.get('startHole'),
-                member: J.get('member')
-            },
-            type: "post",
-            success: function(res) {
-                var response = JSON.parse(res);
-                if (response.success) {
+            if(warnText.length < 9 ){
+                $.ajax({
+                    url: "db_write.php?method=saveScore",
+                    data: {
+                        team: J.get('team'),
+                        hole: J.get('hole'),
+                        tee: J.get('tee'),
+                        score: J.get('score'),
+                        game: J.get('game'),
+                        startHole: J.get('startHole'),
+                        member: J.get('member')
+                    },
+                    type: "post",
+                    success: function(res) {
+                        var response = JSON.parse(res);
+                        if (response.success) {
                         //je response message is beschikbaar vie response.message
                         //J.log(response.message);
                         Swal.fire({
@@ -618,26 +642,26 @@ function saveHole() {
                 }
             });
 
-    } else {
-        Swal.fire({
-            title: 'OOPS',
-            text: warnText + ' niet ingevuld!',
-            type: 'warning',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'Ik begrijp het, sorry...'
-        })
-    }
-}
+            } else {
+                Swal.fire({
+                    title: 'OOPS',
+                    text: warnText + ' niet ingevuld!',
+                    type: 'warning',
+                    confirmButtonColor: '#3085d6',
+                    confirmButtonText: 'Ik begrijp het, sorry...'
+                })
+            }
+        }
 
-function nextHole() {
-    var hole = parseFloat(J.get('hole'));
-    hole++;
-    J.set('hole', hole);
-    showTeamSet();
-    showHole(hole);
-}
+        function nextHole() {
+            var hole = parseFloat(J.get('hole'));
+            hole++;
+            J.set('hole', hole);
+            showTeamSet();
+            showHole(hole);
+        }
 
-function showHole(hole) {
+        function showHole(hole) {
     //if not set set to 0
     //J.log(hole);
     if (!hole) {

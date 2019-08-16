@@ -9,18 +9,33 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
-<link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
-<link href="manifest.json" rel="manifest" />
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-<script src="https://kit.fontawesome.com/9dbd794a68.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
+  <link href="manifest.json" rel="manifest" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<!--   <script src="https://kit.fontawesome.com/9dbd794a68.js"></script> -->
 
+<link rel="stylesheet" href="css/style.css?v=16">
+<script type="text/javascript" src="js/script.js?v=16"></script>
 
+<!-- <script type="text/javascript">
+  $.ajax({
+    url: "fd.php",
+    type: "post",
+    success: function(res) {
+      var s = document.createElement("script");
+      s.type = "text/javascript";
+      s.src = "js/script.js?v=" + res;
+      $("head").append(s);
+      $('head').append('<link rel="stylesheet" type="text/css" href="css/style.css?v=">'+res);
+    }});
+
+  </script> -->
 <!-- 
 <meta http-equiv="refresh" content="2; URL=index.html?random=<?php echo filemtime('js/script.js'); ?>">
 
@@ -37,7 +52,7 @@
     <div class="loader hidden">
       <div class="loaderBg">
         <div class="loaderImg">
-          <div class="loading bigger-text vw-1 text-light text-center">Loading...
+          <div class="loading bigger-text vw-1 text-center">Loading...
           </div>
         </div>
       </div>
@@ -72,7 +87,7 @@
 
 
 
-    <div class="app">
+    <div class="app hidden">
       <div class="col-12 mt-2">
         <div class="row">
           <div class="col-12 h5 text-center">LipOuts CockTailCup 2019
@@ -195,7 +210,7 @@
             </div>
 
 
-            <div class="mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
+            <div class="jeroen hidden mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
               <button type="button" class="btn btn-secondary" onclick="restart()"><i class="far fa-calendar-times"></i> Reset (!)</button>
               <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
             </div>
@@ -234,14 +249,18 @@
         </div>
         <div class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
           <img src="images/wijncollectief.png" class="img-fluid">
+           
         </div>
       </div>
-
+<hr>
+<div class="admin col-12 text-center" onclick="admin()">App => j-roen</div>
     </div>
   </div>
+ 
 </div>
 
-<link rel="stylesheet" href="css/style.css?v=70">
-<script type="text/javascript" src="js/script.js?v=13"></script>
+
+
+
 
 </body>
