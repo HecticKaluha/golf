@@ -2,12 +2,14 @@
 const colors = ['red', 'blue', 'yellow', 'white'];
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
+const holes = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18];
 const wedstrijd = 2;
 var styleId = '';
-
+var txt = "";
 
 
 $(document).ready(function() {
+    $('.birdies').hide();
     J.log(window.location.href);
     if (J.get('team')) {
         $(".splash").hide();
@@ -17,60 +19,200 @@ $(document).ready(function() {
         $(".splash").delay(3500).fadeOut(500);
         setTimeout(function(){
             $('.app').fadeIn(2000);
-        },4000);
+        },1000);
 
     }
     var nu = Date.now();
     if (!J.get(`cookie`) || J.get('cookie') < nu) {
         localStorage.clear();
-        restart();
+        //restart();
         J.set('cookie', Date.now() + (6 * 60 * 60 * 1000)); //5*60*60*1000
         J.log('cookie gezet, geldt voor 6 uren');
         // mail sutren
-        var txt = "";
-        txt += "\r\nTotal width/height: " + screen.width + "*" + screen.height + "\r\n";
-        txt += "\r\nAvailable width/height: " + screen.availWidth + "*" + screen.availHeight + "\r\n";
-        txt += "\r\nColor depth: " + screen.colorDepth + "\r\n";
-        txt += "\r\nColor resolution: " + screen.pixelDepth + "\r\n";
-//txt += "Latitude: " + position.coords.latitude + "\r\nLongitude: " + position.coords.longitude;
+    //}
+
+    txt += "\r\nTotal width/height: " + screen.width + "*" + screen.height + "\r\n";
+    txt += "\r\nAvailable width/height: " + screen.availWidth + "*" + screen.availHeight + "\r\n";
+    txt += "\r\nColor depth: " + screen.colorDepth + "\r\n";
+    txt += "\r\nColor resolution: " + screen.pixelDepth + "\r\n";
+    J.set('txt',txt);
+   // getLocation();
 
 
-$.ajax({
-  url: 'mail.php',
-  data: {
-    txt: txt},
-    type: "post",
-    success: function(data) {
-        J.log(data);
-    }
-});
 
 
 }
-  //$('#noTeamSet').hide();
-  
-  if (J.get('team')) {
+
+
+if (J.get('team')) {
     generatePage();
 }
-    // klassement('2019');
-    /*
-    (function test(){
-        console.time();
-        for (i=0 ; i<100 ; i++){
-            showNoTeamSet();
-        }
-
-        console.timeEnd();
-
-     })();
-     */
-
-//alert(window.location.href);
 
 
-
-
+$(document).scroll(function() {
+  var y = $(this).scrollTop();
+  if (y > 100) {
+    $('.under').fadeIn(500);
+} else {
+    $('.under').fadeOut(500);
+}
 });
+
+
+
+
+
+
+}); //van onLoad
+
+// function birdies(){
+//      $('.app').show();
+
+//     $('.noTeamSet').show();
+// }
+
+
+
+
+
+function birdies() {
+    $('.birdies').show();
+    var result = executeQuery(`select * from teams t where t.id IN (select teamId from game where game.game = ${wedstrijd})`);
+    //generate buttons voor elk bestaand team in database
+    $('.birdieTeams').html('');
+    var div = document.createElement('div');
+    div.className = `col-12 p-0`;
+    result.forEach(function(team) {
+
+        var button = document.createElement('BUTTON');
+        button.className = 'btn-large btn-danger col-3 p-1 bigger-text rounded text-wrap text-break';
+        // de initialen ophalen van de spelers en in de knop laten zien
+        // var result = executeQuery(`select * from teamleden where teamId= ${team.id}`);
+        // var initialen = '';
+        // result.forEach(function(names) {
+        //     initialen += ' ' + names.name;
+        // });
+        button.innerHTML = team.team; // + '<br>' + initialen
+        button.onclick = function() {
+            J.set('birdieTeam', team.id);
+            birdieMembers();
+        }
+        div.appendChild(button);
+        $('.birdieTeams').append(div);
+    });
+    //restructureBirdies();
+}
+
+
+function birdieMembers(){
+    var result = executeQuery(`select * from teamleden where teamId= ${J.get('birdieTeam')}`);
+    $('.birdieTeams').html('');
+    var div = document.createElement('div');
+    div.className = `col-12 p-0`;
+
+    result.forEach(function(team) {
+        var button = document.createElement('BUTTON');
+        button.className = 'btn-large btn-danger col-3 p-1 bigger-text rounded text-wrap text-break';
+        button.innerHTML = team.name + '<br>';
+        button.onclick = function() {
+            J.set('birdieMember', team.id);
+            holeKeuze();
+        }
+        div.appendChild(button);
+        $('.birdieTeams').append(div);
+    });
+   //restructureBirdies(); 
+}
+
+
+
+
+function holeKeuze(){
+    $('.birdieTeams').html('');
+    var div = document.createElement('div');
+    div.className = `col-12 p-0`;
+
+    holes.forEach(function(x){
+        var button = document.createElement('BUTTON');
+        button.className = 'btn-large btn-danger col-2 p-1 bigger-text rounded';
+        button.innerHTML = `H` + x;
+        button.onclick = function() {
+            localStorage.setItem('birdieHole', x);
+            //waarom is x hier steeds 19???
+            addBirdie();
+        }
+        $('.birdieTeams').append(button);
+        div.appendChild(button);            
+        $('.birdieTeams').append(div);
+
+
+    }); 
+
+    //restructure();     
+}
+
+
+function birdieKlassement(){
+
+    renderTable(executeQuery('SELECT hole as hole,teamleden.name as naam, teams.team as Team, DATE_FORMAT(date, " %d %m %Y") as datum FROM `birdies` left join teamleden on birdies.member = teamleden.id left join teams on teamleden.teamId = teams.id order by hole'), 'results');
+    // $('#birdieKlassement').delay(10000).toggle(500);
+}
+
+
+function addBirdie(){
+
+    var marker = prompt("Geef je marker op", "Harry Potter");
+
+if (marker) {
+    executeQuery(`INSERT INTO birdies (  member , hole, marker) VALUES ( ${J.get('birdieMember')},  ${J.get('birdieHole')} ,  ${marker} )`);//,  ${J.get('marker')} 
+    Swal.fire({
+        title: 'Birdie Opgeslagen!',
+        type: 'success',
+        showConfirmButton: false,
+        timer: 1500,
+    });
+
+    $('.birdies').fadeOut(500);}
+}
+
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        J.log("Geolocation is not supported by this browser.");
+    }
+}
+
+function showPosition(position) {
+    txt = J.get('txt');
+    txt += "Latitude: " + position.coords.latitude + 
+    "\nLongitude: " + position.coords.longitude + "\nPrecisie: " + position.coords.accuracy +  " meter.";
+
+    var url=`https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=5d55dc0ff722451b8be8cd19f635c287`;
+    fetch(url)
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(myJson) {
+        txt += myJson.results[0].components.suburb;
+        ALERT(TXT);
+        return txt;
+    })
+    .then(function(txt){
+      alert(txt);
+      $.ajax({
+          url: 'mail.php',
+          type: "post",
+          data: {'txt': J.get('txt')},
+
+          success: function(data) {
+            J.log(data);
+        }
+    });
+  });
+}
+
 
 function admin(){
     $('.jeroen').toggle();
@@ -94,6 +236,16 @@ function restructure() {
     $(document).imagesLoaded().done(function() {
         //alert("loaded");
         $('#teams').masonry({
+            itemSelector: '.grid-item'
+        });
+    })
+}
+
+function restructureBirdies() {
+    //return;
+    $(document).imagesLoaded().done(function() {
+        //alert("loaded");
+        $('.birdieTeams').masonry({
             itemSelector: '.grid-item'
         });
     })
@@ -182,9 +334,9 @@ function plussen(wie){
     var obj = J.get('obj');
     wie.forEach(function(wie){
         if (colors.indexOf(wie) > -1){
-         var sectie = 'colors'; 
-         var max='colorMax'
-     } else {
+           var sectie = 'colors'; 
+           var max='colorMax'
+       } else {
         sectie = 'members'; 
         max='strokeMax';
     }
@@ -249,7 +401,7 @@ function focus() {
 
 
 function klassement(jaar){
-   $('.loader').show();
+ $('.loader').show();
  //$('.container').addClass('noScroll');
  setTimeout(function(){
     klassementt(jaar);
@@ -706,6 +858,7 @@ function executeQuery(query) {
             query: query,
         },
         success: function(res) {
+            J.log(res);
             var response = JSON.parse(res);
             if (response.success) {
                 //je response message (result van de query) is beschikbaar via response.message
@@ -728,6 +881,7 @@ function executeQuery(query) {
 }
 
 function renderTable(jsonResult, renderName) {
+    var keyNot = ['id', 'game', 'team'];
     var divToRenderIn = null;
     if (!renderName) {
         divToRenderIn = results;
@@ -754,7 +908,7 @@ function renderTable(jsonResult, renderName) {
         tableRow.className = 'text-wrap';
         //loop over alle columns van de row
         for (let [key, value] of Object.entries(row)) {
-            if (key === 'id' || key === 'game' || key === 'team') continue;
+            if (keyNot.indexOf(key) > -1) continue;
             //genereren van alle headers (alleen eerste iteratie)
             if (index === 0) {
                 var theader = document.createElement('td');
