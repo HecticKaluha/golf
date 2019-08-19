@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>
+    LOCC
+  </title>
+  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+  <script type="text/javascript" src="js/script.js"></script> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+</html>
+
+<body class="bg-info">
+
+  <div class="row fixed-top">
+    <div class="loccTitle col-12 col-md-8 col-lg-8 h1">
+      The LipOuts CocktailCup
+    </div>
+    <div class="loccTitle col-12 col-md-4 col-lg-4">
+      <img src="images/lipouts.png" id="loImg">
+    </div>
+  </div>
+
+  <div class="row loccKlassement">
+    <div class="focus"></div>
+    <div id="results" class="col-12  p-5 m-3"></div>
+  </div>
+
+  <div class="row col-12 col-lg-12">
+    <button id="queryButton" class="btn  col-3 offset-1 col-lg-3 text-light p-1 p-sm-1 " onclick="klassement('2019')">2019
+           </button>
+    <button id="queryButton" class="btn   col-3  col-lg-3 text-light p-1 p-sm-1 " onclick="klassement('2018')">2018
+           </button>
+    <button id="queryButton" class="btn   col-3  col-lg-3 text-light p-1 p-sm-1 " onclick="klassement('today')">Vandaag
+           </button>
+  </div>
+
+  <div class="row col-12 col-lg-12 m-3">
+
+    <div class="text-dark col-lg-6 col-6 mb-1">De prijs voor het best geklede team werd gesponsord door:
+    </div>
+    <div class="text-dark col-lg-6 col-6 mb-1">De wijn werd gesponsord door:
+    </div>
+    <div class="text-dark col-lg-6 col-6 col-auto mb-3">
+      <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
+    </div>
+    <div class="text-dark col-lg-6 col-6 col-auto mb-3">
+      <img src="images/wijncollectief.png" class="img-fluid h-55">
+    </div>
+  </div>
+
+  </div>
+
+</body>
