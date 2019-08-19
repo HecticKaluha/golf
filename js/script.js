@@ -152,10 +152,16 @@ function holeKeuze(){
 }
 
 
-function birdieKlassement(){
+function birdieKlassement(member){
 
-    renderTable(executeQuery('SELECT hole as hole,teamleden.name as naam, teams.team as Team, DATE_FORMAT(date, " %d %m %Y") as datum FROM `birdies` left join teamleden on birdies.member = teamleden.id left join teams on teamleden.teamId = teams.id order by hole'), 'results');
-    // $('#birdieKlassement').delay(10000).toggle(500);
+    if (member){
+        renderTable(executeQuery( `SELECT hole as hole,teamleden.name as naam, teams.team as Team, birdies.marker as marker, DATE_FORMAT(date, " %d %m %Y") as datum FROM birdies left join teamleden on birdies.member = teamleden.id left join teams on teamleden.teamId = teams.id where birdies.member = ${member} order by hole`,'results'));
+ 
+    } else {
+
+        renderTable(executeQuery('SELECT hole as hole,teamleden.name as naam, teams.team as Team, birdies.marker as marker, DATE_FORMAT(date, " %d %m %Y") as datum, link as link FROM `birdies` left join teamleden on birdies.member = teamleden.id left join teams on teamleden.teamId = teams.id order by hole'), 'results');
+        // $('#birdieKlassement').delay(10000).toggle(500);
+    }
 }
 
 
@@ -164,7 +170,11 @@ function addBirdie(){
     var marker = prompt("Geef je marker op", "Harry Potter");
 
 if (marker) {
-    executeQuery(`INSERT INTO birdies (  member , hole, marker) VALUES ( ${J.get('birdieMember')},  ${J.get('birdieHole')} ,  ${marker} )`);//,  ${J.get('marker')} 
+    var query = `INSERT INTO birdies (  member , hole, marker, link) VALUES ( ${J.get('birdieMember')},  ${J.get('birdieHole')} , "${marker}", ${J.get('birdieMember')} )`;
+      // var query = `INSERT INTO birdies (  member , hole, marker) VALUES ( ${J.get('birdieMember')},  ${J.get('birdieHole')} , "${marker}"  )`;
+
+   J.log(query);
+   executeQuery(query);
     Swal.fire({
         title: 'Birdie Opgeslagen!',
         type: 'success',
@@ -858,8 +868,9 @@ function executeQuery(query) {
             query: query,
         },
         success: function(res) {
-            J.log(res);
             var response = JSON.parse(res);
+            J.log(response);
+
             if (response.success) {
                 //je response message (result van de query) is beschikbaar via response.message
                 result = response.message;
@@ -923,6 +934,10 @@ function renderTable(jsonResult, renderName) {
             if (key === 'kleur') {
                 scoreRowData.style.backgroundColor = value;
             }
+            if (key === 'link') {
+                scoreRowData.innerHTML = `<button class='btn btn-light' onClick='birdieKlassement(${value});'>Alle</button>`;
+            }
+
             tableRow.appendChild(scoreRowData);
         }
         document.getElementById(`${renderName}-tbody`).appendChild(tableRow);
