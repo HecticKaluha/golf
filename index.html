@@ -1,286 +1,317 @@
-<!DOCTYPE html>
-<html>
-
+<!doctype html>
+<html lang="en">
 <head>
-  <title>
-    LOCC
-  </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-  <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png"> 
-  <link href="manifest.json" rel="manifest" />
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css?v=20">
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
-  <!--   <script src="https://kit.fontawesome.com/9dbd794a68.js"></script> -->
+    <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" sizes="152x152" href="images/icons/icon-152x152.png">
+    <link href="manifest.json" rel="manifest" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
 
-  <link rel="stylesheet" href="css/style.css?v=16">
-  <script type="text/javascript" src="js/script.js?v=27"></script>
 
-<!-- <script type="text/javascript">
-  $.ajax({
-    url: "fd.php",
-    type: "post",
-    success: function(res) {
-      var s = document.createElement("script");
-      s.type = "text/javascript";
-      s.src = "js/script.js?v=" + res;
-      $("head").append(s);
-      $('head').append('<link rel="stylesheet" type="text/css" href="css/style.css?v=">'+res);
-    }});
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
-  </script> -->
-<!-- 
-<meta http-equiv="refresh" content="2; URL=index.html?random=<?php echo filemtime('js/script.js'); ?>">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" crossorigin="anonymous"></script>
 
--->
-<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+    <script type="text/javascript" src="js/script.js?v=43"></script>
+
+
+
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top p-1">
+        <a class="navbar-brand p-1" href="#">LipOuts CockTailCup</a>
+        <button class="navbar-toggler p-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon m-0 mr-2"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="location.reload();" href="#">
+                    <i class="material-icons"> home</i>
+                  Home</a> <!--&#127968; -->
+                </li>
+                <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="firstChoice()" href="#">
+                  <i class="material-icons">golf_course</i> Ronde Spelen</a><!--&#9971;-->
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdies()" href="#"><i class="material-icons">flight</i> Birdie ingeven</a> <!--&#128038;-->
+                </li>
+
+                <!-- Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                       <!--  &#127942; --> <i class="material-icons"> emoji_events</i> Klassement
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2019')" href="#"><!-- &#127942; --><i class="material-icons"> emoji_events</i> CockTailCup 2019</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2018')" href="#"><!-- &#127942; --><i class="material-icons"> emoji_events</i> CockTailCup 2018</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdieKlassement()" href="#"><!-- &#128038; --><i class="material-icons">flight</i> Bidie-klassement</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        <!-- &#8505; --><i class="material-icons">info</i> Info
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showRules()" href="#"> <!-- &#9888; --><i class="material-icons">check_box</i> Regelement</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showNews()" href="#"><!-- &#128240; --><i class="material-icons">post_add</i> Nieuws</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showInfo()" href="#"><!-- &#8505; --><i class="material-icons">group</i> Over LOCC</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                        <!-- &#127992; --><i class="material-icons">search</i> Admin
+                    </a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="prepareScore()" href="#">&#9940; Prepare Score</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="pwRestart()" href="#">&#9940; Reset</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="firstChoice('strokePlay')" href="#">&#9940; noLocc</a>
+
+
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <title>LipOuts CockTailCup</title>
 </head>
 
-</html>
-
-<body class="bg-info">
-  <div class="top m-0"></div>
-
-  <div class="container col-12 m-0">
+<body class='bg-info p-2'>
 
 
-    <div class="birdies hidden row`col-12">
-      <h3 class="text-center">Birdie Klassement</h3>
-      <div class="birdieTeams col-12">
-      </div>
-      <div class="birdieMembers col-12">
-      </div>
-    </div>
+    <div class="container-fluid mt-5">
 
-
-    <div class="loader hidden">
-      <div class="loaderBg">
-        <div class="loaderImg">
-          <div class="loading bigger-text vw-1 text-center">Loading...
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class='splash m-0'>
-      <div class="splashBg col-12"></div>
-      <div class="row onTop col-12">
-        <div class="text-dark text-center col-12 m-1">
-
-          <div class="vw-2 text-dark">
-            Welkom
-          </div>
-          <div>
-            <div class="text-dark vw-1 bigger-text">
-              The LipOuts<br>CockTailCup
+        <div class="row d-none">
+            <div class="col">
+                een
             </div>
-            <div class="ulPlace">
-              <ul class="text-left">
-                <li><div class="li-1">4 Teekleuren</div></li>
-                <li><div class="li-2">4 afslagen</div></li>
-                <li><div class="li-3">4 putts</div></li>
-              </ul>
+            <div class="col">
+                twee
             </div>
-            <div class='logo'>
-              <img src="images/lipouts.png" class="img-fluid">
+            <div class="col">
+                drie
             </div>
-          </div>
         </div>
-      </div>
-    </div>
 
+        <!-- start splash-->
+        <div class=" row fullScreen p-0" id="splash">
+            <div class="col-12 splashBg position-absolute h-100 w-100">
+            </div>
+            <div class="col-12 position-absolute z-1 pt-3 h-100 w-100 p-0">
 
-
-    <div class="app hidden">
-      <div class="col-12 mt-2">
-        <div class="row">
-          <div class="col-12 h5 text-center">LipOuts CockTailCup 2019
-          </div>
+                <div class="col-12 text-dark h1 text-center">
+                    The LipOuts<br>CockTailCup
+                </div>
+                <div class="col-12 ulPlace">
+                    <ul class="text-left">
+                        <li>
+                            <div class="li-1">4 Teekleuren</div>
+                        </li>
+                        <li>
+                            <div class="li-2">4 afslagen</div>
+                        </li>
+                        <li>
+                            <div class="li-3">4 putts</div>
+                        </li>
+                    </ul>
+                </div>
+                <!--         <div class="spinner-border "></div> -->
+                <div class='col-12 logo'>
+                    <img src="images/lipouts.png" class="img-fluid">
+                </div>
+            </div>
         </div>
-        <!-- alleen zichtbaar wanneer een team gezet is -->
-        <!-- wordt verwijderd uit dom zodra een team gekozen is -->
-        <div id="noTeamSet" class='row hidden'>
-          <div class="row mb-2">
+
+        <!-- end splash-->
+
+        <div class="row loader fullScreen hidden" id='loader'>
+            <div class="col-12 loaderBg w-100 h-100"></div>
+            <div class="loading z-1 bigger-text vw-1">Loading...
+                <div class="spinner-border "></div>
+            </div>
+        </div>
+
+        <div class="row hidden p-3" id="birdies">
+            <div class="col-12 title h5">Birdie Klassement</div>
+            <div class="col-12" id="birdieInfo"></div>
+            <div id="birdieTeams" class="row"></div>
+        </div>
+
+
+        <!-- app start -->
+
+
+        <div class="row" id="app">
             <div class="col-12">
-              <div class="h3 col-12 bigger-text text-center">Selecteer je team</div>
-              <div class="col-12">
-                <div class="row" id="teams">
+
+<!--                 <div class="row">
+                    <div class="col-12 h5 text-center">LipOuts CockTailCup
+                    </div>
+                </div> -->
+
+
+                <div id="noTeamSet" class='row hidden'>
+                    <div class="row mb-2">
+                        <div class="col-12">
+                            <div class="h3 col-12 bigger-text text-center">Selecteer je team</div>
+                            <div class="col-12">
+                                <div class="row" id="teams">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <div id="teamSet" class="row hidden">
+                    <div class="row p-0">
+                        <div class="col-12 mb-3 text-center">
+                            <div id="checkContainer" class="checkContainer p-1">
+                                <div class="row" style="margin-top: -15px;">
+                                    <div class="check col-4 m-0 p-0 vw-1 " id="holeCheck">--</div>
+                                    <div class="check col-3 m-0 p-0 locc" id="memberCheck">--</div>
+                                    <div class="check col-3 m-0 p-0 locc" id="scoreCheck">--</div>
+                                    <div class="check col-2 m-0 p-0 locc w-100">
+                                        <div id="saldo" class="text-center w-100">
+                                            0
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row m-0">
+                                    <div class="col-4 m-0 p-0">HOLE</div>
+                                    <div class="col-3 m-0 p-0 locc">SPELER</div>
+                                    <div class="col-3 m-0 p-0 locc">SCORE</div>
+                                    <div class="col-2 m-0 p-0 locc">2P</div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row locc">
+                        <div class="col-12 mb-2">
+                            <div class="col-12">
+                                <div class="row" id="teeButtons">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 mb-2">
+                            <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                            <div class="col-12">
+                                <div class="row" id="nameButtons"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="row locc">
+                        <div class="col-12 mb-2">
+                            <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
+                            <div class="col-12">
+                                <div class="row" id="scoreButtons">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row locc">
+                        <div class="col-12">
+                            <div class="m-1">
+                                <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="prepareSaveHole()"> Opslaan
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                </div>
+
+                <div class="strokePlay locc hidden">
+                    <button class="btn btn-warning col-12 mb-2" onclick="nextHole()">Volgende hole
+                    </button>
+                </div>
+
+
+                <div class="row" id="finished">
+                    <div class="col-12 text-center">
+                        <h1 class="mb-1" id="message"></h1>
+                    </div>
+                </div>
+
+
+                <div class="row p-0 locc">
+                    <button type="button" id="playButton" class=" col-12 btn btn-success btn-block p-5 bigger-text vw-2" onclick="firstChoice()">&#9971; ronde spelen</button>
+                </div>
+
             </div>
-          </div>
+
+            <div class="row strokePlay locc scroll-x">
+                <div class="focus"></div>
+                <div id="results" class="col-12 m-1"></div>
+                <div id="verschil" class="col-12 m-1"></div>
+            </div>
+
+
         </div>
 
-        <!-- zichtbaar wanneer een team geselecteerd is -->
-        <div id="teamSet" class='hidden'>
-          <!--<div id="playing">-->
-            <div class="row mb-0">
-              <div class="col-12 mb-3">
-                <div id="checkContainer" class="checkContainer text-center">
-                  <div class="row mb-0">
-                    <div class="check col-3 m-0 p-0" id="holeCheck">--</div>
-                    <div class="check col-3 m-0 p-0" id="colorCheck">--</div>
-                    <div class="check col-3 m-0 p-0" id="scoreCheck">--</div>
-                    <div class="check col-3 m-0 p-0 cel text-center"><div id="saldo" class="text-center">
-                      0
-                    </div></div>
 
-                  </div>
-                  <div class="row">
-                    <div class="col-3 m-0 p-0">HOLE</div>
-                    <div class="col-3 m-0 p-0">SPELER</div>
-                    <div class="col-3 m-0 p-0">SCORE</div>
-                    <div class="col-3 m-0 p-0">2P</div>
+        <!-- app end -->
 
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 mb-2">
-                <!--                     <h2 class="h3 text-center">Tee</h2>
-                -->
+        <div class="row locc text-center m-0 d-flex flex-column justify-content-center" id="footer">
+            <hr>
+            <div class="row mb-3">
                 <div class="col-12">
-                  <div class="row" id="teeButtons">
-                  </div>
+                    <img src="images/lipouts.png" class="img-fluid">
                 </div>
-              </div>
             </div>
-
             <div class="row">
-              <div class="col-12 mb-2">
-                <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-                <div class="col-12">
-                  <div class="row" id="nameButtons"></div>
+                <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-12 mb-2">
-                <!-- <h2 class="h3 col-12 text-center">Score</h2> -->
-                <div class="col-12">
-                  <div class="row" id="scoreButtons">
-                  </div>
+                <div id="vanLange" class="text-dark col-12 mb-3">
+                    <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
                 </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-12">
-                <div class="m-1">
-                  <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="saveHole()"><i class="fas fa-golf-ball"></i> Opslaan
-                  </button>
-                </div>
-              </div>
             </div>
             <hr>
-          </div>
-
-
-          <div class="row" id="finished">
-            <div class="col-12 text-center">
-              <h1 class="mb-1" id="message"></h1>
-              <div id="replay" class="m-1"></div>
-            </div>
-          </div>
-        <!--           <div class="col-12" id="klassement">
-        </div> -->
-
-
-
-        <div class="row p-0">
-          <div class="col-12 p-0">
-            <div class="btn-group btn-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-success btn-block btn-secondary  p-25 bigger-text playButton" onclick="firstChoice()"><i class="fas fa-golf-ball"></i> Ik wil een ronde spelen</button>
-            </div>
-            <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-secondary" onclick="showRules()"><i class="fas fa-receipt"></i> Regelement</button>
-              <button type="button" class="btn btn-secondary" onclick="showNews()"><i class="fas fa-book-reader"></i> Nieuws</button>
-            </div>
-            <div class="btn-group bun-group-lg mb-2 col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-secondary" onclick="birdies()">birdie aanmelden</button>
-              <button type="button" class="btn btn-secondary" onclick="birdieKlassement()">birdieKlassement</button>
-            </div>
-
-            <div class="mb-2 btn-group btn-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
-              <div class="btn-group col-12 p-0"  role="group">
-                <button id="btnGroupDrop1" type="button" class="btn btn-warning dropdown-toggle col-12" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-align-justify"></i> Klassement
-                </button>
-                <div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                  <a class="dropdown-item" href="#" onclick="klassement('2019')">2019</a>
-                  <a class="dropdown-item" href="#" onclick="klassement('2018')">2018</a>
-                  <a class="dropdown-item" href="#" onclick="klassement('today')">Vandaag</a>
-                  <a class="dropdown-item" href="#" onclick="klassement('datum')">Laatste week</a>
+            <div class="row">
+                <div class="text-dark col-12 mb-1">De wijn voor The Longest en The Neary werd gesponsord door:
+                </div>
+                <div class="text-dark col-12 mb-3">
+                    <img src="images/wijncollectief.png" class="img-fluid">
 
                 </div>
-              </div>
             </div>
 
 
-            <div class="jeroen hidden mb-5 btn-group bun-group-lg col-12" role="group" aria-label="Button group with nested dropdown">
-              <button type="button" class="btn btn-secondary" onclick="restart()"><i class="far fa-calendar-times"></i> Reset (!)</button>
-              <button type="button" class="btn btn-secondary" onclick="prepareScore()">prepareScore</button>
+            <hr>
+            <div class="admin col-12 text-center" onclick="admin()">App => j-roen</div>
+
+        </div> <!-- end footer -->
+
+    </div> <!-- end fluid container -->
+
+    </div> <!-- end container -->
+
+    <!-- Optional JavaScript -->
 
 
-
-            </div>
-
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="focus"></div>
-          <div class="col-12">
-            <div id="results" class="m-1 overflow-auto">
-             <div id="verschil"></div>
-           </div>
-         </div>
-       </div>
-
-
-
-       <div class="row mb-3">
-        <div class="col-12">
-          <img src="images/lipouts.png" class="img-fluid">
-        </div>
-      </div>
-
-      <div class="under hidden">
-        <hr>
-        <div class="row">
-          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
-          </div>
-          <div id="vanLange" class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-            <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
-          </div>
-        </div>
-        <hr>
-        <div class="row">
-          <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
-          </div>
-          <div class="text-dark col-lg-6 col-10 offset-1 col-auto mb-3">
-            <img src="images/wijncollectief.png" class="img-fluid">
-
-          </div>
-        </div>
-      </div>
-      <hr>
-      <div class="admin col-12 text-center" onclick="admin()">App => j-roen</div>
-    </div>
-  </div>
-
-</div>
-
-
-
-
-
-</body>
+</body></html>

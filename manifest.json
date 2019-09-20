@@ -4,8 +4,8 @@
   "theme_color": "#c10b0b",
   "background_color": "#ffffff",
   "display": "standalone",
-  "Scope": "/golf/",
-  "start_url": "/golf/",
+  "Scope": "/locc/",
+  "start_url": "/locc/",
   "icons": [
     {
       "src": "images/icons/icon-72x72.png",

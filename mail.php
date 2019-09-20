@@ -15,7 +15,8 @@ function getUserIpAddr() {
 $agent = $_SERVER['HTTP_USER_AGENT'];
 $ip = 'User Real IP - ' . getUserIpAddr();
 $txt = $_POST['txt'];
-$result = mail('jeroenverhoeve@gmail.com', 'App gebruikt', 'De app werd gebruikt ' . $ip . ' ' . $agent . '\n') + $txt;
+$result = mail('jeroenverhoeve@gmail.com', 'App gebruikt', 'De app werd gebruikt ' . $ip . ' 
+' . $agent . '\n'   . $txt);
 if (!$result) {
 	echo "Error";
 } else {

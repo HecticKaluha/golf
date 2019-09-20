@@ -1,129 +1,146 @@
 body,
 html {
-  height: 100%;
-  margin: 0px;
-  padding: 0px;
-  width:100%;
+
 }
 
-.bg-info {
-  padding: 0px;
-  margin: 0px;
+.row{
+  /* padding-left: 0px; */
+  /* padding-right: 0px; */
 }
-.container {
-  /* Full height */
-  height: 100%;
+
+.z-1{
+  z-index: 99999;
+}
+
+
+.z-2{
+  z-index: 2;
+}
+
+.fullScreen{
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      top: 0;
+      z-index: 9999;
+      margin:  0px;
+}
+
+.splash {
+}
+
+
+.splashBg {
+  background: url("../images/haenen10.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  -webkit-filter: opacity(100%);
+  filter: opacity(100%);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.yellow {
+  background-color: #ffc107 !important;
+}
+
+.container,.splashCont {
   position: relative;
-  padding: 0px;
-  margin: 0px;
 }
 
-.ulPlace{
+.navbar-toggle,
+.fixed-botttom {
+  padding-top: 0px;
+  padding-bottom: 0px;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.ulPlace {
   position: absolute;
   border: 5px solid white;
   border-radius: 25px;
-  background: rgba(255,255,255,0.4);
-  padding:5px;
-  width:75%;
+  background: rgba(255, 255, 255, 0.4);
+  padding: 5px;
+  width: 75%;
   right: 20px;
   margin-top: 10px;
 }
 
-
-
-
-.teamName{
-  letter-spacing: 0.25em;  
+.teamName {
+  letter-spacing: 0.25em;
 }
 
-.splashCont{
-  position: relative;
-}
 
-.splashBg {
 
-/*overflow: hidden;*/
-
-position: absolute;
-
-z-index: 1;
-
-height: 100%;
-
-width: 100%;
-
-background: url("../images/haenen10.jpg") no-repeat center center fixed;
-
--webkit-background-size: cover;
-
--moz-background-size: cover;
-
--o-background-size: cover;
-
-background-size: cover;
-
--webkit-filter: opacity(70%);
-
-filter: opacity(70%);
-
-margin: 0px;
-}
-
-.noScroll{
+.noScroll {
   overflow: hidden;
 }
 
-.onTop{
-  width: 100%; 
-  height: 100%; 
-  position: absolute; 
-  z-index:5; 
- padding-top: 20px;
- text-shadow: 1px 1px #eee;
+.onTop {
+position: absolute;
+z-index: 5;
+text-shadow: 1px 1px #eee;
 }
-
 
 .logo {
   position: absolute;
-  bottom: 10px;
+  bottom: 3rem;
   margin-left: auto;
   margin-right: auto;
 }
 
-.loaderBg{
+.loaderBg {
   position: fixed;
   overflow: hidden;
-  z-index: 1;
+  z-index: 1000;
   height: 100%;
   width: 100%;
-  margin: 0px;
-  background-color: #17a2b8;
-  top:0px;
+  margin: -15;
+  background: url("../images/haenen10.jpg") no-repeat top center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  -webkit-filter: opacity(70%);
+  filter: opacity(156%);
+  top: 0px;
+  left: 0px;
 }
 
-.loaderImg{
+.loaderImg {
   position: absolute;
-  height: 100%;
-  width: 100%;
-  margin: 0px;
   background: url("../images/haenen10.jpg") no-repeat top center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   /* background-size: auto; */
-  -webkit-filter: opacity(70%);
+  -webkit-filter: opacity(100%);
   filter: opacity(70%);
   z-index: 2;
 }
 
-.loading{
-    height: 10%;
-    width: 100%;
-    margin: 0px;
-    position: absolute;
-    z-index: 5;
-    margin-top: 150px;
-    color: #fff;
+.loading {
+  margin-top: 150px;
+  color: #fff;
 }
 
 .loader {
@@ -132,12 +149,6 @@ margin: 0px;
   /* height: 10%; */
   /* width: 10%; */
   /* margin: 0px; */
-}
-
-
-.app {
-  /* Full height */
-  height: 100%;
 }
 
 
@@ -155,39 +166,55 @@ margin: 0px;
   width: 2rem;
 }
 
-.eagle, .double
-{
-  border: 4px double ;
+.eagle,
+.double {
+  border: 4px double;
 }
 
-.birdie, .eagle {
+.birdie,
+.eagle {
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
 }
 
 .vanlange {
-  width: 100%;
-  height: 100%;
   background-image: url("images/logo_VanLangeMode_zwart.png");
   background-repeat: none;
 }
 
-
+.scroll-x{
+  overflow-x: hidden;
+}
 
 .check {
-  font-size: 8vw;
+   font-size: 12vw; 
+  margin-top: -15px
   text-shadow: 1px 1px #fff;
+}
+
+sup{
+  font-size: 0.75rem;
+  transform: rotate(45deg);
+}
+
+.rot90{
+    /* transform: rotate(90deg); */
+    /* transform: rotate(45deg); */
+    text-shadow: 4px;
+}
+
+.active{
+  border: 2px yellow solid !important;
 }
 
 .big-text {
   /* font-size: 20px; */
-/*  text-shadow: 1px 1px #ffffff;
-*/}
+  /*  text-shadow: 1px 1px #ffffff;
+*/
+}
 
 .shadow {
-
-    text-shadow: 1px 1px #ffffff;
-
+  text-shadow: 1px 1px #ffffff;
 }
 
 .checkContainer {
@@ -203,85 +230,70 @@ margin: 0px;
 }
 
 .loccTitle {
-/*  position: fixed;
-*/  z-index: 1;
-text-align: center;
-height: 100px;
-background-color: rgb(42,185,208);
-border-bottom: 2px solid;
-padding-top: 20px;
-/*  background-image: url("http://www.j-roen.nl/golf/images/lipouts.png");
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-position: right 50px top;
-  background-size: auto 100px;*/
-  
+  z-index: 1;
+  text-align: center;
+  height: 100px;
+  background-color: rgb(42, 185, 208);
+  border-bottom: 2px solid;
+  padding-top: 20px;
 }
 
-.loccKlassement, .loccKlassement .results{
+
+.loccKlassement,
+.loccKlassement .results {
   margin-top: 100px;
-} 
-.loccKlassement .focus{
+}
+
+.loccKlassement .focus {
   margin-top: -100px;
 }
 
 
-@include media-breakpoint-up(sm) {
-  html {
-    font-size: 2rem;
-  }
-}
-
-@include media-breakpoint-up(md) {
-  html {
-    font-size: 3rem;
-  }
-}
-
-@include media-breakpoint-up(lg) {
-  html {
-    font-size: 4rem;
-  }
-}
-
-#loImg{
+#loImg {
   height: 100px;
-  
 }
 
-.rowHight{
+.rowHight {
   vertical-align: bottom;
   height: 55px;
   padding: 20px;
 }
 
-.memberName{
+.memberName {
   position: absolute;
-  bottom:0;
+  bottom: 0;
   margin: 0 auto;
-  width:50%;
+  width: 50%;
   color: white;
   font-size: 9px;
   text-shadow: 1px 1px #000;
-
 }
 
 hr {
   background-color: white;
 }
 
-#saldo{
+#saldo {
   position: absolute;
-  width: 100%;
   text-align: center;
   bottom: 0;
   font-size: 25px;
   margin: 0 auto;
+  width: 100%;
 }
 
-.cel {
-  position: relative;
+.table td {
 
+  vertical-align: middle;
+  min-width: 40px;
+}
+
+.balk{
+  min-height: 5px;
+  z-index: 2;
+  /* object-position: bottom; */
+  /* position: absolute; */
+  top: 2px;
 }
 
 .red {
@@ -289,39 +301,40 @@ hr {
   background-color: red;
 }
 
-.ball{
-  width: 100px;
-  height: 100px;
-  
+.cel {
+  position: relative;
+  min-width:100px;
+  margin:10px;
+  border-top-color: red;
 }
 
-.zoom {
-  width:100%;
-  MARGIN-LEFT: AUTO;
-  Margin-right:auto;
-  Margin-top: auto;
-  margin-bottom:auto;
-}
-
-.hidden{
+.hidden {
   display: none;
 }
 
-.p-25{
+.p-25 {
   padding: 25px;
 }
 
-.vw-1{
-  font-size: 10vw;
+.vw-1 {
+  font-size: 50px;
 }
 
-.vw-2{
+.vw-2 {
   font-size: 8vw;
 }
 
-.admin{
+
+
+.admin {
   color: #0c505a;
   font-size: 3vw;
   margin-bottom: 25px;
-    height:300px;
+  height: 300px;
+}
+
+@media only screen and (max-width: 600px) {
+  .h1  {
+    font-size: 1.5rem;
+  }
 }
