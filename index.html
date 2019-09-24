@@ -7,7 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css?v=20">
+    <link rel="stylesheet" href="css/style.css?v=24">
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@8/dist/sweetalert2.min.css'>
 
     <link rel="shortcut icon" href="images/icons/favicon.ico" type="image/x-icon" />
@@ -26,12 +26,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
 
-    <script type="text/javascript" src="js/script.js?v=43"></script>
+    <script type="text/javascript" src="js/script.js?v=47"></script>
 
 
 
-    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top p-1">
-        <a class="navbar-brand p-1" href="#">LipOuts CockTailCup</a>
+    <nav class="navbar navbar-light navbar-expand-sm bg-light fixed-top p-0  navbar-toggler">
+        <a class="navbar-brand p-0" href="#"><img src="images/icons/icon-72x72.png" class="w-50"></a>
         <button class="navbar-toggler p-0" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon m-0 mr-2"></span>
         </button>
@@ -39,48 +39,44 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="location.reload();" href="#">
-                    <i class="material-icons"> home</i>
-                  Home</a> <!--&#127968; -->
-                </li>
-                <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="firstChoice()" href="#">
-                  <i class="material-icons">golf_course</i> Ronde Spelen</a><!--&#9971;-->
+                    <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="location.reload();" href="#"><i class="material-icons iconColor">home</i> Home</a> <!--&#127968; -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdies()" href="#"><i class="material-icons">flight</i> Birdie ingeven</a> <!--&#128038;-->
+                        <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="firstChoice()" href="#"><!-- &#127942; --><i class="material-icons iconColor">golf_course</i> Ronde spelen</a>
+
+                </li> 
+                <li class="nav-item">
+
+                        <a class="nav-link" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdies()" href="#"><i class="material-icons iconColor">exposure_neg_1</i> Birdie ingeven</a>
+
                 </li>
 
                 <!-- Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                       <!--  &#127942; --> <i class="material-icons"> emoji_events</i> Klassement
-                    </a>
+                       <!--  &#127942; --> <i class="material-icons iconColor"> emoji_events</i> Klassementen</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2019')" href="#"><!-- &#127942; --><i class="material-icons"> emoji_events</i> CockTailCup 2019</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2018')" href="#"><!-- &#127942; --><i class="material-icons"> emoji_events</i> CockTailCup 2018</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdieKlassement()" href="#"><!-- &#128038; --><i class="material-icons">flight</i> Bidie-klassement</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2019')" href="#"><!-- &#127942; --><i class="material-icons iconColor"> emoji_events</i> CockTailCup 2019</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="klassement('2018')" href="#"><!-- &#127942; --><i class="material-icons iconColor"> emoji_events</i> CockTailCup 2018</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="birdieKlassement()" href="#"><!-- &#128038; --><i class="material-icons iconColor">flight</i> Bidie-klassement</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                        <!-- &#8505; --><i class="material-icons">info</i> Info
-                    </a>
+                        <!-- &#8505; --><i class="material-icons iconColor">info</i> Info</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showRules()" href="#"> <!-- &#9888; --><i class="material-icons">check_box</i> Regelement</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showNews()" href="#"><!-- &#128240; --><i class="material-icons">post_add</i> Nieuws</a>
-                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showInfo()" href="#"><!-- &#8505; --><i class="material-icons">group</i> Over LOCC</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showRules()" href="#"> <!-- &#9888; --><i class="material-icons iconColor">check_box</i> Regelement</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showNews()" href="#"><!-- &#128240; --><i class="material-icons iconColor">post_add</i> Nieuws</a>
+                        <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="showInfo()" href="#"><!-- &#8505; --><i class="material-icons iconColor">group</i> Over LOCC</a>
                     </div>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-                        <!-- &#127992; --><i class="material-icons">search</i> Admin
-                    </a>
+                        <!-- &#127992; --><i class="material-icons iconColor">build</i> Admin</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="prepareScore()" href="#">&#9940; Prepare Score</a>
                         <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="pwRestart()" href="#">&#9940; Reset</a>
                         <a class="dropdown-item" data-toggle="collapse" data-target=".navbar-collapse" onclick="firstChoice('strokePlay')" href="#">&#9940; noLocc</a>
-
-
                     </div>
                 </li>
             </ul>
@@ -96,54 +92,30 @@
 
 
     <div class="container-fluid mt-5">
-
-        <div class="row d-none">
-            <div class="col">
-                een
-            </div>
-            <div class="col">
-                twee
-            </div>
-            <div class="col">
-                drie
-            </div>
-        </div>
-
         <!-- start splash-->
         <div class=" row fullScreen p-0" id="splash">
-            <div class="col-12 splashBg position-absolute h-100 w-100">
-            </div>
+            <div class="col-12 splashBg position-absolute h-100 w-100"></div>
             <div class="col-12 position-absolute z-1 pt-3 h-100 w-100 p-0">
-
                 <div class="col-12 text-dark h1 text-center">
                     The LipOuts<br>CockTailCup
                 </div>
                 <div class="col-12 ulPlace">
                     <ul class="text-left">
-                        <li>
-                            <div class="li-1">4 Teekleuren</div>
-                        </li>
-                        <li>
-                            <div class="li-2">4 afslagen</div>
-                        </li>
-                        <li>
-                            <div class="li-3">4 putts</div>
-                        </li>
+                        <li><div class="li-1">4 Teekleuren</div></li>
+                        <li><div class="li-2">4 afslagen</div></li>
+                        <li><div class="li-3">4 putts</div></li>
                     </ul>
                 </div>
-                <!--         <div class="spinner-border "></div> -->
                 <div class='col-12 logo'>
                     <img src="images/lipouts.png" class="img-fluid">
                 </div>
             </div>
         </div>
-
         <!-- end splash-->
-
-        <div class="row loader fullScreen hidden" id='loader'>
-            <div class="col-12 loaderBg w-100 h-100"></div>
-            <div class="loading z-1 bigger-text vw-1">Loading...
-                <div class="spinner-border "></div>
+        <div class="row fullScreen p-0 hidden" id='loader'>
+            <div class="col-12 splashBg position-absolute w-100 h-100"></div>
+            <div class="col-12 loading position-absolute z-1 bigger-text vw-1 w-100">Loading...
+                <div class="spinner-border"></div>
             </div>
         </div>
 
@@ -153,9 +125,7 @@
             <div id="birdieTeams" class="row"></div>
         </div>
 
-
         <!-- app start -->
-
 
         <div class="row" id="app">
             <div class="col-12">
@@ -237,7 +207,7 @@
                     <div class="row locc">
                         <div class="col-12">
                             <div class="m-1">
-                                <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="prepareSaveHole()"> Opslaan
+                                <button id="opslaanButton" class="btn btn-success border btn-block text-light p-4 mt-1 mb-1 bigger-text" type="submit" name="submit" onclick="prepareSaveHole()"><i class="material-icons iconColor">save</i> Opslaan
                                 </button>
                             </div>
                         </div>
@@ -247,7 +217,7 @@
                 </div>
 
                 <div class="strokePlay locc hidden">
-                    <button class="btn btn-warning col-12 mb-2" onclick="nextHole()">Volgende hole
+                    <button class="btn btn-warning col-12 mb-2" onclick="nextHole()"><i class="material-icons iconColor">save</i> Volgende hole
                     </button>
                 </div>
 
@@ -260,14 +230,14 @@
 
 
                 <div class="row p-0 locc">
-                    <button type="button" id="playButton" class=" col-12 btn btn-success btn-block p-5 bigger-text vw-2" onclick="firstChoice()">&#9971; ronde spelen</button>
+                    <button type="button" id="playButton" class=" col-12 btn btn-success btn-block p-5 bigger-text vw-2" onclick="firstChoice()"><!-- &#9971; --><i class="material-icons iconColor vw-2 white">golf_course</i> ronde spelen</button>
                 </div>
 
             </div>
 
             <div class="row strokePlay locc scroll-x">
                 <div class="focus"></div>
-                <div id="results" class="col-12 m-1"></div>
+                <div id="results" class="col-12 m-1 mt-5"></div>
                 <div id="verschil" class="col-12 m-1"></div>
             </div>
 
@@ -285,23 +255,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="text-dark col-lg-10 col-10 offset-1 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
+                <div class="text-dark col-6 mb-1 text-center">De prijs voor het best geklede team werd gesponsord door:
                 </div>
-                <div id="vanLange" class="text-dark col-12 mb-3">
+                <div class="text-dark col-6 mb-1 text-center">De wijn voor The Longest en The Neary werd gesponsord door:
+                </div>
+
+                <div id="vanLange" class="text-dark col-6">
                     <img src="images/logo_VanLangeMode_zwart.png" class="img-fluid">
                 </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="text-dark col-12 mb-1">De wijn voor The Longest en The Neary werd gesponsord door:
-                </div>
-                <div class="text-dark col-12 mb-3">
+                <div class="text-dark col-6">
                     <img src="images/wijncollectief.png" class="img-fluid">
-
                 </div>
             </div>
-
-
+ 
             <hr>
             <div class="admin col-12 text-center" onclick="admin()">App => j-roen</div>
 

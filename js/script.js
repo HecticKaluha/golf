@@ -11,13 +11,17 @@ const klassementColors = {
     'white_ned': 'witte'
 }
 
+
+
+
 const amountOfScoreButtons = ['1', '2', '3', '4', '5', '6', '7', '8'];
 const par = [0, 4, 4, 5, 3, 5, 4, 3, 3, 4, 3, 4, 3, 5, 4, 4, 4, 4, 4];
 const holes = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
-const wedstrijd = 2;
 var styleId = '';
 var txt = "";
-var askNoLocc = 0;
+var wedstrijd = param('wedstrijd');
+var askNoLocc = param('askNoLocc');
+var askStartHole = param('askStartHole');
 var scoreNormal = {
     1: {},
     2: {},
@@ -42,6 +46,11 @@ var scoreNormal = {
 
 
 $(document).ready(function() {
+
+
+
+
+
     // $('.birdies').hide();
     // J.log(window.location.href);
     if (J.get('reStart') === 'yes') {
@@ -81,8 +90,27 @@ $(document).ready(function() {
         generatePage();
     }
 
-    //getLocation();
+// console.log(param('wedstrijd'));
+// console.log(param('askNoLocc'));
+// console.log(param('askStartHole'));
+
+
+
 }); //van onLoad
+
+
+function param(parameter) {
+    var parameter = executeQuery(`select * from parameters where naam = '${parameter}'`)[0]['parameter'];
+    // console.log(parameters);
+    // $('#results').html('<form>');
+    // for (var key in parameters) {
+    //     $('#results').append(key + ': ' + `<input type="text" name=key value=${parameters[key]}>` + '<br>');
+    // }
+    // $('#results').append('<button type=submit>Verzenden</button>');
+    //J.log(parameter);
+    return parameter;
+
+}
 
 
 function prepareSaveHole() {
@@ -162,16 +190,34 @@ function loop(obj) {
 }
 
 
-function noLocc() {
-    if (!J.get('noLocc')) {
-        J.set('noLocc', 'noLocc');
+async function noLocc() {
+
+    const {
+        value: pw
+    } = await Swal.fire({
+        title: 'Geef wachtwoord',
+        input: 'password',
+        inputPlaceholder: 'Geef wachtwoord',
+        inputAttributes: {
+            maxlength: 10,
+            autocapitalize: 'off',
+            autocorrect: 'off'
+        },
+        showCancelButton: true
+    });
+
+    if (pw == 'j') {
+        if (!J.get('noLocc')) {
+            J.set('noLocc', 'noLocc');
+        }
+        if (!J.get('scoreNormal')) {
+            J.set('scoreNormal', scoreNormal);
+            executeQuery(`insert into nolocc (game,obj) values ( ${J.get('game')}, '')`);
+        }
+        noLoccVieuw();
+        generatePage();
     }
-    if (!J.get('scoreNormal')) {
-        J.set('scoreNormal', scoreNormal);
-        executeQuery(`insert into nolocc (game,obj) values ( ${J.get('game')}, '')`);
-    }
-    noLoccVieuw();
-    generatePage();
+
 }
 
 
@@ -294,7 +340,7 @@ function birdieKlassement(member) {
     toBirdies();
     $('#birdieInfo').html('');
 
-    renderTable(executeQuery('SELECT count(hole)  as birdies, teamleden.name as speler, teamleden.id as link FROM `birdies` left join teamleden on birdies.member = teamleden.id group by member'), 'birdieTeams');
+    renderTable(executeQuery('SELECT count(hole)  as birdies, teamleden.name as speler, teamleden.id as link FROM `birdies` left join teamleden on birdies.member = teamleden.id group by member order by birdies desc'), 'birdieTeams');
 
     if (member) {
         renderTable(executeQuery(`SELECT hole as H, teamleden.name as Naam, teams.team as Team, birdies.marker as Marker FROM birdies left join teamleden on birdies.member = teamleden.id left join teams on teamleden.teamId = teams.id where birdies.member = ${member} order by hole`), 'birdieTeams'); //, DATE_FORMAT(date, " %d %m %Y") as datum
@@ -436,36 +482,46 @@ function restructureBirdies() {
 }
 
 function chooseStartHole() {
-    Swal.fire({
-        title: 'Starthole',
-        text: "Op welke hole gaan jullie starten?",
-        type: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#3085d6',
-        cancelButtonText: 'HOLE 10',
-        confirmButtonText: 'HOLE 1'
-    }).then((result) => {
-        if (result.value) {
-            Swal.fire({
-                title: "Veel succes, StartHole 1!",
-                showConfirmButton: false,
-                timer: 1550
-            });
-            J.set('startHole', 1);
-            J.set('stopHole', parseFloat(18));
-            renderHole(1);
-        } else {
-            Swal.fire({
-                title: "Veel plezier, StartHole 10!",
-                showConfirmButton: false,
-                timer: 1550
-            });
-            J.set('startHole', 10);
-            J.set('stopHole', parseFloat(9));
-            renderHole(10);
-        }
-    });
+    if (askStartHole != 1) {
+        // 0 dus niet vragen
+        J.set('startHole', 1);
+        J.set('stopHole', parseFloat(18));
+        renderHole(1);
+    } else {
+        Swal.fire({
+            title: 'Starthole',
+            text: "Op welke hole gaan jullie starten?",
+            type: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#3085d6',
+            cancelButtonText: 'HOLE 10',
+            confirmButtonText: 'HOLE 1'
+        }).then((result) => {
+            if (result.value) {
+                Swal.fire({
+                    title: "Veel succes, StartHole 1!",
+                    showConfirmButton: false,
+                    timer: 1550
+                });
+                J.set('startHole', 1);
+                J.set('stopHole', parseFloat(18));
+                renderHole(1);
+            } else {
+                Swal.fire({
+                    title: "Veel plezier, StartHole 10!",
+                    showConfirmButton: false,
+                    timer: 1550
+                });
+                J.set('startHole', 10);
+                J.set('stopHole', parseFloat(9));
+                renderHole(10);
+            }
+        });
+
+
+    }
+
 }
 
 async function prepareScore() {
@@ -647,7 +703,7 @@ function klassement(jaar) {
     //$('.container').addClass('noScroll');
     setTimeout(function() {
         klassementt(jaar);
-    }, 500);
+    }, 1000);
 }
 
 function klassementt(jaar) {
@@ -694,7 +750,7 @@ function klassementt(jaar) {
                 objHole[result.hole] = result;
                 teamNaam = result.team;
                 team = result.id;
-                teamRow = `<tr><td colspan=22 class="text-left teamName ">${teamNaam}</td></tr><tr class="rowHight"><td></td>`;
+                teamRow = `<tr><th colspan=22 class="text-left teamName ">${teamNaam}</th></tr><tr class="rowHight"><td></td>`;
             });
         for (var H = 1; H < 19; H++) {
             member = '';
@@ -734,7 +790,7 @@ function klassementt(jaar) {
         } else if ((totaal - 70) == 0) {
             parKleur = 'silver';
         }
-        teamRow += `<td>${totaal}</td><td bgcolor=${parKleur}>` + (totaal - 70) + `</td></tr>`;
+        teamRow += `<td>${totaal}</td><th bgcolor=${parKleur}>` + (totaal - 70) + `</th></tr>`;
         trArray.push([totaal, teamRow]);
         teamRow = 'resetten die shit';
     });
@@ -748,12 +804,13 @@ function renderKlassement(trArray) {
         return a[0] - b[0];
     });
     var table = `<h1>klassement</h1>
-        <table class="table text-center table-sm  table-responsive-md ">
+        <table class="table  table-bordered text-center table-sm  table-responsive ">
+        <thead class="thead-light table-bordered">
 <tr><th>Pos.</th>`; //class='klassement'
     for (var h = 1; h < 19; h++) {
         table += `<th>H` + h + `<br>${par[h]}</th>`
     }
-    table += `<th>2B</th><th>#</th></tr>`;
+    table += `<th>2B</th><th>#</th></tr></thead>`;
     var pos = 0;
     var prevTotal = '';
     var posT
@@ -767,7 +824,7 @@ function renderKlassement(trArray) {
             posT = "*";
         }
         var tableRow = row[1];
-        tableRow = tableRow.replace("<tr>", "<tr><td>" + pos + posT + "</td>");
+        tableRow = tableRow.replace("<tr>", "<tr><th>" + pos + posT + "</th>");
         table += tableRow;
     });
     table += "</table>";
@@ -1008,13 +1065,14 @@ function showTeamSet() {
                 J.set('member', key);
                 memberCheck.innerText = key;
             }
+            
             if (J.get('noLocc')) {
                 (async function score() {
                     const {
                         value: score
                     } = await Swal.fire({
                         title: 'aantal slagen',
-                        inputPlaceholder: 'Klik hier',
+                        inputPlaceholder: 'Kies hier',
                         input: 'select',
                         inputOptions: {
                             '1': 1,
@@ -1184,7 +1242,7 @@ function executeQuery(query) {
         },
         success: function(res) {
             var response = JSON.parse(res);
-            J.log(response);
+            //J.log(response);
 
             if (response.success) {
                 //je response message (result van de query) is beschikbaar via response.message
@@ -1305,7 +1363,7 @@ function getTeamScore() {
     J.log(obj);
     obj.forEach(function(result) {
         verschil += result.verschil;
-        //J.log(verschil);
+        J.log(verschil);
     });
     if (verschil > 0) {
         verschil = '+' + verschil;

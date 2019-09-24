@@ -1,15 +1,15 @@
 body,
 html {
-
+ /* font-size: calc(16px + 0.5vw); */
 }
 
 .row{
-  /* padding-left: 0px; */
-  /* padding-right: 0px; */
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 .z-1{
-  z-index: 99999;
+  z-index: 1;
 }
 
 
@@ -27,27 +27,37 @@ html {
       margin:  0px;
 }
 
-.splash {
-}
+
+
+
 
 
 .splashBg {
-  background: url("../images/haenen10.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
+      background: url("../images/haenen-10.jpg") top no-repeat fixed;
+
+  overflow: hidden;
+  margin: -15;
+/*  -webkit-background-size: cover;
   -moz-background-size: cover;
-  -o-background-size: cover;
+  -o-background-size: cover;*/
   background-size: cover;
-  -webkit-filter: opacity(100%);
-  filter: opacity(100%);
+  top: 0px;
+  left: 0px;
 }
 
 
+.loading {
+  margin-top: 150px;
+  color: #fff;
+}
 
-
-
-
-
-
+.loader {
+  position: relative;
+  overflow: hidden;
+   height: 10%; 
+   width: 10%; 
+   margin: 0px; 
+}
 
 
 
@@ -109,47 +119,15 @@ text-shadow: 1px 1px #eee;
   margin-right: auto;
 }
 
-.loaderBg {
-  position: fixed;
-  overflow: hidden;
-  z-index: 1000;
-  height: 100%;
-  width: 100%;
-  margin: -15;
-  background: url("../images/haenen10.jpg") no-repeat top center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  -webkit-filter: opacity(70%);
-  filter: opacity(156%);
-  top: 0px;
-  left: 0px;
+.iconColor{
+color: black;
 }
 
-.loaderImg {
-  position: absolute;
-  background: url("../images/haenen10.jpg") no-repeat top center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  /* background-size: auto; */
-  -webkit-filter: opacity(100%);
-  filter: opacity(70%);
-  z-index: 2;
+.white{
+  color:white;
 }
 
-.loading {
-  margin-top: 150px;
-  color: #fff;
-}
 
-.loader {
-  position: relative;
-  overflow: hidden;
-  /* height: 10%; */
-  /* width: 10%; */
-  /* margin: 0px; */
-}
 
 
 .align-items-center {
@@ -283,7 +261,6 @@ hr {
 }
 
 .table td {
-
   vertical-align: middle;
   min-width: 40px;
 }
@@ -317,20 +294,22 @@ hr {
 }
 
 .vw-1 {
-  font-size: 50px;
+  font-size: calc50px;
 }
 
 .vw-2 {
   font-size: 8vw;
 }
 
-
+.vw-5{
+  font-size: 15vw;
+}
 
 .admin {
   color: #0c505a;
-  font-size: 3vw;
+  font-size: 4vw;
   margin-bottom: 25px;
-  height: 300px;
+  height: 200px;
 }
 
 @media only screen and (max-width: 600px) {
